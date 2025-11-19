@@ -1,0 +1,317 @@
+:root {
+
+  --primary-color: #4f772d;
+
+  --text-secondary-color: rgba(0, 0, 0, 0.5);
+
+  --background-color: #ffffff;
+
+}
+
+
+*,
+
+*::before,
+
+*::after {
+
+  box-sizing: border-box;
+
+}
+
+
+body {
+
+  margin: 0;
+
+  font-family: 'Inter', sans-serif;
+
+  background-color: var(--background-color);
+
+  color: var(--primary-color);
+
+}
+
+
+/* CSS from section:registration */
+
+#registration-choice {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    min-height: 100vh;
+
+    padding: 40px 20px;
+
+  }
+
+
+  .registration-container {
+
+    width: 100%;
+
+    max-width: 1920px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+  }
+
+
+  .registration-header {
+
+    text-align: center;
+
+    margin-bottom: 64px;
+
+  }
+
+
+  .logo {
+
+    width: 128px;
+
+    height: 128px;
+
+    margin-bottom: 30px;
+
+  }
+
+
+  .main-title {
+
+    font-weight: 700;
+
+    font-size: 48px;
+
+    line-height: 1.2;
+
+    color: var(--primary-color);
+
+    margin: 0;
+
+  }
+
+
+  .options-wrapper {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: stretch;
+
+    gap: 65px; /* Approximate gap on each side of the divider */
+
+  }
+
+
+  .option-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    color: inherit;
+
+    width: 100%;
+
+    max-width: 552px; /* Based on description text width */
+
+    padding: 40px 0;
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  }
+
+  
+
+  .option-card:hover {
+
+    transform: translateY(-10px);
+
+  }
+
+
+  .divider {
+
+    width: 1px;
+
+    background-color: var(--primary-color);
+
+  }
+
+
+  .option-icon {
+
+    width: 128px;
+
+    height: 128px;
+
+    margin-bottom: 60px;
+
+  }
+
+
+  .option-title {
+
+    font-weight: 600;
+
+    font-size: 96px;
+
+    line-height: 1.2;
+
+    color: var(--primary-color);
+
+    margin: 0;
+
+    margin-bottom: 83px;
+
+  }
+
+
+  .option-description {
+
+    font-weight: 700;
+
+    font-size: 32px;
+
+    line-height: 1.2;
+
+    color: var(--text-secondary-color);
+
+    margin: 0;
+
+  }
+
+
+  /* Responsive Styles */
+
+  @media (max-width: 1440px) {
+
+    .options-wrapper {
+
+      gap: 30px;
+
+    }
+
+    .option-title {
+
+      font-size: 72px;
+
+      margin-bottom: 60px;
+
+    }
+
+    .option-description {
+
+      font-size: 28px;
+
+    }
+
+  }
+
+
+  @media (max-width: 1024px) {
+
+    .options-wrapper {
+
+      flex-direction: column;
+
+      align-items: center;
+
+      gap: 40px;
+
+    }
+
+    .divider {
+
+      display: none;
+
+    }
+
+    .option-card {
+
+      padding: 20px;
+
+      max-width: 500px;
+
+    }
+
+    .option-card:hover {
+
+      transform: none;
+
+    }
+
+    .registration-header {
+
+        margin-bottom: 40px;
+
+    }
+
+  }
+
+
+  @media (max-width: 768px) {
+
+    #registration-choice {
+
+      padding: 20px 15px;
+
+    }
+
+    .logo {
+
+      width: 100px;
+
+      height: 100px;
+
+      margin-bottom: 20px;
+
+    }
+
+    .main-title {
+
+      font-size: 36px;
+
+    }
+
+    .option-icon {
+
+      width: 100px;
+
+      height: 100px;
+
+      margin-bottom: 40px;
+
+    }
+
+    .option-title {
+
+      font-size: 60px;
+
+      margin-bottom: 40px;
+
+    }
+
+    .option-description {
+
+      font-size: 24px;
+
+    }
+
+  }

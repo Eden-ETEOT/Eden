@@ -1,0 +1,143 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root{
+    --sidebar-width: 288px;
+    --sidebar-height: 100vh;
+    --sidebar-bg: linear-gradient(to bottom, #132A13, #02532F);
+    --cor-plano : #2FCF3F;
+    --fonte: 'Inter', sans-serif;
+    --tamanho-fonte-titulos: 14px;
+    --altura-icones: 24px;
+    --tamanho-icones: 24px;
+    --padding-lados : 12px;
+    --padding-cimaBaixo : 24px;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: var(--fonte);
+}
+
+a{
+    text-decoration: none;
+    color: white;
+}
+
+.sidebarEstrutura {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: var(--sidebar-height);
+    background: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000; /* garante que fique acima de outros elementos */
+}
+
+
+
+.sidebarCabeçalho {
+    padding: 20px;
+    display: flex;
+}
+
+.conta{
+    display: flex;
+    align-items: center; 
+    gap: 10px;
+}
+
+.linkConta {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 8px;
+    background-color: #118C11;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.planoConta{
+    color: var(--cor-plano);
+    font-size: 12px;
+    opacity: 0.4;
+}
+
+.linkContaNome{
+    font-size: 18px;
+    font-weight: bold;   
+}
+ul{
+    list-style: none;
+}
+
+.submenu{
+    display: none;
+}
+
+.seta{
+    vertical-align:middle; 
+    margin-left:6px;
+}
+
+.guiacomSeta .linkCorpo .guiaSemSeta{
+    font-size: 14px;
+}
+
+
+
+.linkCorpo{
+    margin-left: 40px;
+    padding: var(--padding-cimaBaixo) var(--padding-lados);
+}
+
+
+.icone{
+    max-width: 24px;
+}
+
+ul{
+    display: flex;
+    flex-direction: column;
+}
+
+li{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.icone {
+    width: var(--tamanho-icones);
+    height: var(--altura-icones);
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.sidebarMenu a,
+.linkCorpo,
+.link-rodape {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 0;
+}
+
+.menusPrincipais{
+    padding: var(--padding-cimaBaixo) var(--padding-lados);
+}
+
+.menusPrincipais:hover{
+    background-color: #132A13;
+    border-left: solid 4px #31572C;
+}
+
+
+

@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root{
+    --fonte: 'Inter', sans-serif;
+}
+
+/* Adicione ao seu CSS principal */
+.conteudo-principal {
+    margin-left: 288px; /* mesma largura da sidebar */
+    /* ou padding-left: 288px; */
+}
+

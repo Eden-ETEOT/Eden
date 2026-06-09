@@ -1,37 +1,8 @@
 @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import url("https://use.typekit.net/qud3duq.css");
+@import url("variaveis.css");
 
-:root{
-  --fonteTextos : 'Inter';
-  --fonteTítulos : poppins;
-
-  /* neutras */
-  --corNeutra1 : #fff;
-  --corNeutra2 : #030703;
-  --gray50 : #f7f7f7;
-  --gray100 : #e5e5e5;
-  --gray200 : #cccccc;
-  --gray300 : #b2b2b2;
-
-
-  /* Espaçamento */
-  --spacing0 : 0;
-  --spacing100 : 4px;
-  --spacing200 : 8px;
-  --spacing300 : 12px;
-  --spacing400 : 16px;
-  --spacing500 : 24px;
-  --spacing600 : 36px;
-  --spacing700 : 48px;
-  --spacing800 : 64px;
-
-  /*Pesos fonte*/
-  --normal : 400;
-  --medium : 500;
-  --semi-bold : 600;
-  --bold : 700;
-}
 
 * { 
   box-sizing: border-box; 
@@ -45,42 +16,68 @@ body {
   grid-template-columns: 1fr 1fr;
 }
 
+
+.panel-left {
+  background: var(--gray300);
+}
+
+.panel-left-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* Painel direito */
 .panel-right {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  background: var(--corNeutra1);
 }
 
 .form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 320px;
+  width: 404px;
   gap: var(--spacing400);
 }
 
   /* Logo placeholder */
-.logo {
+.logo{
   width: 88px;
   height: 88px;
   background: #d9d9d9;
   border: 1px solid #aaa;
+  margin-bottom: var(--spacing800);
+}
+
+.logo-image {
+  width: 115px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: var(--spacing800);
 }
 
 .title {
-  font-size: 2.25rem;
+  font-size: 36px;
   font-weight: var(--semi-bold);
-  color: var(--corNeutra2);
+  color: var(--verde-primario);
   font-family: var(--fonteTítulos);
+}
+
+header{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing800);
 }
 
 .subtitle {
   font-size: 1.5rem;
   font-weight: var(--medium);
   font-family: var(--fonteTítulos);
-  color: var(--corNeutra2);
+  color: var(--green1-700);
 }
 
   /* Campos */
@@ -102,20 +99,25 @@ body {
 label {
   font-size: 1.25rem;
   font-weight: var(--medium);
-  color: var(--corNeutra2);
+  color: var(--verde-primario);
   font-family: var(--fonteTextos);
 }
 
-input[type="text"],
+input[type="email"],
 input[type="password"] {
   width: 100%;
   padding: var(--spacing200) var(--spacing300);
-  border: 1px solid var(--corNeutra2); /* vai virar gray 200 no mockup*/
-  color: var(--gray200);
+  border: 1px solid var(--gray200); /* vai virar gray 200 no mockup*/
+  color: var(--corNeutra2);
   font-size: 1rem;
   outline: none;
   border-radius: 8px;
   height: 2rem;
+}
+
+input[type="email"]::placeholder,
+input[type="password"]::placeholder {
+  color: var(--gray300);
 }
 
   /* Linha checkbox + esqueceu */
@@ -140,8 +142,8 @@ input[type="password"] {
 
 .row a {
   font-weight: var(--bold);
-  color: var(--corNeutra2);
-
+  color: var(--verde-primario);
+  text-decoration: none;
 }
 
   /* Botão */
@@ -165,7 +167,11 @@ button {
   align-items: center;
   gap: var(--spacing300);
   font-size: 0.5rem;
-  color: #aaa;
+  color: var(--gray300);
+
+  span {
+    color: var(--corNeutra2);
+  }
 }
 
 .divider hr {
@@ -175,14 +181,18 @@ button {
 }
 
 .register {
-  font-size: .85rem;
-  color: var(--corNeutra2);
+  font-size: 1rem;
+  font-weight: var(--bold);
+  font-family: var(--fonteTítulos);
+  span{
+    color: var(--verde-primario);
+  }
 }
 
 .register a {
-  font-weight: var(--normal);
-  text-decoration: none;
-  color: var(--corNeutra2);
+  font-weight: var(--bold);
+  text-decoration: underline;
+  color: var(--verde-primario);
   font-size: 1rem;
   font-family: var(--fonteTítulos);
 }

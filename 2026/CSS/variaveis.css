@@ -1,0 +1,94 @@
+:root{
+    --branco: #ffff;
+    --preto: #1F1F1F;
+    --cinza: #7A7A7A;
+    --cinza-claro:#E3E3E3;
+
+    --laranja-escuro:#A85700;
+    --laranja-primario: #D47200;
+    --laranja-secundario: #F29A2E;
+    --laranja-claro: #FFD2A3;
+    --orange1-600: #CC6E00;
+    --orange1-700: #995200;
+
+    --green1-700 : #1E2E22;
+    --verde-primario:#24382A;
+    --verde-secundario:#324D39;
+    --verde-terciario:#4F6B57;
+    --verde-claro: #AFC3B5;
+
+    --fonteTextos : 'Inter';
+  --fonteTítulos : poppins;
+
+  /* neutras */
+  --corNeutra1 : #fff;
+  --corNeutra2 : #030703;
+  --gray50 : #f7f7f7;
+  --gray100 : #e5e5e5;
+  --gray200 : #cccccc;
+  --gray300 : #b2b2b2;
+
+
+  /* Espaçamento */
+  --spacing0 : 0;
+  --spacing100 : 4px;
+  --spacing200 : 8px;
+  --spacing300 : 12px;
+  --spacing400 : 16px;
+  --spacing500 : 24px;
+  --spacing600 : 36px;
+  --spacing700 : 48px;
+  --spacing800 : 64px;
+
+  /*Pesos fonte*/
+  --normal : 400;
+  --medium : 500;
+  --semi-bold : 600;
+  --bold : 700;
+}
+
+.btn-primary-orange-small {
+  background-color: var(--laranja-primario);
+  color: var(--corNeutra1);
+  font-size: 1rem;
+  font-weight: var(--medium);
+  padding: var(--spacing200) var(--spacing300);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.btn-primary-orange-small:hover {
+  background-color: var(--orange1-600);
+  color: var(--corNeutra1);
+  font-size: 1rem;
+  font-weight: var(--medium);
+  padding: var(--spacing200) var(--spacing300);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  height: 2rem;
+  text-align: center;
+  align-items: center;
+}
+
+.btn-primary-orange-small:active {
+  background-color: var(--orange1-700);
+  color: var(--corNeutra1);
+  font-size: 1rem;
+  font-weight: var(--medium);
+  padding: var(--spacing200) var(--spacing300);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  height: 2rem;
+  text-align: center;
+  align-items: center;
+}

@@ -1,0 +1,46 @@
+:root{
+    --branco: #ffff;
+    --preto: #1F1F1F;
+    --cinza: #7A7A7A;
+    --cinza-claro:#E3E3E3;
+
+    --laranja-escuro:#A85700;
+    --laranja-primario: #D47200;
+    --laranja-secundario: #F29A2E;
+    --laranja-claro: #FFD2A3;
+    
+    --verde-primario:#24382A;
+    --verde-secundario:#324D39;
+    --verde-terciario:#4F6B57;
+    --verde-claro: #AFC3B5;
+
+    --fonteTextos : 'Inter';
+  --fonteTítulos : poppins;
+
+  /* neutras */
+  --corNeutra1 : #fff;
+  --corNeutra2 : #030703;
+  --gray50 : #f7f7f7;
+  --gray100 : #e5e5e5;
+  --gray200 : #cccccc;
+  --gray300 : #b2b2b2;
+
+
+  /* Espaçamento */
+  --spacing0 : 0;
+  --spacing100 : 4px;
+  --spacing200 : 8px;
+  --spacing300 : 12px;
+  --spacing400 : 16px;
+  --spacing500 : 24px;
+  --spacing600 : 36px;
+  --spacing700 : 48px;
+  --spacing800 : 64px;
+
+  /*Pesos fonte*/
+  --normal : 400;
+  --medium : 500;
+  --semi-bold : 600;
+  --bold : 700;
+}
+

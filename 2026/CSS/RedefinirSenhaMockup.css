@@ -145,7 +145,7 @@ input{
   height: 48px;
 
   border: 1px solid var(--input-border);
-  border-radius: 6px;
+  border-radius: 8px;
 
   padding: 0 16px;
 
@@ -170,7 +170,7 @@ button{
   height: 52px;
 
   border: none;
-  border-radius: 999px;
+  border-radius: 20px;
 
   background: var(--button-color);
 

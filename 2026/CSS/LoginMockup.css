@@ -1,6 +1,4 @@
 @charset "UTF-8";
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-@import url("https://use.typekit.net/qud3duq.css");
 @import url("variaveis.css");
 
 
@@ -62,7 +60,7 @@ body {
 .title {
   font-size: 36px;
   font-weight: var(--semi-bold);
-  color: var(--verde-primario);
+  color: var(--green1-default);
   font-family: var(--fonteTítulos);
 }
 
@@ -99,7 +97,7 @@ header{
 label {
   font-size: 1.25rem;
   font-weight: var(--medium);
-  color: var(--verde-primario);
+  color: var(--green1-default);
   font-family: var(--fonteTextos);
 }
 
@@ -135,14 +133,14 @@ input[type="password"]::placeholder {
   display: flex;
   align-items: center;
   gap: var(--spacing200);
-  font-weight: var();
+  font-weight: var(--medium);
   text-transform: none;
   font-size: 1rem;
 }
 
 .row a {
   font-weight: var(--bold);
-  color: var(--verde-primario);
+  color: var(--green1-default);
   text-decoration: none;
 }
 
@@ -185,14 +183,14 @@ button {
   font-weight: var(--bold);
   font-family: var(--fonteTítulos);
   span{
-    color: var(--verde-primario);
+    color: var(--green1-default);
   }
 }
 
 .register a {
   font-weight: var(--bold);
   text-decoration: underline;
-  color: var(--verde-primario);
+  color: var(--green1-default);
   font-size: 1rem;
   font-family: var(--fonteTítulos);
 }

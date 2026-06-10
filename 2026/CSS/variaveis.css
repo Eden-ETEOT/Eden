@@ -1,54 +1,145 @@
-:root{
-    --branco: #ffff;
-    --preto: #1F1F1F;
-    --cinza: #7A7A7A;
-    --cinza-claro:#E3E3E3;
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url("https://use.typekit.net/qud3duq.css");
 
-    --laranja-escuro:#A85700;
-    --laranja-primario: #D47200;
-    --laranja-secundario: #F29A2E;
-    --laranja-claro: #FFD2A3;
-    --orange1-600: #CC6E00;
+:root {
+    /* Laranja - escala secundaria (orange1) */
+    --orange1-900: #331B00;
+    --orange1-800: #663700;
     --orange1-700: #995200;
+    --orange1-600: #CC6E00;
+    --orange1-default: #FF8900;
+    --orange1-400: #FFA133;
+    --orange1-300: #FFB866;
+    --orange1-200: #FFD099;
+    --orange1-100: #FFE7CC;
+    --orange1-50:  #FFF4E6;
 
-    --green1-700 : #1E2E22;
-    --verde-primario:#24382A;
-    --verde-secundario:#324D39;
-    --verde-terciario:#4F6B57;
-    --verde-claro: #AFC3B5;
+    /* Accent (orange2) */
+    --orange2-900: #301F09;
+    --orange2-800: #613E12;
+    --orange2-700: #915C1C;
+    --orange2-600: #C17B25;
+    --orange2-default: #F29A2E;
+    --orange2-400: #F5AE58;
+    --orange2-300: #F7C282;
+    --orange2-200: #FAD7AB;
+    --orange2-100: #FCEBD5;
 
-    --fonteTextos : 'Inter';
-  --fonteTítulos : poppins;
+    /* Estados */
+    /* Success */
+    --green3-900: #0F1D04;
+    --green3-800: #1F3908;
+    --green3-700: #2E560C;
+    --green3-600: #3E7210;
+    --green3-default: #4D8F14;
+    --green3-400: #71A543;
+    --green3-300: #94BC72;
+    --green3-200: #B8D2A1;
+    --green3-100: #DBE9D0;
+    --green3-50:  #EEF4E8;
 
-  /* neutras */
-  --corNeutra1 : #fff;
-  --corNeutra2 : #030703;
-  --gray50 : #f7f7f7;
-  --gray100 : #e5e5e5;
-  --gray200 : #cccccc;
-  --gray300 : #b2b2b2;
+    /* Warning */
+    --yellow-900: #332600;
+    --yellow-800: #664C00;
+    --yellow-700: #997300;
+    --yellow-600: #CC9900;
+    --yellow-default: #FFBF00;
+    --yellow-400: #FFCC33;
+    --yellow-300: #FFD966;
+    --yellow-200: #FFE599;
+    --yellow-100: #FFF2CC;
+    --yellow-50:  #FFF9E6;
 
+    /* Error*/
+    --red-900: #280E0B;
+    --red-800: #4F1C17;
+    --red-700: #772922;
+    --red-600: #9E372E;
+    --red-default: #C64539;
+    --red-400: #D16A61;
+    --red-300: #DD9088;
+    --red-200: #E8B5B0;
+    --red-100: #F4DAD7;
+    --red-50:  #FAEDEC;
 
-  /* Espaçamento */
-  --spacing0 : 0;
-  --spacing100 : 4px;
-  --spacing200 : 8px;
-  --spacing300 : 12px;
-  --spacing400 : 16px;
-  --spacing500 : 24px;
-  --spacing600 : 36px;
-  --spacing700 : 48px;
-  --spacing800 : 64px;
+    /* Info */
+    --blue-900: #0F1D24;
+    --blue-800: #1F3A47;
+    --blue-700: #2E576B;
+    --blue-600: #3D748F;
+    --blue-default: #4C90B2;
+    --blue-400: #70A7C2;
+    --blue-300: #94BDD1;
+    --blue-200: #B8D3E0;
+    --blue-100: #DBE9F0;
+    --blue-50:  #EEF4F8;
 
-  /*Pesos fonte*/
-  --normal : 400;
-  --medium : 500;
-  --semi-bold : 600;
-  --bold : 700;
+    /* Highlight (beige) */
+    --beige-900: #332600;
+    --beige-800: #2E271F;
+    --beige-700: #5C4E3D;
+    --beige-600: #B79B7A;
+    --beige-default: #E5C299;
+    --beige-400: #EACEAD;
+    --beige-300: #EFDAC2;
+    --beige-200: #F5E7D6;
+    --beige-100: #FAF3EB;
+
+    /* Verde - paleta primária */
+    --green1-900: #0A0F0B;
+    --green1-800: #141F17;
+    --green1-700: #1E2E22;
+    --green1-600: #283e2e;
+    --green1-default: #324D39;
+    --green1-400: #5B7161;
+    --green1-300: #849488;
+    --green1-200: #ADB9B0;
+    --green1-100: #D6DBd7;
+    --green1-50:  #F2F7F4;
+
+    /* Verde escuro */
+    --green2-900: #040A04;
+    --green2-800: #081408;
+    --green2-700: #0C1E0C;
+    --green2-600: #102810;
+    --green2-default: #143214;
+    --green2-400: #435B43;
+    --green2-300: #728472;
+    --green2-200: #A1ADA1;
+    --green2-100: #D0D6D0;
+  
+    /* Tipografia */
+    --fonteTextos: 'Inter';
+    --fonteTítulos: 'Poppins';
+
+    /* Neutras */
+    --corNeutra1: #fff;
+    --corNeutra2: #030703;
+    --gray50: #f7f7f7;
+    --gray100: #e5e5e5;
+    --gray200: #cccccc;
+    --gray300: #b2b2b2;
+
+    /* Espaçamento */
+    --spacing0: 0;
+    --spacing100: 4px;
+    --spacing200: 8px;
+    --spacing300: 12px;
+    --spacing400: 16px;
+    --spacing500: 24px;
+    --spacing600: 36px;
+    --spacing700: 48px;
+    --spacing800: 64px;
+
+    /* Pesos fonte */
+    --normal: 400;
+    --medium: 500;
+    --semi-bold: 600;
+    --bold: 700;
 }
 
 .btn-primary-orange-small {
-  background-color: var(--laranja-primario);
+  background-color: var(--orange1-default);
   color: var(--corNeutra1);
   font-size: 1rem;
   font-weight: var(--medium);

@@ -110,28 +110,12 @@ h1 {
 }
 
 /* Cores - Laranja 1 */
-.btn-orange1-600 {
-    background-color: var(--orange1-600);
-    color: white;
-}
-.btn-orange1-600:hover {
-    background-color: var(--orange1-700);
-}
-
 .btn-orange1-default {
     background-color: var(--orange1-default);
     color: white;
 }
 .btn-orange1-default:hover {
     background-color: var(--orange1-600);
-}
-
-.btn-orange1-400 {
-    background-color: var(--orange1-400);
-    color: white;
-}
-.btn-orange1-400:hover {
-    background-color: var(--orange1-default);
 }
 
 /* Cores - Laranja 2 */
@@ -143,45 +127,13 @@ h1 {
     background-color: var(--orange2-900);
 }
 
-.btn-orange2-600 {
-    background-color: var(--orange2-600);
-    color: white;
-}
-.btn-orange2-600:hover {
-    background-color: var(--orange2-800);
-}
-
-.btn-orange2-400 {
-    background-color: var(--orange2-400);
-    color: white;
-}
-.btn-orange2-400:hover {
-    background-color: var(--orange2-600);
-}
-
 /* Cores - Verde 1 */
-.btn-green1-600 {
-    background-color: var(--green1-600);
-    color: white;
-}
-.btn-green1-600:hover {
-    background-color: var(--green1-700);
-}
-
 .btn-green1-default {
     background-color: var(--green1-default);
     color: white;
 }
 .btn-green1-default:hover {
     background-color: var(--green1-600);
-}
-
-.btn-green1-400 {
-    background-color: var(--green1-400);
-    color: white;
-}
-.btn-green1-400:hover {
-    background-color: var(--green1-default);
 }
 
 /* Cores - Verde 3 (Success) */
@@ -193,45 +145,13 @@ h1 {
     background-color: var(--green3-900);
 }
 
-.btn-green3-600 {
-    background-color: var(--green3-600);
-    color: white;
-}
-.btn-green3-600:hover {
-    background-color: var(--green3-800);
-}
-
-.btn-green3-400 {
-    background-color: var(--green3-400);
-    color: white;
-}
-.btn-green3-400:hover {
-    background-color: var(--green3-600);
-}
-
 /* Cores - Amarelo */
-.btn-yellow-600 {
-    background-color: var(--yellow-600);
-    color: white;
-}
-.btn-yellow-600:hover {
-    background-color: var(--yellow-700);
-}
-
 .btn-yellow-default {
     background-color: var(--yellow-default);
     color: #333;
 }
 .btn-yellow-default:hover {
     background-color: var(--yellow-600);
-}
-
-.btn-yellow-400 {
-    background-color: var(--yellow-400);
-    color: #333;
-}
-.btn-yellow-400:hover {
-    background-color: var(--yellow-default);
 }
 
 /* Cores - Vermelho escuro */
@@ -243,14 +163,6 @@ h1 {
     background-color: var(--red-600);
 }
 
-.btn-red-700 {
-    background-color: var(--red-700);
-    color: white;
-}
-.btn-red-700:hover {
-    background-color: var(--red-800);
-}
-
 /* Cores - Azul escuro */
 .btn-blue-default {
     background-color: var(--blue-default);
@@ -260,29 +172,36 @@ h1 {
     background-color: var(--blue-600);
 }
 
-.btn-blue-700 {
+.btn-orange1-default:active {
+    background-color: var(--orange1-700);
+}
+.btn-orange2-800:active {
+    background-color: var(--orange2-900);
+}
+.btn-green1-default:active {
+    background-color: var(--green1-700);
+}
+
+.btn-green3-800:active {
+    background-color: var(--green3-900);
+}
+.btn-yellow-default:active {
+    background-color: var(--yellow-700);
+}
+
+.btn-red-default:active {
+    background-color: var(--red-700);
+}
+
+.btn-blue-default:active {
     background-color: var(--blue-700);
-    color: white;
-}
-.btn-blue-700:hover {
-    background-color: var(--blue-800);
 }
 
-/* Cores - Cinza claro */
-.btn-gray-300 {
-    background-color: #d0d0d0;
-    color: #333;
+.btn-black-900:active {
+    background-color: #1a1a1a;
 }
-.btn-gray-300:hover {
-    background-color: #b8b8b8;
-}
-
-.btn-gray-400 {
-    background-color: #a8a8a8;
-    color: white;
-}
-.btn-gray-400:hover {
-    background-color: #909090;
+.btn-black-800:active {
+    background-color: #333333;
 }
 
 /* Cores - Preto */
@@ -300,14 +219,6 @@ h1 {
 }
 .btn-black-800:hover {
     background-color: #333333;
-}
-
-.btn-black-700 {
-    background-color: #333333;
-    color: white;
-}
-.btn-black-700:hover {
-    background-color: #4a4a4a;
 }
 
 /* Outline buttons */

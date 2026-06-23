@@ -1,3 +1,35 @@
+<?php
+session_start();
+require_once "../../config/conexao.php";
+
+$msg = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = trim($_POST["usuario"]);
+    $senha = $_POST["senha"];
+    
+        try {
+            $sql = "SELECT * FROM usuario WHERE email = :email";
+            $stmt = $conexao->prepare($sql);
+            $stmt->execute(["email" => $email]);
+
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($usuario && password_verify($senha, $usuario["senha"])) {
+                $_SESSION["id_usuario"] = $usuario["idUsuario"];
+                header("Location: /GitHub/Eden/2026/landing-page/index.html");
+                exit();
+
+            } else {
+                $msg = 'Email ou senha inválidos.';
+            }
+        } catch (PDOException $e) {
+            $msg = 'Erro de banco de dados: ' . $e->getMessage();
+        }
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -18,7 +50,7 @@
 
   <main class="panel-right">
 
-    <form class="form">
+    <form action="" method="POST" class="form">
 
       <figure aria-label="Logo da empresa">
         <img src="../../assets/logo.png" alt="Logo da empresa" class="logo-image">
@@ -28,6 +60,7 @@
         <h1 class="title">Bem-vindo de volta</h1>
         <p class="subtitle">Acesse sua conta para continuar</p>
       </header>
+
 
       <section class="content">
 
@@ -60,7 +93,7 @@
         <div class="row">
           <label>
             <input type="checkbox" name="lembrar">
-            Lembrar senha
+            Lembrar login
           </label>
 
           <a href="#">Esqueceu a senha?</a>
@@ -79,12 +112,44 @@
       </div>
 
       <p class="register">
-        <span>Não tem uma conta? <a href="#">Crie agora</a></span>
+        <span>Não tem uma conta? <a href="../../cadastro/create.php">Crie agora</a></span>
       </p>
 
     </form>
 
   </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const emailInput = document.querySelector('input[name="usuario"]');
+      const passwordInput = document.querySelector('input[name="senha"]');
+      const rememberCheckbox = document.querySelector('input[name="lembrar"]');
+      const form = document.querySelector('form');
+
+      const saved = localStorage.getItem("edenLoginRemember");
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          if (data.email) emailInput.value = data.email;
+          if (data.password) passwordInput.value = data.password;
+          rememberCheckbox.checked = true;
+        } catch (e) {
+          localStorage.removeItem("edenLoginRemember");
+        }
+      }
+
+      form.addEventListener("submit", function() {
+        if (rememberCheckbox.checked) {
+          localStorage.setItem("edenLoginRemember", JSON.stringify({
+            email: emailInput.value,
+            password: passwordInput.value
+          }));
+        } else {
+          localStorage.removeItem("edenLoginRemember");
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>

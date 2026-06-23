@@ -17,6 +17,7 @@ body {
 
 .panel-left {
   background: var(--gray300);
+  background-image: url(/2026/assets/image.png);
 }
 
 .panel-left-image {
@@ -76,6 +77,8 @@ header{
   font-weight: var(--medium);
   font-family: var(--fonteTítulos);
   color: var(--green1-700);
+  width: 500px;
+  text-align: center;
 }
 
   /* Campos */
@@ -95,7 +98,7 @@ header{
 
 
 label {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: var(--medium);
   color: var(--green1-default);
   font-family: var(--fonteTextos);
@@ -149,7 +152,7 @@ button {
   width: 100%;
   height: 32px;
   align-items: center;
-  background: var(--corNeutra2);
+  background: var(--orange1-default);
   color: var(--corNeutra1);
   border: none;
   border-radius: 12px;

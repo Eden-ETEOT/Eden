@@ -1,3 +1,16 @@
+<?php 
+session_start();
+require_once "../config/conexao.php";
+
+if (!isset($_SESSION['id_usuario'])) {
+    $_SESSION['redirect'] = $_SERVER['REQUEST_URI'];
+    header("Location: ../Login/loginMockup/index.php");
+    exit;
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -28,7 +41,7 @@
                 <a href="#">Suporte</a>
             </nav>
 
-            <button class="botao-primario">Login</button>
+            <a href="../Login/loginMockup/index.php"><button class="botao-primario">Login</button></a>
         </header>
 
         <!-- Início seção HERO -->

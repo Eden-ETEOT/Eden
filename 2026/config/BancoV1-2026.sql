@@ -265,3 +265,6 @@ CREATE TABLE IF NOT EXISTS chamadoAnexo (
         REFERENCES chamados (idchamados)
         ON DELETE NO ACTION ON UPDATE NO ACTION
 );
+
+INSERT INTO usuario (nome, email, senha, cpf, telefone)
+            VALUES ('a', 'a@gmail.com', 1234, 1234, 1234);

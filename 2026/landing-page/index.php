@@ -41,7 +41,7 @@ if (!isset($_SESSION['id_usuario'])) {
                 <a href="#">Suporte</a>
             </nav>
 
-            <a href="../Login/loginMockup/index.php"><button class="botao-primario">Login</button></a>
+            <a href="../config/logout.php"><button class="botao-primario">Login</button></a>
         </header>
 
         <!-- Início seção HERO -->

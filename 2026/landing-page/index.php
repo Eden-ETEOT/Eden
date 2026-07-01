@@ -1,12 +1,12 @@
 <?php 
-//session_start();
-//require_once "../config/conexao.php";
+session_start();
+require_once "../config/conexao.php";
 
-//if (!isset($_SESSION['id_usuario'])) {
-    //$_SESSION['redirect'] = $_SERVER['REQUEST_URI'];
-    //header("Location: ../Login/loginMockup/index.php");
-    //exit;
-//}
+if (!isset($_SESSION['id_usuario'])) {
+    $_SESSION['redirect'] = $_SERVER['REQUEST_URI'];
+    header("Location: ../Login/loginMockup/index.php");
+    exit;
+}
 
 ?>
 

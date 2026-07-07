@@ -9,7 +9,7 @@
 }
 
 body {
-  height: 100vh;
+  height: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
@@ -17,11 +17,12 @@ body {
 
 .panel-left {
   background: var(--gray300);
+  background-image: url(../../2026/assets/imageLogin.png);
+  width: 50vw;
+  height: 100vh;
 }
 
 .panel-left-image {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
 }
 
@@ -31,6 +32,8 @@ body {
   align-items: center;
   justify-content: center;
   background: var(--corNeutra1);
+  height: 100vh;
+  width: 50vw;
 }
 
 .form {
@@ -76,6 +79,8 @@ header{
   font-weight: var(--medium);
   font-family: var(--fonteTítulos);
   color: var(--green1-700);
+  width: 500px;
+  text-align: center;
 }
 
   /* Campos */
@@ -95,7 +100,7 @@ header{
 
 
 label {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: var(--medium);
   color: var(--green1-default);
   font-family: var(--fonteTextos);
@@ -149,7 +154,7 @@ button {
   width: 100%;
   height: 32px;
   align-items: center;
-  background: var(--corNeutra2);
+  background: var(--orange1-default);
   color: var(--corNeutra1);
   border: none;
   border-radius: 12px;

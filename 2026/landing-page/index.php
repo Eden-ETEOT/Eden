@@ -18,8 +18,8 @@ if (!isset($_SESSION['id_usuario'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Landing Page</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="../css/root.css">
+    <link rel="stylesheet" href="../CSS/LandingPage.css">
+    <link rel="stylesheet" href="../CSS/variaveis.css">
 
 </head>
 
@@ -41,7 +41,7 @@ if (!isset($_SESSION['id_usuario'])) {
                 <a href="#">Suporte</a>
             </nav>
 
-            <a href="../Login/loginMockup/index.php"><button class="botao-primario">Login</button></a>
+            <a href="../config/logout.php"><button class="botao-primario">Login</button></a>
         </header>
 
         <!-- Início seção HERO -->
@@ -129,10 +129,9 @@ if (!isset($_SESSION['id_usuario'])) {
 
                 <div class="cartao-recurso">
                     <div class="icone"> <img src="assets/icones/lista-check.png" alt=""></div>
-                    <h3>Histórico e acompanhamento</h3>
+                    <h3>Histórico de ocorrências</h3>
                     <p>
-                        Acompanhe o status de cada ocorrência e consulte o histórico para identificar problemas
-                        recorrentes.
+                        Monitore o status e o histórico das ocorrências para identificar recorrências.
                     </p>
                     <button class="botao-primario btn-sobre"> Saiba mais</button>
                 </div>
@@ -526,6 +525,6 @@ if (!isset($_SESSION['id_usuario'])) {
     <!-- fim rodapé -->
 
 </body>
-<script src="js/script.js"></script>
+<script src="../JS/LandingPage.js"></script>
 
 </html>

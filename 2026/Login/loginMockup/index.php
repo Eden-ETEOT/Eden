@@ -18,18 +18,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($usuario && password_verify($senha, $usuario["senha"])) {
                 $_SESSION["id_usuario"] = $usuario["idUsuario"];
                 header("Location: /GitHub/Eden/2026/landing-page/index.php");
+                
                 exit();
-
-            } else {
-                $msg = 'Email ou senha inválidos.';
-            }
-        } catch (PDOException $e) {
-            $msg = 'Erro de banco de dados: ' . $e->getMessage();
-        }
-    }
-?>
-
-
+                
+                } else {
+                  $msg = 'Email ou senha inválidos.';
+                  }
+                  } catch (PDOException $e) {
+                    $msg = 'Erro de banco de dados: ' . $e->getMessage();
+                    }
+                    }
+                    ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -45,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
   <figure class="panel-left">
-    <img src="../../assets/imageLogin.png" alt="Ilustração de login" class="panel-left-image">
+
   </figure>
 
   <main class="panel-right">
@@ -119,37 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   </main>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const emailInput = document.querySelector('input[name="usuario"]');
-      const passwordInput = document.querySelector('input[name="senha"]');
-      const rememberCheckbox = document.querySelector('input[name="lembrar"]');
-      const form = document.querySelector('form');
 
-      const saved = localStorage.getItem("edenLoginRemember");
-      if (saved) {
-        try {
-          const data = JSON.parse(saved);
-          if (data.email) emailInput.value = data.email;
-          if (data.password) passwordInput.value = data.password;
-          rememberCheckbox.checked = true;
-        } catch (e) {
-          localStorage.removeItem("edenLoginRemember");
-        }
-      }
-
-      form.addEventListener("submit", function() {
-        if (rememberCheckbox.checked) {
-          localStorage.setItem("edenLoginRemember", JSON.stringify({
-            email: emailInput.value,
-            password: passwordInput.value
-          }));
-        } else {
-          localStorage.removeItem("edenLoginRemember");
-        }
-      });
-    });
-  </script>
-
+  <script src="../../js/loginLembrar.js"></script>
 </body>
 </html>

@@ -39,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../CSS/LoginMockup.css">
-  <link rel="stylesheet" href="../../css/root.css">
 </head>
 <body>
 
@@ -60,6 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <p class="subtitle">Acesse sua conta para continuar</p>
       </header>
 
+      <?php if ($msg): ?>
+        <p class="msg msg-error"><?= htmlspecialchars($msg) ?></p>
+      <?php endif; ?>
 
       <section class="content">
 
@@ -95,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             Lembrar login
           </label>
 
-          <a href="#">Esqueceu a senha?</a>
+          <a href="RecuperarSenha.php">Esqueceu a senha?</a>
         </div>
 
         <button type="submit" class="btn-primary-orange-small">

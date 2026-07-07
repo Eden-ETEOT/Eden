@@ -265,3 +265,19 @@ CREATE TABLE IF NOT EXISTS chamadoAnexo (
         REFERENCES chamados (idchamados)
         ON DELETE NO ACTION ON UPDATE NO ACTION
 );
+
+CREATE TABLE IF NOT EXISTS resetSenha (
+    idResetSenha   INT          NOT NULL AUTO_INCREMENT,
+    idUsuario      INT          NOT NULL,
+    codigo         CHAR(6)      NOT NULL,
+    dataCriacao    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    dataExpiracao  DATETIME     NOT NULL,
+    verificado     TINYINT(1)   NOT NULL DEFAULT 0,
+    usado          TINYINT(1)   NOT NULL DEFAULT 0,
+    PRIMARY KEY (idResetSenha),
+    INDEX idUsuario (idUsuario ASC),
+    CONSTRAINT resetSenha_ibfk_1
+        FOREIGN KEY (idUsuario)
+        REFERENCES usuario (idUsuario)
+        ON DELETE CASCADE
+);

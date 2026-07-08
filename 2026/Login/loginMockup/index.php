@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form action="" method="POST" class="form">
 
       <figure aria-label="Logo da empresa">
-        <img src="../../assets/logo.png" alt="Logo da empresa" class="logo-image">
+        <img src="../../assets/Logo.png" alt="Logo da empresa" class="logo-image">
       </figure>
 
       <header>

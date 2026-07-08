@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         .panel-left-cadastro {
             background: var(--gray300);
-            background-image: url(../../2026/assets/imageLogin.png);
+            background-image: url(../assets/imageLogin.png);
             width: 50vw;
             height: 100vh;
         }

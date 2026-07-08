@@ -17,7 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($usuario && password_verify($senha, $usuario["senha"])) {
                 $_SESSION["id_usuario"] = $usuario["idUsuario"];
-                header("Location: /GitHub/Eden/2026/landing-page/index.php");
+                $_SESSION["nome"] = $usuario["nome"];
+                header("Location: ../../dashboard.php");
                 
                 exit();
                 
@@ -51,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form action="" method="POST" class="form">
 
       <figure aria-label="Logo da empresa">
-        <img src="../../assets/logo.png" alt="Logo da empresa" class="logo-image">
+        <img src="../../assets/Logo.png" alt="Logo da empresa" class="logo-image">
       </figure>
 
       <header>

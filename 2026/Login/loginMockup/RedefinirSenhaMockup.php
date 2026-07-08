@@ -19,8 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $msg = 'As senhas não coincidem.';
     } else {
         try {
-            // Confere de novo que o token ainda é válido e não foi usado
-            // (evita reaproveitar um link/sessão antiga).
             $sql = "SELECT idResetSenha FROM resetSenha
                     WHERE idResetSenha = :id
                       AND idUsuario = :idUsuario
@@ -143,10 +141,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             placeholder="Digite novamente a senha"
             minlength="8"
             required
+            class ="input-field-default-sm"
           >
         </div>
 
-        <button type="submit">
+        <button type="submit" class="btn-primary-orange-small">
           Redefinir senha
         </button>
 

@@ -138,6 +138,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             pattern="\d{6}"
             maxlength="6"
             required
+            class ="input-field-default-sm"
           >
         </div>
 
@@ -145,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <footer class="footer-form">
 
-        <button type="submit">
+        <button type="submit" class="btn-primary-orange-small">
           Verificar código
         </button>
 
@@ -158,9 +159,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
 
       <p class="register">
-        <button type="submit" name="reenviar" value="1" class="link-button">Reenviar código</button>
-        <br>
-        <a href="index.php">Voltar para login</a>
+        <span> Não recebeu? <button type="submit" name="reenviar" value="1" class="link-button" formnovalidate>Reenviar e-mail</button></span>
+      
       </p>
 
     </form>

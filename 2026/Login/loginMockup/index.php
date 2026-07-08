@@ -73,6 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             name="usuario"
             placeholder="Digite seu e-mail"
             required
+            class ="input-field-default-sm"
           >
         </div>
 
@@ -84,6 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             name="senha"
             placeholder="Digite sua senha"
             required
+            class ="input-field-default-sm"
           >
         </div>
 

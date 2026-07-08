@@ -106,6 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             name="usuario"
             placeholder="Digite seu e-mail"
             required
+            class ="input-field-default-sm"
           >
         </div>
 
@@ -113,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <footer class="footer-form">
 
-        <button type="submit">
+        <button type="submit" class="btn-primary-orange-small">
           Recuperar senha
         </button>
 

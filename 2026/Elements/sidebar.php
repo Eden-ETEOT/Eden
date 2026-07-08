@@ -29,7 +29,7 @@
 
             <!-- Gerenciamento Administrativo -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link" onclick="toggleSubmenu('admin'); return false;">
+                <a href="#" class="sidebar-menu-link disabled" onclick="toggleSubmenu('admin'); return false;">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <circle cx="12" cy="12" r="1"></circle>
                         <circle cx="19" cy="12" r="1"></circle>
@@ -51,7 +51,7 @@
 
             <!-- Portaria -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link" onclick="toggleSubmenu('portaria'); return false;">
+                <a href="#" class="sidebar-menu-link disabled" onclick="toggleSubmenu('portaria'); return false;">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                         <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -90,7 +90,7 @@
 
             <!-- Áreas & Eventos -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link" onclick="toggleSubmenu('eventos'); return false;">
+                <a href="#" class="sidebar-menu-link disabled" onclick="toggleSubmenu('eventos'); return false;">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                         <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -110,7 +110,7 @@
 
             <!-- Financeiro -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link" onclick="toggleSubmenu('financeiro'); return false;">
+                <a href="#" class="sidebar-menu-link disabled" onclick="toggleSubmenu('financeiro'); return false;">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <circle cx="12" cy="12" r="8"></circle>
                         <path d="M12 6v12M15 9h-6"></path>
@@ -141,7 +141,7 @@
 
             <!-- Moradores -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link">
+                <a href="#" class="sidebar-menu-link disabled">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                         <circle cx="9" cy="7" r="4"></circle>
@@ -154,7 +154,7 @@
 
             <!-- Documentação -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link">
+                <a href="#" class="sidebar-menu-link disabled">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                         <polyline points="14 2 14 8 20 8"></polyline>
@@ -167,7 +167,7 @@
 
             <!-- Configurações (Seção Admin) -->
             <li class="sidebar-menu-item" style="margin-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 16px;">
-                <a href="#" class="sidebar-menu-link">
+                <a href="#" class="sidebar-menu-link disabled">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <circle cx="12" cy="12" r="3"></circle>
                         <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6m-1.78 7.78l-4.24-4.24m-6.08 0l-4.24 4.24"></path>
@@ -177,7 +177,7 @@
             </li>
 
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link">
+                <a href="#" class="sidebar-menu-link disabled">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 100-16 8 8 0 000 16zm3.54-4.46L10.88 9.88a1 1 0 00-1.41 1.41l4.25 4.25a1 1 0 001.41 0l6.36-6.36a1 1 0 00-1.41-1.41L13.54 15.54z"></path>
                     </svg>
@@ -186,7 +186,7 @@
             </li>
 
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link">
+                <a href="#" class="sidebar-menu-link disabled">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <circle cx="12" cy="12" r="10"></circle>
                         <path d="M12 6v6l4 2"></path>

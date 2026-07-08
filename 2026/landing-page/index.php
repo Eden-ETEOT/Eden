@@ -30,7 +30,7 @@ if (!isset($_SESSION['id_usuario'])) {
         <header class="barra-navegacao">
             <figure>
                 <div>
-                    <img src="assets/logos/PNG/original.png" alt="logo éden" class="logotipo-header">
+                    <img src="../assets/PNG/original.png" alt="logo éden" class="logotipo-header">
                 </div>
             </figure>
 

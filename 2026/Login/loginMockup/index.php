@@ -17,7 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($usuario && password_verify($senha, $usuario["senha"])) {
                 $_SESSION["id_usuario"] = $usuario["idUsuario"];
-                header("Location: /GitHub/Eden/2026/landing-page/index.php");
+                $_SESSION["nome"] = $usuario["nome"];
+                header("Location: ../../dashboard.php");
                 
                 exit();
                 

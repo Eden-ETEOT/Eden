@@ -2,12 +2,7 @@
 session_start();
 require_once "../config/conexao.php";
 
-if (!isset($_SESSION['id_usuario'])) {
-    $_SESSION['redirect'] = $_SERVER['REQUEST_URI'];
-    header("Location: ../Login/loginMockup/index.php");
-    exit;
-}
-
+// Landing page é pública — sem verificação de autenticação
 ?>
 
 
@@ -30,7 +25,7 @@ if (!isset($_SESSION['id_usuario'])) {
         <header class="barra-navegacao">
             <figure>
                 <div>
-                    <img src="assets/logos/PNG/original.png" alt="logo éden" class="logotipo-header">
+                    <img src="../assets/PNG/original.png" alt="logo éden" class="logotipo-header">
                 </div>
             </figure>
 
@@ -41,7 +36,7 @@ if (!isset($_SESSION['id_usuario'])) {
                 <a href="#">Suporte</a>
             </nav>
 
-            <a href="../config/logout.php"><button class="botao-primario">Login</button></a>
+            <a href="../Login/loginMockup/index.php"><button class="botao-primario">Entrar</button></a>
         </header>
 
         <!-- Início seção HERO -->
@@ -119,7 +114,7 @@ if (!isset($_SESSION['id_usuario'])) {
             <div class="grade-recursos">
 
                 <div class="cartao-recurso">
-                    <div class="icone"> <img src="assets/icones/diagrama.png" alt=""></div>
+                    <div class="icone"> <img src="../assets/icones/diagrama.png" alt=""></div>
                     <h3>Registro estruturado</h3>
                     <p>
                         Registre ocorrências com tipo, descrição, local e imagens, evitando perda de informação.
@@ -128,7 +123,7 @@ if (!isset($_SESSION['id_usuario'])) {
                 </div>
 
                 <div class="cartao-recurso">
-                    <div class="icone"> <img src="assets/icones/lista-check.png" alt=""></div>
+                    <div class="icone"> <img src="../assets/icones/lista-check.png" alt=""></div>
                     <h3>Histórico de ocorrências</h3>
                     <p>
                         Monitore o status e o histórico das ocorrências para identificar recorrências.
@@ -137,7 +132,7 @@ if (!isset($_SESSION['id_usuario'])) {
                 </div>
 
                 <div class="cartao-recurso">
-                    <div class="icone"> <img src="assets/icones/chat.png" alt=""></div>
+                    <div class="icone"> <img src="../assets/icones/chat.png" alt=""></div>
                     <h3>Comunicação integrada</h3>
                     <p>
                         Converse diretamente dentro de cada chamado, sem depender de e-mails ou aplicativos externos.
@@ -459,7 +454,7 @@ if (!isset($_SESSION['id_usuario'])) {
             <div class="rodape-topo">
                 <div class="coluna-rodape coluna-marca">
                     <figure>
-                        <img src="assets/logos/PNG/logobranca-laranja.png" alt="" class="logotipo-rodape">
+                        <img src="../assets/PNG/logobranca-laranja.png" alt="" class="logotipo-rodape">
                 </div>
 
                 <div class="coluna-rodape coluna-links">
@@ -489,16 +484,16 @@ if (!isset($_SESSION['id_usuario'])) {
 
                     <div class="icones-sociais">
                         <a href="#" class="icone-social" aria-label="Instagram">
-                            <img src="assets/icones/instagram.png" alt="Instagram">
+                            <img src="../assets/icones/instagram.png" alt="Instagram">
                         </a>
                         <a href="#" class="icone-social" aria-label="LinkedIn">
-                            <img src="assets/icones/linkedin.png" alt="LinkedIn">
+                            <img src="../assets/icones/linkedin.png" alt="LinkedIn">
                         </a>
                         <a href="#" class="icone-social" aria-label="Facebook">
-                            <img src="assets/icones/facebook.png" alt="Facebook">
+                            <img src="../assets/icones/facebook.png" alt="Facebook">
                         </a>
                         <a href="#" class="icone-social" aria-label="Twitter/X">
-                            <img src="assets/icones/twitter.png" alt="Twitter/X">
+                            <img src="../assets/icones/twitter.png" alt="Twitter/X">
                         </a>
                     </div>
                 </div>
@@ -525,6 +520,6 @@ if (!isset($_SESSION['id_usuario'])) {
     <!-- fim rodapé -->
 
 </body>
-<script src="../JS/LandingPage.js"></script>
+<script src="../js/LandingPage.js"></script>
 
 </html>

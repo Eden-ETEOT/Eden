@@ -14,13 +14,6 @@ $stmt = $conexao->prepare("SELECT COUNT(*) FROM sindico WHERE idUsuario = :id");
 $stmt->execute(['id' => $idUsuario]);
 $isAdmin = $stmt->fetchColumn() > 0;
 
-if (!$isAdmin) {
-    http_response_code(403);
-    echo "<h1>Acesso restrito</h1><p>Esta área é exclusiva para síndicos.</p>";
-    echo '<p><a href="./landing-page/index.php">Voltar</a></p>';
-    exit;
-}
-
 // Dados do usuário logado
 $stmt = $conexao->prepare("SELECT nome FROM usuario WHERE idUsuario = :id");
 $stmt->execute(['id' => $idUsuario]);

@@ -281,3 +281,13 @@ CREATE TABLE IF NOT EXISTS resetSenha (
         REFERENCES usuario (idUsuario)
         ON DELETE CASCADE
 );
+
+INSERT INTO usuario (email, senha, CPF, telefone, nome, ativo)
+VALUES (
+    'gui.ferreira365@gmail.com',
+    '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', -- hash de "1234"
+    '000.000.000-00', 
+    NULL,
+    'adm', 
+    1
+);

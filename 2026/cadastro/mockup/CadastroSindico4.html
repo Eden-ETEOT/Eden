@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro Síndico 4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../CSS/CadastroSindico.css">
+</head>
+<body>
+  <main class="panel-rigth">
+
+    <form class="form">
+
+        <figure aria-label="Logo da empresa">
+        <img src="../../assets/Logo.png" alt="Logo da empresa" class="logo-image">
+      </figure>
+
+      <header>
+        <h1 class="title">Crie sua Conta</h1>
+        <p class="subtitle">Endereço</p>
+      </header>
+
+      <section class="content">
+
+        <div class="field">
+          <label for="text">Logradouro</label>
+          <input
+            type="text"
+            id="logradouro"
+            name="logradouro"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="text">numero</label>
+          <input
+            type="text"
+            id="numero"
+            name="numero"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="text">bairro</label>
+          <input
+            type="text"
+            id="bairro"
+            name="bairro"
+            required
+          >
+        </div>
+
+         <div class="field">
+          <label for="text">Cidade</label>
+          <input
+            type="text"
+            id="Cidade"
+            name="Cidade"
+            required
+          >
+        </div>
+
+         <div class="field">
+    <label for="uf">UF</label>
+
+    <div class="field">
+        <select id="uf" name="uf" required>
+            <option value="" selected disabled>a</option>
+            <option value="AC">Acre</option>
+            <option value="AL">Alagoas</option>
+            <option value="AP">Amapá</option>
+            <option value="AM">Amazonas</option>
+            <option value="BA">Bahia</option>
+            <option value="CE">Ceará</option>
+            <option value="DF">Distrito Federal</option>
+            <option value="ES">Espírito Santo</option>
+            <option value="GO">Goiás</option>
+            <option value="MA">Maranhão</option>
+            <option value="MT">Mato Grosso</option>
+            <option value="MS">Mato Grosso do Sul</option>
+            <option value="MG">Minas Gerais</option>
+            <option value="PA">Pará</option>
+            <option value="PB">Paraíba</option>
+            <option value="PR">Paraná</option>
+            <option value="PE">Pernambuco</option>
+            <option value="PI">Piauí</option>
+            <option value="RJ">Rio de Janeiro</option>
+            <option value="RN">Rio Grande do Norte</option>
+            <option value="RS">Rio Grande do Sul</option>
+            <option value="RO">Rondônia</option>
+            <option value="RR">Roraima</option>
+            <option value="SC">Santa Catarina</option>
+            <option value="SP">São Paulo</option>
+            <option value="SE">Sergipe</option>
+            <option value="TO">Tocantins</option>
+        </select>
+    </div>
+</div>
+      </section>
+
+      <footer class="footer-form">
+
+        <button type="submit">
+          Próximo
+        </button>
+
+      </footer>
+
+      <div class="divider" aria-hidden="true">
+        <hr>
+        <span>ou</span>
+        <hr>
+      </div>
+
+      <p class="register">
+        <a href="#">Já tem uma conta? <a href="../../Login/loginMockup/index.php">Faça seu login</a></a>
+      </p>
+
+    </form>
+
+  </main>
+
+  <aside class="panel-left" aria-label="Imagem ilustrativa"></aside>
+
+
+</body>
+</html>

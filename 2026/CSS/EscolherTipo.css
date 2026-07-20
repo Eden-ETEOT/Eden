@@ -1,0 +1,140 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url("https://use.typekit.net/qud3duq.css");
+@import url("variaveis.css");
+
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+body {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+
+.panel-left {
+  background: var(--gray300);
+  background-image: url(../assets/imageLogin.png);
+  width: 50vw;
+  height: 100vh;
+}
+
+.panel-left-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Painel direito */
+.panel-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--corNeutra1);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 404px;
+  gap: var(--spacing600);
+}
+
+  header{
+    text-align: center;
+  }
+  
+
+  /* Logo placeholder */
+
+.logo{
+  width: 88px;
+  height: 88px;
+  background: #d9d9d9;
+  border: 1px solid #aaa;
+  margin-bottom: var(--spacing800);
+}
+
+.logo-image {
+  width: 115px;
+  height: 100px;
+  object-fit: contain;
+  margin-top: 40px;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: var(--semi-bold);
+  color: var(--green3-800);
+  font-family: var(--fonteTítulos);
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  font-weight: var(--medium);
+  font-family: var(--fonteTítulos);
+  color: var(--green3-800);
+}
+
+  /* Campos */
+.content{
+  display: flex;
+  gap: var(--spacing700);
+}
+
+
+  /* Linha checkbox + esqueceu */
+.row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1rem;
+  color: var(--corNeutra2);
+  font-family: var(--fonteTextos);
+}
+
+
+  /* Botão */
+button {
+  width: 100%;
+  height: 32px;
+  align-items: center;
+  background: var(--corNeutra2);
+  color: var(--corNeutra1);
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: var(--fonteTextos);
+  font-weight: var(--normal);
+}
+
+.card-1{
+    display: flex;
+    flex-direction: column;
+    width:308px;
+    height:448px;
+    border-radius: 15px;
+    border: solid 1px #EAEAEA;
+    gap: var(--spacing400);
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 50px;
+    font-family: var(--fonteTextos);
+    font-weight: var(--normal);
+      color:var(--green3-800);
+}
+.icon-arrow{
+   width:45px;
+}
+.subtitulo-card1{
+  width: 90%;
+  text-align: center;
+  color: var(--corNeutra2);
+
+}

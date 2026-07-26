@@ -1,8 +1,6 @@
 <?php 
 session_start();
 require_once "../config/conexao.php";
-
-// Landing page é pública — sem verificação de autenticação
 ?>
 
 
@@ -12,7 +10,7 @@ require_once "../config/conexao.php";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page</title>
+    <title>Landing Page - test</title>
     <link rel="stylesheet" href="../CSS/LandingPage.css">
     <link rel="stylesheet" href="../CSS/variaveis.css">
 

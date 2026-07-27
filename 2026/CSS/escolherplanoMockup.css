@@ -1,0 +1,199 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url("https://use.typekit.net/qud3duq.css");
+@import url("variaveis.css");
+
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+/* ============================
+   CABEÇALHO
+============================ */
+#cabecalho{
+    background-color: var(--green1-800);
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    
+}
+/* Logo */
+.logo{
+  height: 66px;
+  align-self: center;
+ 
+}
+/* ============================
+   CONTEÚDO PRINCIPAL
+============================ */
+main{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+}
+
+/* ============================
+   TÍTULOS
+============================ */
+.titulos{
+    align-content: center;
+    height: 150px;
+    width: 100%;
+    align-self: center;
+    text-align: center;
+    font-family: var(--fonteTítulos);
+}
+
+.destaque-titulo{
+    color: var(--green3-700);
+}
+#subtitulo-principal{
+    font-family: var(--fonteTextos);
+    font-weight: var(--normal);
+}
+.cards-beneficios{
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--fonteTextos);
+}
+
+/* Card individual */
+.card{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 5px 14px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+
+    background: #f8f8f8;
+
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+
+}
+
+/* Linha divisória */
+hr{
+    background-color: #333;
+}
+
+/* ============================
+   CARDS DOS PLANOS
+============================ */
+.cards-planos{
+    margin-top: 50px;
+    display: flex;
+    gap: var(--spacing600);
+    justify-content: center;
+    align-items: flex-end;
+}
+.cifrao{
+    font-family: var(--fonteTextos);
+    color: rgb(39, 39, 39);
+    font-weight: 400;
+    font-size: 24px;
+}
+.mes{
+    font-family: var(--fonteTextos);
+    color: rgb(39, 39, 39);
+    font-weight: 400;
+    font-size: small;
+}
+#preco{
+    font-family: var(--fonteTítulos);
+    color:var(--green3-700);
+    font-weight: bold;
+    font-size: 36px;
+}
+/* Card do plano */
+.card-plano{
+    border-radius: 10px;
+    border: solid 1px var(--green2-200);
+    height: 500px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+/* Área de textos do plano */
+.card-plano > .textos{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-top: var(--spacing600);
+    font-family: var(--fonteTítulos);
+    font-size: medium;
+}
+
+/* Subtítulo do plano */
+#subtitulo{
+    font-family: var(--fonteTextos);
+    font-size: small;
+    font-weight: 300;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Plano profissional (destacado) */
+.profissional{
+    background-color: rgba(8, 152, 177, 0);
+    height: 520px;
+    width: 420px;
+}
+
+/* ============================
+   LISTA DE BENEFÍCIOS
+============================ */
+.beneficios{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-family: var(--fonteTextos);
+    margin-left: 20px;
+    margin-top: 30px;
+}
+
+/* Remove marcadores da lista */
+li{
+    list-style: none;
+    display: flex;
+    gap: 8px;
+}
+.fa-solid{
+    font-size: medium;
+    color:var(--green3-700);
+   
+}
+
+/* ============================
+   BOTÃO ASSINAR
+============================ */
+.button-assinar{
+  display: flex;
+  justify-content: center;
+  width: 230px;
+  height: 30px;
+  align-items: center;
+  background: var(--orange1-default);
+  color: var(--corNeutra1);
+  border: none;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-family: var(--fonteTextos);
+  font-weight: var(--normal);
+  margin: 0 auto;
+  margin-top: 50px;
+  gap: 8px;
+}
+.button-assinar:hover{
+    background-color: var(--orange1-400);
+}

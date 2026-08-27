@@ -291,3 +291,20 @@ VALUES (
     'adm', 
     1
 );
+
+INSERT INTO plano
+(nome, descricao, valor, maxApartamentos, funcionalidades, ativo)
+VALUES
+(
+  'Plano Básico',
+  'Plano inicial do condomínio',
+  0.00,
+  50,
+  'Gestão de moradores e ocorrências',
+  1
+);
+
+
+
+
+

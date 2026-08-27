@@ -18,6 +18,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome_condominio = trim($_POST["nome"]);
     $cep = trim($_POST["CEP"]);
 
+    if (isset($_FILES["foto"]) && $_FILES["foto"]["error"] !== UPLOAD_ERR_NO_FILE) {
+      $foto = $_FILES["foto"];
+      $tiposPermitidos = ["image/jpeg" => "jpg", "image/png" => "png", "image/gif" => "gif", "image/webp" => "webp"];
+      $tamanhoMaximo = 5 * 1024 * 1024;
+      $imagem = $foto["error"] === UPLOAD_ERR_OK ? getimagesize($foto["tmp_name"]) : false;
+
+      if ($foto["error"] !== UPLOAD_ERR_OK || $foto["size"] > $tamanhoMaximo || $imagem === false || !isset($tiposPermitidos[$imagem["mime"]])) {
+        $erro = "Envie uma imagem JPG, PNG, GIF ou WEBP de até 5 MB.";
+      } else {
+        $diretorioUpload = __DIR__ . "/../../uploads/condominios";
+        if (!is_dir($diretorioUpload) && !mkdir($diretorioUpload, 0755, true)) {
+          $erro = "Não foi possível preparar o envio da foto.";
+        } else {
+          $nomeArquivo = bin2hex(random_bytes(16)) . "." . $tiposPermitidos[$imagem["mime"]];
+          $caminhoArquivo = $diretorioUpload . DIRECTORY_SEPARATOR . $nomeArquivo;
+
+          if (!move_uploaded_file($foto["tmp_name"], $caminhoArquivo)) {
+            $erro = "Não foi possível salvar a foto.";
+          } else {
+            $_SESSION["condominio"]["foto"] = "uploads/condominios/" . $nomeArquivo;
+          }
+        }
+      }
+    }
+
     if (empty($cnpj) || empty($nome_condominio) || empty($cep)) {
         $erro = "Preencha todos os campos!";
     } else {
@@ -54,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
   <main class="panel-rigth">
 
-    <form class="form" action="CadastroSindico3.php" method="post">
+    <form class="form" action="CadastroSindico3.php" method="post" enctype="multipart/form-data">
 
       <figure aria-label="Logo da empresa">
         <img src="../../assets/Logo.png" alt="Logo da empresa" class="logo-image">
@@ -84,6 +109,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="field">
           <label for="CEP">CEP</label>
           <input type="text" id="CEP" name="CEP" value="<?php echo htmlspecialchars($cep); ?>" required>
+        </div>
+
+        <div class="field">
+          <label for="foto">Foto do condomínio</label>
+          <input type="file" id="foto" name="foto" accept="image/*">
         </div>
 
       </section>

@@ -29,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_SESSION["cadastro"]["email"];
         $telefone = $_SESSION["cadastro"]["telefone"];
         $senha = $_SESSION["cadastro"]["senha"];
+        $foto_usuario = $_SESSION["cadastro"]["foto"] ?? null;
 
         // Dados do condomínio (etapas 3 e 4)
         $cnpj = $_SESSION["condominio"]["cnpj"];
@@ -39,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $bairro = $_SESSION["condominio"]["bairro"];
         $cidade = $_SESSION["condominio"]["cidade"];
         $uf = $_SESSION["condominio"]["uf"];
+        $foto = $_SESSION["condominio"]["foto"] ?? null;
 
         // Verifica novamente se CPF/e-mail já existem (evita duplicidade em caso de dupla submissão)
         $stmt = $conexao->prepare("SELECT idUsuario FROM usuario WHERE CPF = :cpf OR email = :email");
@@ -53,8 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $conexao->beginTransaction();
 
                 $stmt = $conexao->prepare(
-                    "INSERT INTO usuario (nome, CPF, email, telefone, senha)
-                     VALUES (:nome, :cpf, :email, :telefone, :senha)"
+                  "INSERT INTO usuario (nome, CPF, email, telefone, senha, foto)
+                   VALUES (:nome, :cpf, :email, :telefone, :senha, :foto)"
                 );
                 $stmt->execute([
                     "nome" => $nome,
@@ -62,6 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     "email" => $email,
                     "telefone" => $telefone,
                     "senha" => $senhaCriptografada,
+                    "foto" => $foto_usuario,
                 ]);
 
                 $usuario_id = $conexao->lastInsertId();
@@ -78,13 +81,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $stmt = $conexao->prepare(
                   "INSERT INTO condominio
-                   (CNPJ, nome, CEP, logradouro, numero, bairro, cidade, UF, telefone, email, Plano_idPlano)
+                   (CNPJ, nome, foto, CEP, logradouro, numero, bairro, cidade, UF, telefone, email, Plano_idPlano)
                      VALUES
-                   (:cnpj, :nome, :cep, :logradouro, :numero, :bairro, :cidade, :uf, :telefone, :email, :plano)"
+                   (:cnpj, :nome, :foto, :cep, :logradouro, :numero, :bairro, :cidade, :uf, :telefone, :email, :plano)"
                 );
                 $stmt->execute([
                     "cnpj" => $cnpj,
                     "nome" => $nome_condominio,
+                    "foto" => $foto,
                     "cep" => $cep,
                     "logradouro" => $logradouro,
                     "numero" => $numero,

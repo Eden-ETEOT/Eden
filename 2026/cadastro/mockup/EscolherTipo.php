@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+$nivel = $_GET['nivel'] ?? '';
+if (in_array($nivel, ['adm', 'mor'], true)) {
+    $_SESSION['nivel'] = $nivel;
+    header('Location: CadastroSindico1.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,7 +16,7 @@
   <title>Tipo de Usuário Mockup</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../CSS/EscolherTipo.css">
 </head>
 <body>
@@ -36,7 +46,9 @@
             <h3 class="subtitulo-card1">Registre ocorrências,
                 acompanhe o status e receba atualizações em tempo real
             </h3>
+            <a href="EscolherTipo.php?nivel=mor">
             <img class="icon-arrow" src="../../assets/icones/arrow_right_alt.png" alt="">
+            </a>
         </div>
 
          <div class="card-1 card-sindico">
@@ -46,7 +58,7 @@
             <h1 class="titulo-card1">Sindico</h1>
             <h3 class="subtitulo-card1">Gestão completa do condominio na palma da sua mão</h3>
 
-            <a href="CadastroSindico1.html">
+            <a href="EscolherTipo.php?nivel=adm">
             <img  class="icon-arrow" 
             src="../../assets/icones/arrow_right_alt.png" alt="">
             </a>

@@ -3,10 +3,15 @@
 ?>
 <aside class="sidebar">
     <div class="sidebar-header">
-        <div class="sidebar-logo">é</div>
+        <?php $cond_name = $cond_name ?? 'Condomínio'; ?>
+        <?php if (!empty($cond_foto)): ?>
+            <div class="sidebar-logo sidebar-logo-img" style="background-image: url('<?= htmlspecialchars($cond_foto) ?>'); background-size: cover; background-position: center;"></div>
+        <?php else: ?>
+            <div class="sidebar-logo">é</div>
+        <?php endif; ?>
         <div class="sidebar-account">
-            <span class="sidebar-account-name">Administração</span>
-            <span class="sidebar-account-type">Plano Avançado</span>
+            <span class="sidebar-account-name"><?= htmlspecialchars($cond_name) ?></span>
+            <span class="sidebar-account-type">Administração</span>
         </div>
     </div>
 

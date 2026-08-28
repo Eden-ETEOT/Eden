@@ -8,7 +8,21 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSearch();
     initializeUserAvatar();
     attachEventListeners();
+    showUrlNotification();
 });
+
+/**
+ * Exibir notificação com base nos parâmetros da URL (ex: ?tipo=success&msg=...)
+ * Usado ao chegar na dashboard vindo de um cadastro/redirecionamento.
+ */
+function showUrlNotification() {
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get('tipo') || 'info';
+    const message = params.get('msg');
+    if (message) {
+        showNotification(decodeURIComponent(message), type, 3000);
+    }
+}
 
 /**
  * Inicializar busca
@@ -32,8 +46,12 @@ function initializeUserAvatar() {
     const userName = document.getElementById('userName');
     
     if (userName && userAvatar) {
-        const firstLetter = userName.textContent.charAt(0).toUpperCase();
-        userAvatar.textContent = firstLetter;
+        // Só exibe a inicial quando o avatar não tem foto de perfil
+        const hasPhoto = userAvatar.style.backgroundImage && userAvatar.style.backgroundImage !== 'none';
+        if (!hasPhoto) {
+            const firstLetter = userName.textContent.charAt(0).toUpperCase();
+            userAvatar.textContent = firstLetter;
+        }
     }
 }
 

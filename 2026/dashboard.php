@@ -15,12 +15,28 @@ $stmt->execute(['id' => $idUsuario]);
 $isAdmin = $stmt->fetchColumn() > 0;
 
 // Dados do usuário logado
-$stmt = $conexao->prepare("SELECT nome FROM usuario WHERE idUsuario = :id");
+$stmt = $conexao->prepare("SELECT nome, foto FROM usuario WHERE idUsuario = :id");
 $stmt->execute(['id' => $idUsuario]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 $user_name = $user ? $user['nome'] : 'Usuário';
 $user_type = 'Síndico';
 $user_avatar = mb_substr($user_name, 0, 1);
+$user_foto = ($user && !empty($user['foto'])) ? $user['foto'] : null;
+
+// Foto do condomínio (vinculado pelo último condomínio criado)
+// TODO futuro: substituir por FK sindico -> condominio quando o schema for atualizado
+$cond_name = 'Condomínio';
+$cond_foto = null;
+try {
+    $stmt = $conexao->query("SELECT nome, foto FROM condominio ORDER BY idCondominio DESC LIMIT 1");
+    $cond = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($cond) {
+        $cond_name = $cond['nome'];
+        $cond_foto = !empty($cond['foto']) ? $cond['foto'] : null;
+    }
+} catch (PDOException $e) {
+    // sem condomínio cadastrado ainda
+}
 
 // Estatísticas do banco
 $stats = [];

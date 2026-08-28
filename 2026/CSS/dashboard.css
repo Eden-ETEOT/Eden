@@ -619,3 +619,12 @@ body {
         min-width: 600px;
     }
 }
+
+/* ===== Imagens de avatar (foto) ===== */
+.sidebar-logo-img,
+.user-avatar-img {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+}

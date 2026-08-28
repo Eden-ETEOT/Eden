@@ -116,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
 
       <p class="register">
-        <span>Não tem uma conta? <a href="../../cadastro/create.php">Crie agora</a></span>
+        <span>Não tem uma conta? <a href="../../cadastro/mockup/escolhertipo.php">Crie agora</a></span>
       </p>
 
     </form>

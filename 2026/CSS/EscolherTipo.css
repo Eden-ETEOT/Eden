@@ -20,7 +20,7 @@ body {
   background: var(--gray300);
   background-image: url(../assets/imageLogin.png);
   width: 50vw;
-  height: 100vh;
+  height: 100%;
 }
 
 .panel-left-image {

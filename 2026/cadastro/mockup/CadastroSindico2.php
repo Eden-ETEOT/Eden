@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
   <main class="panel-rigth">
 
-    <form class="form" action="CadastroSindico2.php" method="post">
+    <form class="form " action="CadastroSindico2.php" method="post">
 
       <figure aria-label="Logo da empresa">
         <img src="../../assets/Logo.png" alt="Logo da empresa" class="logo-image">

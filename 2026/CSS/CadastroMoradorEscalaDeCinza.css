@@ -26,7 +26,7 @@ body {
   object-fit: cover;
 }
 
-
+/* Painel esquerdo */
 .panel-left{
   display: flex;
   align-items: center;
@@ -42,7 +42,7 @@ body {
   gap: var(--spacing400);
 }
 
-
+  /* Logo placeholder */
   header{
     text-align:center;
 }
@@ -75,7 +75,7 @@ body {
   color: var(--corNeutra2);
 }
 
-
+  /* Campos */
 .content{
   display: flex;
   flex-direction: column;
@@ -97,12 +97,14 @@ label {
   color: var(--corNeutra2);
   font-family: var(--fonteTextos);
 }
-
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="number"],
+input[type="email"]
+{
   width: 100%;
   padding: var(--spacing200) var(--spacing300);
-  border: 1px solid var(--corNeutra2);
+  border: 1px solid var(--gray200);
   color: var(--gray200);
   font-size: 1rem;
   outline: none;
@@ -110,7 +112,38 @@ input[type="password"] {
   height: 2rem;
 }
 
-  
+
+input[type="file"] {
+  width: 100%;
+  height: 32px;
+  border: 1px solid var(--gray200);
+  border-radius: 8px;
+  background: var(--corNeutra1);
+  font-family: var(--fonteTextos);
+  font-size: 1rem;
+  color: var(--gray200);
+  padding: 0;
+}
+.foto-text{
+  font-family: var(--fonteTextos);
+  color: var(--gray200);
+  font-size: 1rem;
+  font-weight: var(--medium);
+}
+
+input[type="file"]::file-selector-button {
+  height: 100%;
+  border: none;
+  border-right: 1px solid var(--gray200);
+  background: transparent;
+  color: var(--gray200);
+  padding: 0 12px;
+  margin-right: 8px;
+  font-family: var(--fonteTextos);
+  cursor: pointer;
+}
+
+
 .row {
   width: 100%;
   display: flex;
@@ -136,7 +169,7 @@ input[type="password"] {
 
 }
 
-
+  /* Botão */
 button {
   width: 100%;
   height: 32px;

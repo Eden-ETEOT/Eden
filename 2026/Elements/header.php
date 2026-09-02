@@ -5,6 +5,7 @@
 
 <header class="dashboard-header">
     <div class="header-left">
+        <h1 class="header-title"><?= htmlspecialchars($pageTitle ?? 'Painel de Controle') ?></h1>
         <div class="search-container">
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="11" cy="11" r="8"></circle>

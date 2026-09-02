@@ -56,15 +56,6 @@ function attachEventListeners() {
             console.log('Abrindo menu do usuário');
         });
     }
-
-    // Ações das linhas da tabela
-    const actionDropdowns = document.querySelectorAll('.actions-dropdown');
-    actionDropdowns.forEach(dropdown => {
-        dropdown.addEventListener('click', function(e) {
-            e.stopPropagation();
-            console.log('Abrindo ações para:', this.closest('tr'));
-        });
-    });
 }
 
 /**
@@ -187,7 +178,7 @@ function animateCounter(element, targetValue, duration = 1000) {
  */
 function logout() {
     if (confirm('Tem certeza que deseja sair?')) {
-        window.location.href = './config/logout.php';
+        window.location.href = './logout.php';
     }
 }
 
@@ -211,6 +202,169 @@ function loadSavedTheme() {
 
 // Carregar tema salvo ao iniciar
 loadSavedTheme();
+
+/* =========================================================
+   FLUXO DE OCORRÊNCIAS (Adicionar / Editar / Excluir)
+   ========================================================= */
+
+function abrirModal(id) {
+    document.getElementById(id).classList.add('active');
+}
+
+function fecharModal(id) {
+    document.getElementById(id).classList.remove('active');
+    const erro = document.querySelector('#' + id + ' .modal-error');
+    if (erro) erro.textContent = '';
+}
+
+/**
+ * Abre o modal em modo "Nova ocorrência", com o formulário limpo.
+ */
+function abrirModalNovo() {
+    document.getElementById('modalOcorrenciaTitulo').textContent = 'Nova ocorrência';
+    document.getElementById('ocorrenciaAcao').value = 'criar';
+    document.getElementById('ocorrenciaId').value = '';
+    document.getElementById('formOcorrencia').reset();
+    abrirModal('modalOcorrencia');
+}
+
+/**
+ * Abre o modal em modo "Editar", pré-preenchendo com os dados
+ * guardados no atributo data-issue da linha (<tr>) clicada.
+ */
+function abrirModalEditar(botao) {
+    const linha = botao.closest('tr');
+    const dados = JSON.parse(linha.dataset.issue);
+
+    document.getElementById('modalOcorrenciaTitulo').textContent = 'Editar ocorrência';
+    document.getElementById('ocorrenciaAcao').value = 'editar';
+    document.getElementById('ocorrenciaId').value = dados.id;
+    document.getElementById('ocorrenciaTitulo').value = dados.titulo || '';
+    document.getElementById('ocorrenciaDescricao').value = dados.descricao || '';
+    document.getElementById('ocorrenciaCategoria').value = dados.categoria_id;
+    document.getElementById('ocorrenciaPrioridade').value = dados.prioridade_id;
+    document.getElementById('ocorrenciaStatus').value = dados.status;
+    if (dados.morador_id) {
+        document.getElementById('ocorrenciaMorador').value = dados.morador_id;
+    }
+
+    fecharTodosOsMenus();
+    abrirModal('modalOcorrencia');
+}
+
+let idOcorrenciaParaExcluir = null;
+
+function abrirModalExcluir(botao) {
+    const linha = botao.closest('tr');
+    const dados = JSON.parse(linha.dataset.issue);
+    idOcorrenciaParaExcluir = dados.id;
+
+    const nome = dados.titulo || dados.categoria_nome || 'esta ocorrência';
+    document.getElementById('modalExcluirTexto').textContent =
+        `Tem certeza que deseja excluir "${nome}"? Essa ação não pode ser desfeita.`;
+
+    fecharTodosOsMenus();
+    abrirModal('modalExcluir');
+}
+
+/**
+ * Envia o formulário (criar ou editar, dependendo do campo "acao")
+ * para o endpoint PHP via fetch, sem recarregar a página até o fim.
+ */
+async function salvarOcorrencia(event) {
+    event.preventDefault();
+
+    const form = document.getElementById('formOcorrencia');
+    const erro = document.getElementById('ocorrenciaErro');
+    const botaoSalvar = form.querySelector('.modal-submit-btn');
+
+    erro.textContent = '';
+    botaoSalvar.disabled = true;
+    const textoOriginal = botaoSalvar.textContent;
+    botaoSalvar.textContent = 'Salvando...';
+
+    try {
+        const resposta = await fetch('./actions/ocorrencias.php', {
+            method: 'POST',
+            body: new FormData(form)
+        });
+        const resultado = await resposta.json();
+
+        if (!resultado.ok) {
+            erro.textContent = resultado.erro || 'Não foi possível salvar a ocorrência.';
+            return;
+        }
+
+        window.location.reload();
+    } catch (e) {
+        erro.textContent = 'Erro de conexão. Tente novamente.';
+    } finally {
+        botaoSalvar.disabled = false;
+        botaoSalvar.textContent = textoOriginal;
+    }
+}
+
+/**
+ * Confirma a exclusão da ocorrência selecionada em abrirModalExcluir().
+ */
+async function confirmarExclusao() {
+    if (!idOcorrenciaParaExcluir) return;
+
+    const erro = document.getElementById('excluirErro');
+    const botao = document.getElementById('btnConfirmarExclusao');
+
+    erro.textContent = '';
+    botao.disabled = true;
+    const textoOriginal = botao.textContent;
+    botao.textContent = 'Excluindo...';
+
+    try {
+        const dados = new FormData();
+        dados.append('acao', 'deletar');
+        dados.append('id', idOcorrenciaParaExcluir);
+
+        const resposta = await fetch('./actions/ocorrencias.php', { method: 'POST', body: dados });
+        const resultado = await resposta.json();
+
+        if (!resultado.ok) {
+            erro.textContent = resultado.erro || 'Não foi possível excluir a ocorrência.';
+            return;
+        }
+
+        window.location.reload();
+    } catch (e) {
+        erro.textContent = 'Erro de conexão. Tente novamente.';
+    } finally {
+        botao.disabled = false;
+        botao.textContent = textoOriginal;
+    }
+}
+
+/* ---------- Dropdown "Ações" de cada linha da tabela ---------- */
+
+function toggleActionsMenu(event, botao) {
+    event.stopPropagation();
+    const menu = botao.nextElementSibling;
+    const jaEstavaAberto = menu.classList.contains('active');
+    fecharTodosOsMenus();
+    if (!jaEstavaAberto) menu.classList.add('active');
+}
+
+function fecharTodosOsMenus() {
+    document.querySelectorAll('.actions-menu.active').forEach(menu => menu.classList.remove('active'));
+}
+
+// Fecha o menu de ações ao clicar fora dele
+document.addEventListener('click', fecharTodosOsMenus);
+
+// Fecha o modal ao clicar fora da caixa (na área escurecida)
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) overlay.classList.remove('active');
+        });
+    });
+});
 
 // Adições de CSS para animações
 const style = document.createElement('style');

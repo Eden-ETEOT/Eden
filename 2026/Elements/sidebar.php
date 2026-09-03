@@ -31,25 +31,6 @@
                 </a>
             </li>
 
-            <!-- Comunicação -->
-            <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link" onclick="toggleSubmenu('comunicacao'); return false;">
-                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    Comunicação
-                    <svg style="width: 12px; height: 12px; margin-left: auto;" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="3 4 6 8 9 4"></polyline>
-                    </svg>
-                </a>
-                <ul id="submenu-comunicacao" class="sidebar-submenu">
-                    <li class="sidebar-submenu-item"><a href="#" class="sidebar-submenu-link">Chat</a></li>
-                    <li class="sidebar-submenu-item"><a href="#" class="sidebar-submenu-link">Feedbacks</a></li>
-                    <li class="sidebar-submenu-item"><a href="#" class="sidebar-submenu-link">Mural</a></li>
-                    <li class="sidebar-submenu-item"><a href="#" class="sidebar-submenu-link">Atas de Reunião</a></li>
-                </ul>
-            </li>
-
             <!-- Ocorrências -->
             <li class="sidebar-menu-item">
                 <a href="#" class="sidebar-menu-link">
@@ -60,63 +41,61 @@
                 </a>
             </li>
 
-            <!-- Itens desabilitados -->
+            <!-- Moradores -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link disabled">
+                <a href="#" class="sidebar-menu-link">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6m-1.78 7.78l-4.24-4.24m-6.08 0l-4.24 4.24"></path>
-                    </svg>
-                    Gerenciamento
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link disabled">
-                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6m-1.78 7.78l-4.24-4.24m-6.08 0l-4.24 4.24"></path>
-                    </svg>
-                    Portaria
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link disabled">
-                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6m-1.78 7.78l-4.24-4.24m-6.08 0l-4.24 4.24"></path>
-                    </svg>
-                    Áreas & Eventos
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link disabled">
-                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6m-1.78 7.78l-4.24-4.24m-6.08 0l-4.24 4.24"></path>
-                    </svg>
-                    Financeiro
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link disabled">
-                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6m-1.78 7.78l-4.24-4.24m-6.08 0l-4.24 4.24"></path>
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
                     Moradores
                 </a>
             </li>
+
+            <!-- Apartamentos -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link disabled">
+                <a href="#" class="sidebar-menu-link">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6m-1.78 7.78l-4.24-4.24m-6.08 0l-4.24 4.24"></path>
+                        <path d="M3 21h18"></path>
+                        <path d="M5 21V7l8-4 8 4v14"></path>
+                        <path d="M9 9h1m4 0h1M9 13h1m4 0h1M9 17h1m4 0h1"></path>
+                    </svg>
+                    Apartamentos
+                </a>
+            </li>
+
+            <!-- Documentação -->
+            <li class="sidebar-menu-item">
+                <a href="#" class="sidebar-menu-link">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="8" y1="13" x2="16" y2="13"></line>
+                        <line x1="8" y1="17" x2="16" y2="17"></line>
                     </svg>
                     Documentação
                 </a>
             </li>
+
+            <!-- Relatórios -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link disabled">
+                <a href="#" class="sidebar-menu-link">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    Relatórios
+                </a>
+            </li>
+
+            <li class="sidebar-section-label">Administração</li>
+
+            <!-- Configurações -->
+            <li class="sidebar-menu-item">
+                <a href="#" class="sidebar-menu-link">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <circle cx="12" cy="12" r="3"></circle>
                         <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6m-1.78 7.78l-4.24-4.24m-6.08 0l-4.24 4.24"></path>
@@ -124,20 +103,23 @@
                     Configurações
                 </a>
             </li>
+
+            <!-- Permissões -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link disabled">
+                <a href="#" class="sidebar-menu-link">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6m-1.78 7.78l-4.24-4.24m-6.08 0l-4.24 4.24"></path>
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                     </svg>
                     Permissões
                 </a>
             </li>
+
+            <!-- Suporte -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link disabled">
+                <a href="#" class="sidebar-menu-link">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6m-1.78 7.78l-4.24-4.24m-6.08 0l-4.24 4.24"></path>
+                        <path d="M4 15v-3a8 8 0 0 1 16 0v3"></path>
+                        <path d="M21 16a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-1a2 2 0 0 1 2-2h3zm-18 0a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2H3z"></path>
                     </svg>
                     Suporte
                 </a>
@@ -146,20 +128,11 @@
     </nav>
 
     <div class="sidebar-footer">
-        <a href="./config/logout.php" class="sidebar-logout">
+        <a href="./logout.php" class="sidebar-logout">
             <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M10 3H5a2 2 0 00-2 2v14c0 1.1.9 2 2 2h5m7-4l4-4m0 0l-4-4m4 4H9"></path>
             </svg>
-            Sair
+            Log out
         </a>
     </div>
 </aside>
-
-<script>
-function toggleSubmenu(id) {
-    const submenu = document.getElementById('submenu-' + id);
-    if (submenu) {
-        submenu.classList.toggle('active');
-    }
-}
-</script>

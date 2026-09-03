@@ -26,7 +26,7 @@ body {
   object-fit: cover;
 }
 
-/* Painel esquerdo */
+
 .panel-left{
   display: flex;
   align-items: center;
@@ -42,7 +42,7 @@ body {
   gap: var(--spacing400);
 }
 
-  /* Logo placeholder */
+
   header{
     text-align:center;
 }
@@ -75,7 +75,7 @@ body {
   color: var(--corNeutra2);
 }
 
-  /* Campos */
+
 .content{
   display: flex;
   flex-direction: column;
@@ -102,7 +102,7 @@ input[type="text"],
 input[type="password"] {
   width: 100%;
   padding: var(--spacing200) var(--spacing300);
-  border: 1px solid var(--corNeutra2); /* vai virar gray 200 no mockup*/
+  border: 1px solid var(--corNeutra2);
   color: var(--gray200);
   font-size: 1rem;
   outline: none;
@@ -110,7 +110,7 @@ input[type="password"] {
   height: 2rem;
 }
 
-  /* Linha checkbox + esqueceu */
+  
 .row {
   width: 100%;
   display: flex;
@@ -136,7 +136,7 @@ input[type="password"] {
 
 }
 
-  /* Botão */
+
 button {
   width: 100%;
   height: 32px;

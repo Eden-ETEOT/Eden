@@ -41,6 +41,25 @@
                 </a>
             </li>
 
+            <!-- Comunicação -->
+            <li class="sidebar-menu-item">
+                <a href="#" class="sidebar-menu-link" onclick="toggleSubmenu('comunicacao'); return false;">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Comunicação
+                    <svg style="width: 12px; height: 12px; margin-left: auto;" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 4 6 8 9 4"></polyline>
+                    </svg>
+                </a>
+                <ul id="submenu-comunicacao" class="sidebar-submenu">
+                    <li class="sidebar-submenu-item"><a href="#" class="sidebar-submenu-link">Chat</a></li>
+                    <li class="sidebar-submenu-item"><a href="#" class="sidebar-submenu-link">Feedbacks</a></li>
+                    <li class="sidebar-submenu-item"><a href="#" class="sidebar-submenu-link">Mural</a></li>
+                    <li class="sidebar-submenu-item"><a href="#" class="sidebar-submenu-link">Atas de Reunião</a></li>
+                </ul>
+            </li>
+
             <!-- Moradores -->
             <li class="sidebar-menu-item">
                 <a href="#" class="sidebar-menu-link">

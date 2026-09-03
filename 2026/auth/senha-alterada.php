@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <link rel="stylesheet" href="../CSS/SenhaAlteradaMockup.css">
+
+    <aside class="panel-left"></aside>
+</head>
+    <main class="panel-right">
+
+        <section class="form">
+
+            <figure class="logo"></figure>
+
+            <header>
+
+                <h1 class="title">
+                    Senha alterada com sucesso
+                </h1>
+
+                <p class="subtitle">
+                    Sua senha foi atualizada.
+                    Agora você já pode acessar sua conta.
+                </p>
+
+            </header>
+
+            <footer class="footer-form">
+
+                <button type="button">
+                    <a href="login.php">Ir para login</a>
+                </button>
+
+            </footer>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

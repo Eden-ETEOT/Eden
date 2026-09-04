@@ -1,81 +1,27 @@
 <?php
 session_start();
 
-$nivel = $_GET["nivel"] ?? $_SESSION["nivel"] ?? "mor";
-if (in_array($nivel, ["adm", "mor"], true)) {
-  $_SESSION["nivel"] = $nivel;
-}
+$nome = $_SESSION["cadastroMorador"]["nome"] ?? "";
+$cpf = $_SESSION["cadastroMorador"]["cpf"] ?? "";
 
-$nome = $_SESSION["cadastro"]["nome"] ?? "";
-$cpf = $_SESSION["cadastro"]["cpf"] ?? "";
-$erro = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    include "../../config/conexao.php";
-
-    $nome = trim($_POST["nome"]);
-    $cpf = trim($_POST["cpf"]);
-
-    if (empty($nome) || empty($cpf)) {
-        $erro = "Preencha todos os campos!";
-    } else {
-        $stmt = $conexao->prepare("SELECT idUsuario FROM usuario WHERE CPF = :cpf");
-        $stmt->execute(["cpf" => $cpf]);
-
-        if ($stmt->fetch(PDO::FETCH_ASSOC)) {
-            $erro = "CPF já cadastrado!";
-        }
-    }
-
-    if (empty($erro) && isset($_FILES["foto"]) && $_FILES["foto"]["error"] !== UPLOAD_ERR_NO_FILE) {
-        $foto = $_FILES["foto"];
-        $tiposPermitidos = ["image/jpeg" => "jpg", "image/png" => "png", "image/gif" => "gif", "image/webp" => "webp"];
-        $tamanhoMaximo = 5 * 1024 * 1024;
-        $imagem = $foto["error"] === UPLOAD_ERR_OK ? getimagesize($foto["tmp_name"]) : false;
-
-        if ($foto["error"] !== UPLOAD_ERR_OK || $foto["size"] > $tamanhoMaximo || $imagem === false || !isset($tiposPermitidos[$imagem["mime"]])) {
-          $erro = "Envie uma imagem JPG, PNG, GIF ou WEBP de até 5 MB.";
-        } else {
-          $diretorioUpload = __DIR__ . "/../../uploads/usuarios";
-          if (!is_dir($diretorioUpload) && !mkdir($diretorioUpload, 0755, true)) {
-            $erro = "Não foi possível preparar o envio da foto.";
-          } else {
-            $nomeArquivo = bin2hex(random_bytes(16)) . "." . $tiposPermitidos[$imagem["mime"]];
-            $caminhoArquivo = $diretorioUpload . DIRECTORY_SEPARATOR . $nomeArquivo;
-
-            if (!move_uploaded_file($foto["tmp_name"], $caminhoArquivo)) {
-              $erro = "Não foi possível salvar a foto.";
-            } else {
-              $_SESSION["cadastro"]["foto"] = "uploads/usuarios/" . $nomeArquivo;
-            }
-          }
-        }
-    }
-
-    if (empty($erro)) {
-        $_SESSION["cadastro"]["nome"] = $nome;
-        $_SESSION["cadastro"]["cpf"] = $cpf;
-
-        header("Location: passo-2.php");
-        exit;
-    }
-}
+$erro = $_SESSION["erro_moradorEtapa1"] ?? "";
+unset($_SESSION["erro_moradorEtapa1"]);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cadastro Morador 1</title>
+  <title>Cadastro Morador 1 Mockup</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../CSS/CadastroMoradorMockup.css">
 </head>
 <body>
   <main class="panel-left">
 
-    <form class="form" action="passo-1.php" method="post" enctype="multipart/form-data">
+    <form class="form" action="passo-2.php" method="post" enctype="multipart/form-data">
 
       <figure aria-label="Logo da empresa">
         <img src="../../assets/Logo.png" alt="Logo da empresa" class="logo-image">
@@ -87,19 +33,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </header>
 
       <?php if (!empty($erro)): ?>
-        <p class="alerta-danger"><?php echo htmlspecialchars($erro); ?></p>
+      <p class="alerta-danger"><?php echo htmlspecialchars($erro); ?></p>
       <?php endif; ?>
 
       <section class="content">
 
         <div class="field">
           <label for="nome">Nome</label>
-          <input type="text" id="nome" name="nome" value="<?php echo htmlspecialchars($nome); ?>" required>
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            value="<?php echo htmlspecialchars($nome); ?>"
+          >
         </div>
 
-        <div class="field">
+        <div class="field foto">
           <label for="cpf">CPF</label>
-          <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" value="<?php echo htmlspecialchars($cpf); ?>" required>
+          <input
+            type="number"
+            id="cpf"
+            name="cpf"
+            placeholder="000.000.000.00"
+            value="<?php echo htmlspecialchars($cpf); ?>"
+            required
+          >
         </div>
 
         <div class="field">
@@ -110,11 +68,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </section>
 
       <footer class="footer-form">
-        <button type="submit">Próximo</button>
+
+        <button type="submit">
+          Próximo
+        </button>
+
       </footer>
 
       <div class="divider" aria-hidden="true">
-        <hr><span>ou</span><hr>
+        <hr>
+        <span>xx</span>
+        <hr>
       </div>
 
       <p class="register">

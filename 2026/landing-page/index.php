@@ -34,7 +34,7 @@ require_once "../config/conexao.php";
                 <a href="#">Suporte</a>
             </nav>
 
-            <a href="../Login/loginMockup/index.php"><button class="botao-primario">Entrar</button></a>
+            <a href="../auth/login.php"><button class="botao-primario">Entrar</button></a>
         </header>
 
         <!-- Início seção HERO -->

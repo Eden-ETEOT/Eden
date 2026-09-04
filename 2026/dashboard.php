@@ -3,7 +3,7 @@ session_start();
 include './config/conexao.php';
 
 if (!isset($_SESSION['id_usuario'])) {
-    header('Location: ./Login/loginMockup/index.php');
+    header('Location: ./auth/login.php');
     exit;
 }
 

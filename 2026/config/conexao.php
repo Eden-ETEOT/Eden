@@ -1,10 +1,10 @@
 <?php
-$config = require __DIR__ . '/database.php';
-
-$host     = $config['host'];
-$banco    = $config['database'];
-$usuario  = $config['username'];
-$senha    = $config['password'];
+// Conexão com o banco de dados
+// Padrão XAMPP: localhost / root / senha vazia / banco 'eden'
+$host     = "localhost";
+$banco    = "eden";
+$usuario  = "root";
+$senha    = "";
 
 try {
     $conexao = new PDO("mysql:host=$host;dbname=$banco;charset=utf8", $usuario, $senha);

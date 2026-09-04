@@ -19,8 +19,11 @@ body {
 .panel-left {
   background: var(--gray300);
   background-image: url(../assets/imageLogin.png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   width: 50vw;
-  height: 100%;
+  height: 100vh;
 }
 
 .panel-left-image {

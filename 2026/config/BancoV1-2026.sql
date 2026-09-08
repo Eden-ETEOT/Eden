@@ -151,6 +151,29 @@ CREATE TABLE IF NOT EXISTS unidade (
 );
 
 
+CREATE TABLE IF NOT EXISTS convite (
+    idConvite         INT          NOT NULL AUTO_INCREMENT,
+    token             CHAR(32)     NOT NULL,
+    Unidade_idUnidade INT          NOT NULL,
+    tipoMorador       ENUM('proprietario', 'inquilino', 'dependente') NOT NULL,
+    criadoPor         INT          NOT NULL,
+    dataCriacao       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    dataExpiracao     DATETIME     NOT NULL,
+    usado             TINYINT(1)   NOT NULL DEFAULT 0,
+    PRIMARY KEY (idConvite),
+    UNIQUE INDEX token (token ASC),
+    INDEX Unidade_idUnidade (Unidade_idUnidade ASC),
+    INDEX criadoPor (criadoPor ASC),
+    CONSTRAINT convite_ibfk_1
+        FOREIGN KEY (Unidade_idUnidade)
+        REFERENCES unidade (idUnidade),
+    CONSTRAINT convite_ibfk_2
+        FOREIGN KEY (criadoPor)
+        REFERENCES usuario (idUsuario)
+);
+
+
+
 CREATE TABLE IF NOT EXISTS moradorunidade (
     idMoradorUnidade  INT  NOT NULL AUTO_INCREMENT,
     Morador_idMorador INT  NOT NULL,

@@ -74,7 +74,7 @@ function criarOcorrencia(PDO $conexao): void
     }
 
     $stmt = $conexao->prepare(
-        "INSERT INTO chamados (titulo, descricao, dataPedida, status, prioridade_idprioridade, categoria_idcategoria, morador_idMorador)
+        "INSERT INTO chamados (titulo, descricao, dataPedida, status, prioridade_idPrioridade, categoria_idCategoria, morador_idMorador)
          VALUES (:titulo, :descricao, NOW(), :status, :prioridade, :categoria, :morador)"
     );
     $stmt->execute([
@@ -99,7 +99,7 @@ function editarOcorrencia(PDO $conexao): void
     $dados = dadosDoFormulario();
 
     $campos = "titulo = :titulo, descricao = :descricao, status = :status,
-               prioridade_idprioridade = :prioridade, categoria_idcategoria = :categoria";
+               prioridade_idPrioridade = :prioridade, categoria_idCategoria = :categoria";
     $parametros = [
         'titulo' => $dados['titulo'],
         'descricao' => $dados['descricao'],
@@ -117,7 +117,7 @@ function editarOcorrencia(PDO $conexao): void
     // Se marcou como resolvida, tenta registrar dataResolucao (coluna pode não existir ainda)
     if ($dados['status'] === 'resolvida') {
         try {
-            $stmt = $conexao->prepare("UPDATE chamados SET $campos, dataResolucao = NOW() WHERE idchamados = :id");
+            $stmt = $conexao->prepare("UPDATE chamados SET $campos, dataResolucao = NOW() WHERE idChamados = :id");
             $stmt->execute($parametros);
             echo json_encode(['ok' => true]);
             return;
@@ -126,7 +126,7 @@ function editarOcorrencia(PDO $conexao): void
         }
     }
 
-    $stmt = $conexao->prepare("UPDATE chamados SET $campos WHERE idchamados = :id");
+    $stmt = $conexao->prepare("UPDATE chamados SET $campos WHERE idChamados = :id");
     $stmt->execute($parametros);
 
     echo json_encode(['ok' => true]);
@@ -139,7 +139,7 @@ function deletarOcorrencia(PDO $conexao): void
         throw new Exception('Ocorrência inválida.');
     }
 
-    $stmt = $conexao->prepare("DELETE FROM chamados WHERE idchamados = :id");
+    $stmt = $conexao->prepare("DELETE FROM chamados WHERE idChamados = :id");
     $stmt->execute(['id' => $id]);
 
     echo json_encode(['ok' => true]);

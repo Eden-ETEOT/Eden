@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS plano (
     descricao       TEXT          NULL DEFAULT NULL,
     valor           DECIMAL(10,2) NOT NULL,
     maxApartamentos INT           NOT NULL,
-    funcionalidades TEXT          NOT NULL,
+    funcionalidades TEXT          NOT NULL DEFAULT '',
     ativo           TINYINT(1)    NOT NULL DEFAULT 1,
     PRIMARY KEY (idPlano)
 );
@@ -170,62 +170,67 @@ CREATE TABLE IF NOT EXISTS moradorunidade (
 
 
 CREATE TABLE IF NOT EXISTS sindico (
-    idSindico INT NOT NULL AUTO_INCREMENT,
-    idUsuario INT NOT NULL,
+    idSindico               INT NOT NULL AUTO_INCREMENT,
+    idUsuario               INT NOT NULL,
+    Condominio_idCondominio INT NOT NULL,
     PRIMARY KEY (idSindico),
     INDEX idUsuario (idUsuario ASC),
+    INDEX Condominio_idCondominio (Condominio_idCondominio ASC),
     CONSTRAINT sindico_ibfk_1
         FOREIGN KEY (idUsuario)
-        REFERENCES usuario (idUsuario)
+        REFERENCES usuario (idUsuario),
+    CONSTRAINT sindico_ibfk_2
+        FOREIGN KEY (Condominio_idCondominio)
+        REFERENCES condominio (idCondominio)
 );
 
 
 CREATE TABLE IF NOT EXISTS prioridade (
-    idprioridade INT         NOT NULL AUTO_INCREMENT,
+    idPrioridade INT         NOT NULL AUTO_INCREMENT,
     ordem        INT         NOT NULL,
     nome         VARCHAR(45) NOT NULL,
     descricao    TEXT        NOT NULL,
-    PRIMARY KEY (idprioridade)
+    PRIMARY KEY (idPrioridade)
 );
 
 
 CREATE TABLE IF NOT EXISTS categoria (
-    idcategoria INT         NOT NULL AUTO_INCREMENT,
+    idCategoria INT         NOT NULL AUTO_INCREMENT,
     nome        VARCHAR(45) NOT NULL,
     descricao   TEXT        NOT NULL,
     tipo        VARCHAR(45) NOT NULL,
-    PRIMARY KEY (idcategoria)
+    PRIMARY KEY (idCategoria)
 );
 
 
 CREATE TABLE IF NOT EXISTS chamados (
-    idchamados                INT         NOT NULL AUTO_INCREMENT,
-    dataPedida                DATETIME    NOT NULL,
-    dataRealizada             DATETIME    NULL DEFAULT NULL,
-    titulo                    VARCHAR(45) NOT NULL,
-    descricao                 TEXT        NOT NULL,
-    privado                   TINYINT(1)  NOT NULL DEFAULT 0,
-    status                    ENUM('analise', 'andamento', 'cancelada', 'resolvida') NOT NULL DEFAULT 'analise',
-    prioridade_idprioridade   INT         NOT NULL,
-    funcionario_idFuncionario INT         NOT NULL,
-    categoria_idcategoria     INT         NOT NULL,
-    morador_idMorador         INT         NOT NULL,
-    PRIMARY KEY (idchamados),
-    INDEX fk_chamados_prioridade1_idx (prioridade_idprioridade ASC),
+    idChamados               INT         NOT NULL AUTO_INCREMENT,
+    dataPedida               DATETIME    NOT NULL,
+    dataRealizada            DATETIME    NULL DEFAULT NULL,
+    titulo                   VARCHAR(45) NOT NULL,
+    descricao                TEXT        NOT NULL,
+    privado                  TINYINT(1)  NOT NULL DEFAULT 0,
+    status                   ENUM('analise', 'andamento', 'cancelada', 'resolvida') NOT NULL DEFAULT 'analise',
+    prioridade_idPrioridade  INT         NOT NULL,
+    funcionario_idFuncionario INT        NULL DEFAULT NULL,
+    categoria_idCategoria    INT         NOT NULL,
+    morador_idMorador        INT         NOT NULL,
+    PRIMARY KEY (idChamados),
+    INDEX fk_chamados_prioridade1_idx (prioridade_idPrioridade ASC),
     INDEX fk_chamados_funcionario1_idx (funcionario_idFuncionario ASC),
-    INDEX fk_chamados_categoria1_idx (categoria_idcategoria ASC),
+    INDEX fk_chamados_categoria1_idx (categoria_idCategoria ASC),
     INDEX fk_chamados_morador1_idx (morador_idMorador ASC),
     CONSTRAINT fk_chamados_prioridade1
-        FOREIGN KEY (prioridade_idprioridade)
-        REFERENCES prioridade (idprioridade)
+        FOREIGN KEY (prioridade_idPrioridade)
+        REFERENCES prioridade (idPrioridade)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT fk_chamados_funcionario1
         FOREIGN KEY (funcionario_idFuncionario)
         REFERENCES funcionario (idFuncionario)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT fk_chamados_categoria1
-        FOREIGN KEY (categoria_idcategoria)
-        REFERENCES categoria (idcategoria)
+        FOREIGN KEY (categoria_idCategoria)
+        REFERENCES categoria (idCategoria)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT fk_chamados_morador1
         FOREIGN KEY (morador_idMorador)
@@ -235,17 +240,17 @@ CREATE TABLE IF NOT EXISTS chamados (
 
 
 CREATE TABLE IF NOT EXISTS mensagemChamado (
-    idmensagemChamado   INT      NOT NULL AUTO_INCREMENT,
-    chamados_idchamados INT      NOT NULL,
+    idMensagemChamado   INT      NOT NULL AUTO_INCREMENT,
+    chamados_idChamados INT      NOT NULL,
     usuario_idUsuario   INT      NOT NULL,
     conteudo            TEXT     NOT NULL,
     dataEnvio           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    PRIMARY KEY (idmensagemChamado),
-    INDEX fk_mensagemChamado_chamados1_idx (chamados_idchamados ASC),
+    PRIMARY KEY (idMensagemChamado),
+    INDEX fk_mensagemChamado_chamados1_idx (chamados_idChamados ASC),
     INDEX fk_mensagemChamado_usuario1_idx (usuario_idUsuario ASC),
     CONSTRAINT fk_mensagemChamado_chamados1
-        FOREIGN KEY (chamados_idchamados)
-        REFERENCES chamados (idchamados)
+        FOREIGN KEY (chamados_idChamados)
+        REFERENCES chamados (idChamados)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT fk_mensagemChamado_usuario1
         FOREIGN KEY (usuario_idUsuario)
@@ -259,12 +264,12 @@ CREATE TABLE IF NOT EXISTS chamadoAnexo (
     caminho             VARCHAR(500) NULL DEFAULT NULL,
     nomeArquivo         VARCHAR(100) NOT NULL,
     dataUpload          DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    chamados_idchamados INT          NOT NULL,
+    chamados_idChamados INT          NOT NULL,
     PRIMARY KEY (idChamadoAnexo),
-    INDEX fk_ChamadoAnexo_chamados1_idx (chamados_idchamados ASC),
+    INDEX fk_ChamadoAnexo_chamados1_idx (chamados_idChamados ASC),
     CONSTRAINT fk_ChamadoAnexo_chamados1
-        FOREIGN KEY (chamados_idchamados)
-        REFERENCES chamados (idchamados)
+        FOREIGN KEY (chamados_idChamados)
+        REFERENCES chamados (idChamados)
         ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
@@ -283,30 +288,3 @@ CREATE TABLE IF NOT EXISTS resetSenha (
         REFERENCES usuario (idUsuario)
         ON DELETE CASCADE
 );
-
-INSERT INTO usuario (email, senha, CPF, telefone, nome, ativo)
-VALUES (
-    'gui.ferreira365@gmail.com',
-    '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', -- hash de "1234"
-    '000.000.000-00', 
-    NULL,
-    'adm', 
-    1
-);
-
-INSERT INTO plano
-(nome, descricao, valor, maxApartamentos, funcionalidades, ativo)
-VALUES
-(
-  'Plano Básico',
-  'Plano inicial do condomínio',
-  0.00,
-  50,
-  'Gestão de moradores e ocorrências',
-  1
-);
-
-
-
-
-

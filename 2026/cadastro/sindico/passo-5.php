@@ -69,11 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $usuario_id = $conexao->lastInsertId();
 
-                  $stmt = $conexao->prepare(
-                      "INSERT INTO sindico (idUsuario) VALUES (:idUsuario)"
-                  );
-                  $stmt->execute(["idUsuario" => $usuario_id]);
-
                 $plano = $conexao->query("SELECT idPlano FROM plano WHERE ativo = 1 ORDER BY idPlano LIMIT 1")->fetchColumn();
                 if (!$plano) {
                   throw new RuntimeException("Nenhum plano ativo cadastrado.");
@@ -98,6 +93,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     "telefone" => $telefone_condominio,
                     "email" => $email_condominio,
                     "plano" => $plano
+                ]);
+
+                $condominio_id = $conexao->lastInsertId();
+
+                $stmt = $conexao->prepare(
+                    "INSERT INTO sindico (idUsuario, Condominio_idCondominio) VALUES (:idUsuario, :idCondominio)"
+                );
+                $stmt->execute([
+                    "idUsuario" => $usuario_id,
+                    "idCondominio" => $condominio_id,
                 ]);
 
                 $conexao->commit();

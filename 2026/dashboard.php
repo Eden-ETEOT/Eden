@@ -55,7 +55,7 @@ $stats['analyzing'] = $stmt->fetchColumn();
 
 // Ocorrências pendentes com joins
 $sql = "SELECT 
-            c.idchamados,
+            c.idChamados,
             c.titulo,
             c.descricao,
             c.dataPedida,
@@ -68,8 +68,8 @@ $sql = "SELECT
             u.andar,
             cond.nome as condominio_nome
         FROM chamados c
-        JOIN prioridade p ON c.prioridade_idprioridade = p.idprioridade
-        JOIN categoria cat ON c.categoria_idcategoria = cat.idcategoria
+        JOIN prioridade p ON c.prioridade_idPrioridade = p.idPrioridade
+        JOIN categoria cat ON c.categoria_idCategoria = cat.idCategoria
         JOIN morador m ON c.morador_idMorador = m.idMorador
         JOIN usuario us ON m.idUsuario = us.idUsuario
         JOIN moradorunidade mu ON m.idMorador = mu.Morador_idMorador AND mu.dataFim IS NULL

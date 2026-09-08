@@ -3,7 +3,7 @@ session_start();
 include './config/conexao.php';
 
 if (!isset($_SESSION['id_usuario'])) {
-    header('Location: ./Login/loginMockup/index.php');
+    header('Location: ./auth/login.php');
     exit;
 }
 
@@ -15,12 +15,28 @@ $stmt->execute(['id' => $idUsuario]);
 $isAdmin = $stmt->fetchColumn() > 0;
 
 // Dados do usuário logado
-$stmt = $conexao->prepare("SELECT nome FROM usuario WHERE idUsuario = :id");
+$stmt = $conexao->prepare("SELECT nome, foto FROM usuario WHERE idUsuario = :id");
 $stmt->execute(['id' => $idUsuario]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 $user_name = $user ? $user['nome'] : 'Usuário';
 $user_type = 'Síndico';
 $user_avatar = mb_substr($user_name, 0, 1);
+$user_foto = ($user && !empty($user['foto'])) ? $user['foto'] : null;
+
+// Foto do condomínio (vinculado pelo último condomínio criado)
+// TODO futuro: substituir por FK sindico -> condominio quando o schema for atualizado
+$cond_name = 'Condomínio';
+$cond_foto = null;
+try {
+    $stmt = $conexao->query("SELECT nome, foto FROM condominio ORDER BY idCondominio DESC LIMIT 1");
+    $cond = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($cond) {
+        $cond_name = $cond['nome'];
+        $cond_foto = !empty($cond['foto']) ? $cond['foto'] : null;
+    }
+} catch (PDOException $e) {
+    // sem condomínio cadastrado ainda
+}
 
 // Estatísticas do banco
 $stats = [];
@@ -39,7 +55,7 @@ $stats['analyzing'] = $stmt->fetchColumn();
 
 // Ocorrências pendentes com joins
 $sql = "SELECT 
-            c.idchamados,
+            c.idChamados,
             c.titulo,
             c.descricao,
             c.dataPedida,
@@ -52,8 +68,8 @@ $sql = "SELECT
             u.andar,
             cond.nome as condominio_nome
         FROM chamados c
-        JOIN prioridade p ON c.prioridade_idprioridade = p.idprioridade
-        JOIN categoria cat ON c.categoria_idcategoria = cat.idcategoria
+        JOIN prioridade p ON c.prioridade_idPrioridade = p.idPrioridade
+        JOIN categoria cat ON c.categoria_idCategoria = cat.idCategoria
         JOIN morador m ON c.morador_idMorador = m.idMorador
         JOIN usuario us ON m.idUsuario = us.idUsuario
         JOIN moradorunidade mu ON m.idMorador = mu.Morador_idMorador AND mu.dataFim IS NULL

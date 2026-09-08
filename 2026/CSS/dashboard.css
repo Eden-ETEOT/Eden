@@ -788,6 +788,15 @@ body {
     }
 }
 
+/* ===== Imagens de avatar (foto) ===== */
+.sidebar-logo-img,
+.user-avatar-img {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+}
+
 /* ========== BOTÃO "NOVA OCORRÊNCIA" ========== */
 .add-btn {
     background-color: var(--orange1-default);

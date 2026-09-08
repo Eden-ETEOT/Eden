@@ -20,18 +20,22 @@ body {
 .panel-left{
   background: var(--gray300);
   background-image: url(../assets/imageLogin.png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   width: 50vw;
   height: 100vh;
 }
 
 .panel-left-image{
-  width: 100%;
+  width: 100vw;
   height: 100%;
   object-fit: cover;
 
 }
 
 .panel-rigth{
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -109,7 +113,7 @@ input[type="number"] {
   width: 100%;
   padding: var(--spacing200) var(--spacing300);
   border: 1px solid var(--corNeutra2); /* vai virar gray 200 no mockup*/
-  color: var(--gray200);
+  color: var(--corNeutra2);
   font-size: 1rem;
   outline: none;
   border-radius: 8px;

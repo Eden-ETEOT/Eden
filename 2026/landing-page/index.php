@@ -14,6 +14,7 @@ require_once "../config/conexao.php";
     <link rel="stylesheet" href="../CSS/LandingPage.css">
     <link rel="stylesheet" href="../CSS/variaveis.css">
 
+<?php include '../Elements/favicon.php'; ?>
 </head>
 
 <body>

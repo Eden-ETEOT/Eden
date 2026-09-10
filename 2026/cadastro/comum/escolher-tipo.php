@@ -19,6 +19,7 @@ if (in_array($nivel, ['adm', 'mor'], true)) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../CSS/EscolherTipo.css">
+<?php include '../../Elements/favicon.php'; ?>
 </head>
 <body>
 

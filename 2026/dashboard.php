@@ -124,6 +124,7 @@ try {
     <title>Dashboard - Eden Systems</title>
     <link rel="stylesheet" href="./CSS/dashboard.css">
     <link rel="stylesheet" href="./CSS/reset.css">
+<?php include './Elements/favicon.php'; ?>
 </head>
 <body>
     <div class="dashboard-wrapper">

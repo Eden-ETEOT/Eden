@@ -53,6 +53,35 @@ $stats['pending'] = $stmt->fetchColumn();
 $stmt = $conexao->query("SELECT COUNT(*) FROM chamados WHERE status = 'andamento'");
 $stats['analyzing'] = $stmt->fetchColumn();
 
+// Distribuição de ocorrências pendentes por categoria (para o card de breakdown)
+$stmt = $conexao->query(
+    "SELECT cat.nome, COUNT(*) AS total
+     FROM chamados c
+     JOIN categoria cat ON c.categoria_idCategoria = cat.idCategoria
+     WHERE c.status IN ('analise', 'andamento')
+     GROUP BY cat.idCategoria, cat.nome
+     ORDER BY total DESC
+     LIMIT 4"
+);
+$categorias_pendentes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$max_categoria = 0;
+foreach ($categorias_pendentes as $cat) {
+    $max_categoria = max($max_categoria, (int) $cat['total']);
+}
+
+// Tempo médio de resolução (horas) e total de resolvidas no período
+$stmt = $conexao->query(
+    "SELECT AVG(TIMESTAMPDIFF(HOUR, c.dataPedida, c.dataRealizada)) AS media_horas,
+            COUNT(*) AS total_resolvidas
+     FROM chamados c
+     WHERE c.status = 'resolvida' AND c.dataRealizada IS NOT NULL"
+);
+$tempo_resolucao = $stmt->fetch(PDO::FETCH_ASSOC);
+$media_resolucao_horas = $tempo_resolucao && $tempo_resolucao['media_horas'] !== null
+    ? round((float) $tempo_resolucao['media_horas'], 1)
+    : null;
+$total_resolvidas = $tempo_resolucao ? (int) $tempo_resolucao['total_resolvidas'] : 0;
+
 // Ocorrências pendentes com joins
 $sql = "SELECT 
             c.idChamados,
@@ -95,6 +124,7 @@ try {
     <title>Dashboard - Eden Systems</title>
     <link rel="stylesheet" href="./CSS/dashboard.css">
     <link rel="stylesheet" href="./CSS/reset.css">
+<?php include './Elements/favicon.php'; ?>
 </head>
 <body>
     <div class="dashboard-wrapper">
@@ -148,29 +178,52 @@ try {
                     </div>
                 </div>
 
-                <!-- Seção de Gráficos (placeholder) -->
-                <div class="charts-container">
-                    <!-- Gráfico 1 -->
-                    <div class="chart-card">
-                        <h3 class="chart-title">Ocorrências Pendentes</h3>
-                        <div class="chart-canvas" style="background: linear-gradient(135deg, #f5f5f5 0%, #efefef 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;">
-                            Gráfico
+                <!-- Visão geral (breakdown + tempo médio de resolução) -->
+                <div class="overview-container">
+                    <div class="breakdown-card">
+                        <h3 class="pending-title">Ocorrências Pendentes</h3>
+                        <p class="breakdown-subtitle">Distribuição por categoria</p>
+                        <div class="breakdown-list">
+                            <?php if (empty($categorias_pendentes)): ?>
+                                <p style="font-size: 13px; color: var(--green1-300);">Nenhuma ocorrência pendente.</p>
+                            <?php else: ?>
+                                <?php foreach ($categorias_pendentes as $cat): ?>
+                                <?php
+                                    $largura = $max_categoria > 0
+                                        ? round(((int) $cat['total'] / $max_categoria) * 100)
+                                        : 0;
+                                ?>
+                                <div class="breakdown-item">
+                                    <div class="breakdown-label-row">
+                                        <span class="breakdown-label"><?= htmlspecialchars($cat['nome']) ?></span>
+                                        <span class="breakdown-value"><?= (int) $cat['total'] ?></span>
+                                    </div>
+                                    <div class="breakdown-track">
+                                        <div class="breakdown-fill" style="width: <?= $largura ?>%;"></div>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </div>
                     </div>
 
-                    <!-- Gráfico 2 -->
-                    <div class="chart-card">
-                        <h3 class="chart-title">Tipos de Ocorrência</h3>
-                        <div class="chart-canvas" style="background: linear-gradient(135deg, #f5f5f5 0%, #efefef 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;">
-                            Gráfico
-                        </div>
-                    </div>
-
-                    <!-- Gráfico 3 -->
-                    <div class="chart-card">
-                        <h3 class="chart-title">Tempo Médio de Resolução</h3>
-                        <div class="chart-canvas" style="background: linear-gradient(135deg, #f5f5f5 0%, #efefef 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;">
-                            Gráfico
+                    <div class="resolution-card">
+                        <h3 class="resolution-title">Tempo Médio de Resolução</h3>
+                        <p class="resolution-period">Ocorrências resolvidas no período</p>
+                        <?php if ($media_resolucao_horas !== null): ?>
+                            <div class="resolution-value">
+                                <?= $media_resolucao_horas ?><span class="resolution-unit">horas</span>
+                            </div>
+                            <span class="resolution-trend up">▲ tempo apurado no período</span>
+                        <?php else: ?>
+                            <div class="resolution-value">—<span class="resolution-unit">horas</span></div>
+                            <span class="resolution-trend">Sem ocorrências resolvidas ainda</span>
+                        <?php endif; ?>
+                        <div class="resolution-divider"></div>
+                        <p class="resolution-subheading">Detalhes do período</p>
+                        <div class="resolution-block-info">
+                            <span class="resolution-block-badge"><?= $total_resolvidas ?></span>
+                            ocorrências resolvidas
                         </div>
                     </div>
                 </div>

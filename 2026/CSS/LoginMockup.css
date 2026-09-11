@@ -21,7 +21,7 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   width: 50vw;
-  height: 100vh;
+  height: 100%;
 }
 
 .panel-left-image {
@@ -34,11 +34,12 @@ body {
   align-items: center;
   justify-content: center;
   background: var(--corNeutra1);
-  height: 100vh;
-  width: 50vw;
+  height: 100%;
 }
 
 .form {
+  padding-top: 24px;
+  padding-bottom: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -23,7 +23,7 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   width: 50vw;
-  height: 100vh;
+  height: 100%;
 }
 
 .panel-rigth-image{
@@ -43,6 +43,8 @@ body {
 }
 
 .form {
+  padding-top: 24px;
+  padding-bottom: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;

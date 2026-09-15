@@ -63,6 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <?php if ($msg): ?>
         <p class="msg msg-error"><?= htmlspecialchars($msg) ?></p>
+      <?php elseif (isset($_GET["cadastro"]) && $_GET["cadastro"] === "ok"): ?>
+        <p class="msg msg-success">Cadastro realizado com sucesso! Faça login para continuar.</p>
       <?php endif; ?>
 
       <section class="content">

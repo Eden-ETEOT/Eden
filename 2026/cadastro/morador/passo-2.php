@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["erro_moradorEtapa1"] = $erroEtapa1;
             $_SESSION["cadastroMorador"]["nome"] = $nomeRecebido;
             $_SESSION["cadastroMorador"]["cpf"] = $cpfRecebido;
-            header("Location: CadastroMorador1.php");
+            header("Location: passo-1.php");
             exit;
         }
 
@@ -101,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["usuario_email"] = $emailRecebido;
             $_SESSION["logado"] = true;
 
-            header("Location: ../../dashboard.php?tipo=success&msg=" . urlencode("Cadastro realizado com sucesso!"));
+            header("Location: ../../auth/login.php?cadastro=ok");
             exit;
         }
     }

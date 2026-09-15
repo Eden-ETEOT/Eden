@@ -52,11 +52,14 @@ unset($_SESSION["erro_moradorEtapa1"]);
         <div class="field foto">
           <label for="cpf">CPF</label>
           <input
-            type="number"
+            type="text"
             id="cpf"
             name="cpf"
-            placeholder="000.000.000.00"
+            placeholder="000.000.000-00"
             value="<?php echo htmlspecialchars($cpf); ?>"
+            inputmode="numeric"
+            maxlength="14"
+            autocomplete="off"
             required
           >
         </div>
@@ -92,5 +95,6 @@ unset($_SESSION["erro_moradorEtapa1"]);
 
   <aside class="panel-rigth" aria-label="Imagem ilustrativa"></aside>
 
+  <script src="../../js/mascaras.js"></script>
 </body>
 </html>

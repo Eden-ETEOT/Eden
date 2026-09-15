@@ -106,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="field">
           <label for="cpf">CPF</label>
-          <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" value="<?php echo htmlspecialchars($cpf); ?>" required>
+          <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" value="<?php echo htmlspecialchars($cpf); ?>" inputmode="numeric" maxlength="14" autocomplete="off" required>
         </div>
 
         <div class="field">
@@ -139,5 +139,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <aside class="panel-left" aria-label="Imagem ilustrativa"></aside>
 
+  <script src="../../js/mascaras.js"></script>
 </body>
 </html>

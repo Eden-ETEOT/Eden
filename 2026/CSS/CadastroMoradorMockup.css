@@ -9,10 +9,16 @@
   padding: 0; 
 }
 
+html,
 body {
-  height: 100vh;
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  align-items: stretch;
 }
 
 
@@ -22,8 +28,8 @@ body {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  width: 50vw;
-  height: 100%;
+  min-height: 100vh;
+  height: auto;
 }
 
 .panel-rigth-image{
@@ -40,15 +46,20 @@ body {
   align-items: center;
   justify-content: center;
   background: var(--corNeutra1);
+  min-height: 100vh;
+  height: auto;
+  padding: 24px 16px;
 }
 
 .form {
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding-top: 16px;
+  padding-bottom: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 404px;
+  justify-content: center;
+  width: min(404px, 100%);
+  max-height: 100vh;
   gap: var(--spacing400);
 }
 
@@ -65,21 +76,21 @@ body {
 }
 
 .logo-image {
-  width: 115px;
-  height: 100px;
+  width: 88px;
+  height: 76px;
   object-fit: contain;
-  margin-bottom: var(--spacing800);
+  margin-bottom: var(--spacing400);
 }
 
 .title {
-  font-size: 36px;
+  font-size: 30px;
   font-weight: var(--semi-bold);
   color: var( --green3-800);
   font-family: var(--fonteTítulos);
 }
 
 .subtitle {
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   font-weight: var(--medium);
   font-family: var(--fonteTítulos);
   color: var(--corNeutra2);
@@ -90,19 +101,19 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: var(--spacing700);
+  gap: var(--spacing400);
 }
 
 .field {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing400);
+  gap: var(--spacing200);
 }
 
 
 label {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: var(--medium);
   color: var( --green3-800);
   font-family: var(--fonteTextos);
@@ -193,6 +204,21 @@ button {
   font-weight: var(--normal);
 }
 
+
+/* Mensagem de erro do formulário */
+.alerta-danger {
+  width: 100%;
+  padding: var(--spacing200) var(--spacing300);
+  border-radius: var(--spacing200);
+  background: var(--red-50);
+  color: var(--red-800);
+  border: 1px solid var(--red-200);
+  font-size: 0.9rem;
+  font-family: var(--fonteTextos);
+  font-weight: var(--medium);
+  text-align: center;
+}
+
   /* Divisor */
 .divider {
   width: 100%;
@@ -226,6 +252,6 @@ button {
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 36px;
-  margin-top: 36px;
+  gap: var(--spacing400);
+  margin-top: var(--spacing400);
 }

@@ -99,6 +99,11 @@ body {
 .sidebar-icon {
     width: 20px;
     height: 20px;
+    color: #fff;
+}
+
+.sidebar-logout img {
+    color: #fff;
 }
 
 .sidebar-submenu {

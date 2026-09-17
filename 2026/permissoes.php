@@ -129,6 +129,7 @@ function iniciais($nome) {
     <link rel="stylesheet" href="./CSS/dashboard.css">
     <link rel="stylesheet" href="./CSS/reset.css">
     <link rel="stylesheet" href="./CSS/FrontDev.css">
+    <link rel="stylesheet" href="./CSS/tabelas.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 <?php include './Elements/favicon.php'; ?>
 </head>
@@ -155,7 +156,7 @@ function iniciais($nome) {
                             </button>
                         </div>
                         <div class="table-container">
-                            <table class="users-table">
+                            <table class="issues-table">
                                 <thead>
                                     <tr>
                                         <th>FUNCIONÁRIO</th>
@@ -183,9 +184,9 @@ function iniciais($nome) {
                                         </td>
                                         <td><span class="role <?= classe_papel($f['funcao']) ?>"><?= htmlspecialchars($f['funcao']) ?></span></td>
                                         <td>—</td>
-                                        <td><span class="status <?= $ativo ? 'status-active' : 'status-inactive' ?>"><?= $ativo ? 'Ativo' : 'Inativo' ?></span></td>
+                                        <td><span class="badge <?= $ativo ? 'ativo' : 'inativo' ?>"><?= $ativo ? 'Ativo' : 'Inativo' ?></span></td>
                                         <td>
-                                            <button type="button" class="edit-button" title="Editar" onclick='fdEditarFuncionario(<?= json_encode($f, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)'><i data-lucide="pencil"></i></button>
+                                            <button type="button" class="tbl-action" title="Editar" onclick='fdEditarFuncionario(<?= json_encode($f, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)'><i data-lucide="pencil"></i></button>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>

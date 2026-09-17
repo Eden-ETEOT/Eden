@@ -59,6 +59,7 @@ try {
     <link rel="stylesheet" href="./CSS/dashboard.css">
     <link rel="stylesheet" href="./CSS/reset.css">
     <link rel="stylesheet" href="./CSS/FrontDev.css">
+    <link rel="stylesheet" href="./CSS/tabelas.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 <?php include './Elements/favicon.php'; ?>
 </head>
@@ -95,8 +96,8 @@ try {
                                 <button class="filter-btn" onclick="filtrar()" title="Mostrar inativos"><i data-lucide="list-filter"></i></button>
                             </div>
                         </div>
-                        <div class="table-wrapper">
-                            <table>
+                        <div class="table-wrapper table-scroll">
+                            <table class="issues-table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -120,12 +121,12 @@ try {
                                             <td><?= htmlspecialchars($m['bloco'] ?? '—') ?></td>
                                             <td><?= htmlspecialchars($m['numResid'] ?? '—') ?></td>
                                             <td><?= htmlspecialchars($m['entrada'] ?? '—') ?></td>
-                                            <td><span class="status <?= $ativo ? 'active-status' : 'inactive-status' ?>"><?= $ativo ? 'Ativo' : 'Inativo' ?></span></td>
+                                            <td><span class="badge <?= $ativo ? 'ativo' : 'inativo' ?>"><?= $ativo ? 'Ativo' : 'Inativo' ?></span></td>
                                             <td>
-                                                <div class="row-actions">
-                                                    <button type="button" onclick='visualizar(<?= json_encode($m, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' title="Visualizar"><i data-lucide="eye"></i></button>
+                                                <div class="tbl-actions">
+                                                    <button type="button" class="tbl-action" onclick='visualizar(<?= json_encode($m, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' title="Visualizar"><i data-lucide="eye"></i></button>
                                                     <?php if ($ativo): ?>
-                                                    <button type="button" onclick="excluir(<?= (int) $m['idMorador'] ?>)" title="Desativar"><i data-lucide="trash-2"></i></button>
+                                                    <button type="button" class="tbl-action danger" onclick="excluir(<?= (int) $m['idMorador'] ?>)" title="Desativar"><i data-lucide="trash-2"></i></button>
                                                     <?php endif; ?>
                                                 </div>
                                             </td>

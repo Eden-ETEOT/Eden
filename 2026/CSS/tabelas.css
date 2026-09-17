@@ -1,0 +1,153 @@
+/* tabelas.css — padrão de tabelas da dashboard (Inter + issues-table + badges).
+   Carregado após dashboard.css / FrontDev.css nas páginas da área logada. */
+
+/* ===== Fontes: Inter em todo o conteúdo das páginas (sobrescreve Arial dos mockups) ===== */
+.fd-dashboard, .fd-dashboard *,
+.fd-moradores, .fd-moradores *,
+.fd-ocorrencias, .fd-ocorrencias *,
+.fd-documentacao, .fd-documentacao *,
+.fd-apartamentos, .fd-apartamentos *,
+.fd-relatorios, .fd-relatorios *,
+.fd-configuracoes, .fd-configuracoes *,
+.fd-permissoes, .fd-permissoes *,
+.fd-suporte, .fd-suporte * {
+    font-family: 'Inter', sans-serif;
+}
+
+/* ===== Badges de status (valores reais do banco) ===== */
+.badge.analise {
+    background-color: var(--blue-50);
+    color: var(--blue-default);
+}
+.badge.andamento {
+    background-color: var(--yellow-50);
+    color: var(--yellow-default);
+}
+.badge.resolvida {
+    background-color: var(--green3-50);
+    color: var(--green3-default);
+}
+.badge.cancelada {
+    background-color: var(--red-50);
+    color: var(--red-default);
+}
+.badge.urgent {
+    background-color: var(--red-50);
+    color: var(--red-default);
+}
+.badge.ativo {
+    background-color: var(--green3-50);
+    color: var(--green3-default);
+}
+.badge.inativo {
+    background-color: var(--red-50);
+    color: var(--red-default);
+}
+
+/* ===== Ações de linha (padrão ocorrências) ===== */
+.tbl-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.tbl-action {
+    background: transparent;
+    border: 0;
+    padding: 2px;
+    color: var(--green1-300);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+.tbl-action svg {
+    width: 17px;
+    height: 17px;
+}
+.tbl-action:hover {
+    color: var(--orange1-default);
+}
+.tbl-action.danger:hover {
+    color: var(--red-default);
+}
+
+/* ===== Rolagem horizontal padrão das tabelas ===== */
+.table-scroll {
+    overflow-x: auto;
+}
+
+/* ===== Modal de visualização da dashboard (tema dashboard) ===== */
+.dash-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(25, 30, 27, .58);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+}
+.dash-modal-overlay.active {
+    display: flex;
+}
+.dash-modal {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.22);
+    width: min(560px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+.dash-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--green1-100);
+}
+.dash-modal-header h2 {
+    font-size: 18px;
+    color: var(--green1-default);
+}
+.dash-modal-close {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    color: var(--green1-300);
+    display: inline-flex;
+}
+.dash-modal-close svg {
+    width: 20px;
+    height: 20px;
+}
+.dash-modal-body {
+    padding: 18px 24px;
+    display: grid;
+    gap: 12px;
+}
+.dash-modal-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 14px;
+}
+.dash-modal-row span {
+    color: var(--green1-300);
+}
+.dash-modal-row strong {
+    color: var(--green1-default);
+    text-align: right;
+}
+.dash-modal-desc {
+    background: var(--green1-50);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--green1-default);
+}
+.dash-modal-footer {
+    padding: 0 24px 20px;
+    display: flex;
+    justify-content: flex-end;
+}

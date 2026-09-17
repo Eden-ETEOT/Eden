@@ -19,10 +19,10 @@ function mapaPrioridade($nome) {
 }
 function mapaStatus($status) {
     return [
-        'analise' => ['status-analise', 'Em análise'],
-        'andamento' => ['status-andamento', 'Em andamento'],
-        'resolvida' => ['status-finalizado', 'Finalizado'],
-        'cancelada' => ['status-cancelado', 'Cancelado'],
+        'analise' => ['analise', 'Em análise'],
+        'andamento' => ['andamento', 'Em andamento'],
+        'resolvida' => ['resolvida', 'Finalizado'],
+        'cancelada' => ['cancelada', 'Cancelado'],
     ][$status] ?? ['analysis', $status];
 }
 
@@ -135,6 +135,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
     <link rel="stylesheet" href="./CSS/dashboard.css">
     <link rel="stylesheet" href="./CSS/reset.css">
     <link rel="stylesheet" href="./CSS/FrontDev.css">
+    <link rel="stylesheet" href="./CSS/tabelas.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 <?php include './Elements/favicon.php'; ?>
 </head>
@@ -179,8 +180,8 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                                 <button class="new-occurrence-button" type="button" onclick="abrirModal('newModal')"><i data-lucide="plus"></i>Ocorrência</button>
                             </div>
                         </div>
-                        <div class="table-container">
-                            <table>
+                        <div class="table-container table-scroll">
+                            <table class="issues-table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -204,14 +205,14 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                                             <td><?= htmlspecialchars($o['titulo']) ?></td>
                                             <td><?= htmlspecialchars($o['categoria']) ?></td>
                                             <td><?= htmlspecialchars($o['numResid'] ?? '—') ?></td>
-                                            <td><span class="priority <?= $pc ?>"><?= $pl ?></span></td>
-                                            <td><span class="status <?= $sc ?>"><?= $sl ?></span></td>
+                                            <td><span class="badge <?= $pc ?>"><?= $pl ?></span></td>
+                                            <td><span class="badge <?= $sc ?>"><?= $sl ?></span></td>
                                             <td><?= htmlspecialchars($o['dataFmt']) ?></td>
                                             <td>
-                                                <div class="row-actions">
-                                                    <button type="button" onclick='visualizar(<?= json_encode(array_merge($o, ['pc' => $pc]), JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' title="Visualizar"><i data-lucide="eye"></i></button>
+                                                <div class="tbl-actions">
+                                                    <button type="button" class="tbl-action" onclick='visualizar(<?= json_encode(array_merge($o, ['pc' => $pc]), JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' title="Visualizar"><i data-lucide="eye"></i></button>
                                                     <?php if ($o['status'] !== 'cancelada'): ?>
-                                                    <button type="button" onclick="cancelarOcorrencia(<?= (int) $o['idChamados'] ?>)" title="Cancelar"><i data-lucide="trash-2"></i></button>
+                                                    <button type="button" class="tbl-action danger" onclick="cancelarOcorrencia(<?= (int) $o['idChamados'] ?>)" title="Cancelar"><i data-lucide="trash-2"></i></button>
                                                     <?php endif; ?>
                                                 </div>
                                             </td>
@@ -238,7 +239,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
             <div class="details-content">
                 <div class="details-top">
                     <h3>Ocorrência <span id="viewId"></span></h3>
-                    <span id="viewPriority" class="priority medium"></span>
+                    <span id="viewPriority" class="badge medium"></span>
                 </div>
                 <div class="detail-grid">
                     <div class="detail-box"><span>Morador</span><strong id="viewResident"></strong></div>
@@ -354,7 +355,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
             document.getElementById('viewId').textContent = '#' + String(o.idChamados).padStart(3, '0');
             const vp = document.getElementById('viewPriority');
             vp.textContent = o.prioridade;
-            vp.className = 'priority ' + (o.pc || 'medium');
+            vp.className = 'badge ' + (o.pc || 'medium');
             document.getElementById('viewResident').textContent = o.morador_nome;
             document.getElementById('viewApartment').textContent = o.numResid || '—';
             document.getElementById('viewCategory').textContent = o.categoria;

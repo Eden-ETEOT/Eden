@@ -109,6 +109,7 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
     <link rel="stylesheet" href="./CSS/dashboard.css">
     <link rel="stylesheet" href="./CSS/reset.css">
     <link rel="stylesheet" href="./CSS/FrontDev.css">
+    <link rel="stylesheet" href="./CSS/tabelas.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 <?php include './Elements/favicon.php'; ?>
 </head>
@@ -148,8 +149,8 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
                                 <button class="filter-button" type="button" onclick="filtrarComArquivo()" title="Somente com arquivo"><i data-lucide="list-filter"></i></button>
                             </div>
                         </div>
-                        <div class="table-container">
-                            <table>
+                        <div class="table-container table-scroll">
+                            <table class="issues-table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -174,11 +175,11 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
                                             <td><?= htmlspecialchars($d['tamanho']) ?></td>
                                             <td><?= htmlspecialchars($d['dataFmt'] ?? '—') ?></td>
                                             <td>
-                                                <div class="document-actions">
+                                                <div class="tbl-actions">
                                                     <?php if ($d['temArquivo']): ?>
-                                                    <a href="./<?= htmlspecialchars($d['caminho']) ?>" download title="Baixar"><i data-lucide="download"></i></a>
+                                                    <a class="tbl-action" href="./<?= htmlspecialchars($d['caminho']) ?>" download title="Baixar"><i data-lucide="download"></i></a>
                                                     <?php endif; ?>
-                                                    <button type="button" onclick="excluirDocumento(<?= (int) $d['idDocumento'] ?>)" title="Excluir"><i data-lucide="trash-2"></i></button>
+                                                    <button type="button" class="tbl-action danger" onclick="excluirDocumento(<?= (int) $d['idDocumento'] ?>)" title="Excluir"><i data-lucide="trash-2"></i></button>
                                                 </div>
                                             </td>
                                         </tr>

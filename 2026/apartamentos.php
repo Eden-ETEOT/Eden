@@ -91,6 +91,7 @@ try {
     <link rel="stylesheet" href="./CSS/dashboard.css">
     <link rel="stylesheet" href="./CSS/reset.css">
     <link rel="stylesheet" href="./CSS/FrontDev.css">
+    <link rel="stylesheet" href="./CSS/tabelas.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 <?php include './Elements/favicon.php'; ?>
 </head>
@@ -147,8 +148,8 @@ try {
                             </div>
                         </div>
 
-                        <div class="table-wrapper">
-                            <table>
+                        <div class="table-wrapper table-scroll">
+                            <table class="issues-table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -172,11 +173,11 @@ try {
                                             <td><?= htmlspecialchars($a['bloco']) ?></td>
                                             <td><?= htmlspecialchars($a['proprietario'] ?? 'Sem morador') ?></td>
                                             <td><?= $a['metragem'] !== null ? htmlspecialchars(number_format((float) $a['metragem'], 0, ',', '.') . ' m²') : '—' ?></td>
-                                            <td><span class="status <?= $ativo ? 'active-status' : 'inactive-status' ?>"><?= $ativo ? 'Ativo' : 'Inativo' ?></span></td>
+                                            <td><span class="badge <?= $ativo ? 'ativo' : 'inativo' ?>"><?= $ativo ? 'Ativo' : 'Inativo' ?></span></td>
                                             <td>
-                                                <div class="row-actions">
-                                                    <button type="button" onclick='fdVerApartamento(<?= json_encode($a, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' title="Visualizar"><i data-lucide="eye"></i></button>
-                                                    <button type="button" onclick="fdStatusApartamento(<?= (int) $a['idUnidade'] ?>, <?= $ativo ? 0 : 1 ?>, '<?= $ativo ? 'desativar' : 'reativar' ?>')" title="<?= $ativo ? 'Desativar' : 'Reativar' ?>"><i data-lucide="trash-2"></i></button>
+                                                <div class="tbl-actions">
+                                                    <button type="button" class="tbl-action" onclick='fdVerApartamento(<?= json_encode($a, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' title="Visualizar"><i data-lucide="eye"></i></button>
+                                                    <button type="button" class="tbl-action danger" onclick="fdStatusApartamento(<?= (int) $a['idUnidade'] ?>, <?= $ativo ? 0 : 1 ?>, '<?= $ativo ? 'desativar' : 'reativar' ?>')" title="<?= $ativo ? 'Desativar' : 'Reativar' ?>"><i data-lucide="trash-2"></i></button>
                                                 </div>
                                             </td>
                                         </tr>

@@ -11,7 +11,7 @@ function menuAtivoCls($chave, $menuAtivo) {
         <img src="./assets/PNG/logobranca-laranja.png" alt="éden Systems" class="sidebar-brand">
     </div>
 
-    <nav>
+    <nav class="sidebar-nav">
         <ul class="sidebar-menu">
 
             <!-- Dashboard -->
@@ -62,7 +62,11 @@ function menuAtivoCls($chave, $menuAtivo) {
                 </a>
             </li>
 
-            <li class="sidebar-section-label">Administração</li>
+        </ul>
+
+        <div class="sidebar-admin">
+            <div class="sidebar-section-label">Administração</div>
+            <ul class="sidebar-menu">
 
             <!-- Configurações -->
             <li class="sidebar-menu-item">
@@ -87,7 +91,8 @@ function menuAtivoCls($chave, $menuAtivo) {
                     Suporte
                 </a>
             </li>
-        </ul>
+            </ul>
+        </div>
     </nav>
 
     <div class="sidebar-footer">

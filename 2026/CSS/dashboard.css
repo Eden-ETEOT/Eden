@@ -37,7 +37,8 @@ body {
     align-items: center;
     justify-content: center;
     padding: 0 20px var(--spacing500);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0 16px;
+    border-bottom: 1px solid #fff;
 }
 
 .sidebar-brand {
@@ -68,9 +69,9 @@ body {
 }
 
 .sidebar-admin {
-    margin-top: auto;
+    margin: auto 16px 0;
     padding-bottom: var(--spacing300);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid #fff;
 }
 
 .sidebar-admin .sidebar-menu {
@@ -89,7 +90,7 @@ body {
     color: #fff;
     text-decoration: none;
     font-size: 16px;
-    font-weight: var(--bold);
+    font-weight: var(--semi-bold);
     transition: all 0.3s ease;
     position: relative;
 }
@@ -160,7 +161,8 @@ body {
 
 .sidebar-footer {
     padding: var(--spacing400) 20px var(--spacing500);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0 16px;
+    border-top: 1px solid #fff;
 }
 
 .sidebar-logout {
@@ -170,7 +172,7 @@ body {
     color: var(--red-default);
     text-decoration: none;
     font-size: 16px;
-    font-weight: var(--bold);
+    font-weight: var(--semi-bold);
     transition: all 0.2s ease;
 }
 

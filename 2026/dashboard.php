@@ -171,7 +171,7 @@ try {
                         <div class="stat-value"><?php echo number_format($stats['total_occurrences']); ?></div>
                         <div class="stat-label">Total de Ocorrências</div>
                         <div class="stat-description">Total registrado nesse período</div>
-                        <a href="#" class="stat-link">Ver mais</a>
+                        <a href="./ocorrencias.php" class="stat-link">Ver mais</a>
                     </div>
 
                     <!-- Resolvidas -->
@@ -180,7 +180,7 @@ try {
                         <div class="stat-value"><?php echo number_format($stats['resolved']); ?></div>
                         <div class="stat-label">Resolvidas</div>
                         <div class="stat-description">Ocorrências concluídas com sucesso</div>
-                        <a href="#" class="stat-link">Ver mais</a>
+                        <a href="./ocorrencias.php?status=resolvida" class="stat-link">Ver mais</a>
                     </div>
 
                     <!-- Pendentes -->
@@ -189,7 +189,7 @@ try {
                         <div class="stat-value"><?php echo number_format($stats['pending']); ?></div>
                         <div class="stat-label">Pendentes</div>
                         <div class="stat-description">Ocorrências esperando análise</div>
-                        <a href="#" class="stat-link">Ver mais</a>
+                        <a href="./ocorrencias.php?status=analise" class="stat-link">Ver mais</a>
                     </div>
 
                     <!-- Em Análise -->
@@ -198,7 +198,7 @@ try {
                         <div class="stat-value"><?php echo number_format($stats['analyzing']); ?></div>
                         <div class="stat-label">Em análise</div>
                         <div class="stat-description">Aguardando triagem e análise</div>
-                        <a href="#" class="stat-link">Ver mais</a>
+                        <a href="./ocorrencias.php?status=andamento" class="stat-link">Ver mais</a>
                     </div>
                 </div>
 

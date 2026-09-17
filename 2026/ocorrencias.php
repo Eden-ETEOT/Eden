@@ -97,6 +97,11 @@ $user_avatar = mb_substr($user_name, 0, 1);
 $user_foto = ($user && !empty($user['foto'])) ? $user['foto'] : null;
 $pageTitle = 'Ocorrências';
 $menuAtivo = 'ocorrencias';
+$filtroStatus = $_GET['status'] ?? '';
+if (!in_array($filtroStatus, ['analise', 'andamento', 'resolvida', 'cancelada'], true)) {
+    $filtroStatus = '';
+}
+$rotuloFiltro = ['analise' => 'Em análise', 'andamento' => 'Em andamento', 'resolvida' => 'Resolvidas', 'cancelada' => 'Canceladas'][$filtroStatus] ?? '';
 
 // Lista de ocorrências
 $ocorrencias = [];
@@ -169,7 +174,8 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                         <div class="card-header">
                             <div>
                                 <h2>Histórico de Ocorrências</h2>
-                                <p><span id="totalCount"><?= count($ocorrencias) ?></span> ocorrências encontradas</p>
+                                <p><span id="totalCount"><?= count($ocorrencias) ?></span> ocorrências encontradas
+                                <a id="clearStatusFilter" href="./ocorrencias.php" hidden style="font-size:12px;color:var(--orange1-default);font-weight:600"> · limpar filtro</a></p>
                             </div>
                             <div class="card-actions">
                                 <div class="search-box">
@@ -200,7 +206,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                                     <?php else: ?>
                                         <?php foreach ($ocorrencias as $o): ?>
                                         <?php [$pc, $pl] = mapaPrioridade($o['prioridade']); [$sc, $sl] = mapaStatus($o['status']); ?>
-                                        <tr data-prioridade="<?= $pc ?>" data-status-valor="<?= $o['status'] ?>">
+                                        <tr data-prioridade="<?= $pc ?>" data-status-valor="<?= $o['status'] ?>" data-status="<?= $o['status'] ?>">
                                             <td class="resident-id">#<?= str_pad((int) $o['idChamados'], 3, '0', STR_PAD_LEFT) ?></td>
                                             <td><?= htmlspecialchars($o['titulo']) ?></td>
                                             <td><?= htmlspecialchars($o['categoria']) ?></td>
@@ -335,17 +341,26 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
     <script>
         lucide.createIcons();
         function pesquisarOcorrencias() {
-            filtrarLinhas('occurrenceTable', document.getElementById('searchInput').value);
+            filtrarLinhas('occurrenceTable', document.getElementById('searchInput').value, window.__statusFiltro || '');
+            atualizarContagemOcc();
+        }
+        window.__statusFiltro = <?= json_encode($filtroStatus, JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+        function atualizarContagemOcc() {
+            const visiveis = document.querySelectorAll('#occurrenceTable tr:not(.f-hide)').length;
+            document.getElementById('totalCount').textContent = visiveis;
         }
         let urgentes = false;
         function filtrarUrgentes() {
             urgentes = !urgentes;
             document.getElementById('searchInput').value = '';
-            document.querySelectorAll('#occurrenceTable tr').forEach(tr => {
-                const ok = !urgentes || tr.dataset.prioridade === 'urgent';
-                tr.classList.toggle('f-hide', !ok);
-            });
+            filtrarLinhas('occurrenceTable', '', window.__statusFiltro || '');
+            if (urgentes) {
+                document.querySelectorAll('#occurrenceTable tr').forEach(tr => {
+                    if (tr.dataset.prioridade !== 'urgent') tr.classList.add('f-hide');
+                });
+            }
             if (pagEstado['occurrenceTable']) { pagEstado['occurrenceTable'].pagina = 1; desenharPaginacao('occurrenceTable'); }
+            atualizarContagemOcc();
         }
         function mostrarUrgentes() { if (!urgentes) filtrarUrgentes(); }
         let atualId = null;
@@ -383,6 +398,12 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
             document.getElementById('fileName').textContent = inp.files.length ? inp.files[0].name : '';
         }
         paginar('occurrenceTable', 'pager', 10);
+        if (window.__statusFiltro) {
+            document.getElementById('searchInput').value = '';
+            filtrarLinhas('occurrenceTable', '', window.__statusFiltro);
+            document.getElementById('clearStatusFilter').hidden = false;
+            atualizarContagemOcc();
+        }
     </script>
 </body>
 </html>

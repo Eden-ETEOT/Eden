@@ -21,7 +21,7 @@ body {
 /* ========== SIDEBAR ========== */
 .sidebar {
     width: 290px;
-    background-color: var(--green1-default);
+    background-color: #283E2E;
     color: white;
     padding: var(--spacing500) 0 0;
     position: fixed;
@@ -86,10 +86,10 @@ body {
     align-items: center;
     gap: var(--spacing300);
     padding: var(--spacing300) 20px;
-    color: rgba(255, 255, 255, 0.7);
+    color: #fff;
     text-decoration: none;
     font-size: 16px;
-    font-weight: var(--semi-bold);
+    font-weight: var(--bold);
     transition: all 0.3s ease;
     position: relative;
 }
@@ -170,7 +170,7 @@ body {
     color: var(--red-default);
     text-decoration: none;
     font-size: 16px;
-    font-weight: var(--semi-bold);
+    font-weight: var(--bold);
     transition: all 0.2s ease;
 }
 

@@ -19,10 +19,10 @@ function mapaPrioridade($nome) {
 }
 function mapaStatus($status) {
     return [
-        'analise' => ['analysis', 'Em análise'],
-        'andamento' => ['progress', 'Em andamento'],
-        'resolvida' => ['finished', 'Finalizado'],
-        'cancelada' => ['cancelled', 'Cancelado'],
+        'analise' => ['status-analise', 'Em análise'],
+        'andamento' => ['status-andamento', 'Em andamento'],
+        'resolvida' => ['status-finalizado', 'Finalizado'],
+        'cancelada' => ['status-cancelado', 'Cancelado'],
     ][$status] ?? ['analysis', $status];
 }
 
@@ -134,7 +134,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
     <title>Ocorrências - Eden Systems</title>
     <link rel="stylesheet" href="./CSS/dashboard.css">
     <link rel="stylesheet" href="./CSS/reset.css">
-    <link rel="stylesheet" href="./CSS/SindicoPages.css">
+    <link rel="stylesheet" href="./CSS/FrontDev.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 <?php include './Elements/favicon.php'; ?>
 </head>
@@ -146,17 +146,17 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
             <?php include './Elements/header.php'; ?>
 
             <div class="dashboard-content">
-                <div class="sind-page">
-                    <section class="top-content">
-                        <div class="intro" style="margin:0">
+                <div class="fd-ocorrencias">
+                    <section class="intro">
+                        <div>
                             <h1>Tela de Ocorrências Condominiais</h1>
                             <p>Permite consultar, visualizar e excluir as ocorrências, além de registrar novas ocorrências.</p>
                         </div>
                         <div class="urgent-box">
-                            <i class="urgent-icon" data-lucide="triangle-alert"></i>
-                            <span class="urgent-text"><?= $nUrgentes ?> ocorrência(s) com Urgência</span>
+                            <i data-lucide="triangle-alert"></i>
+                            <strong><span id="urgentCount"><?= $nUrgentes ?></span> ocorrências com Urgência</strong>
                             <div class="urgent-divider"></div>
-                            <button class="urgent-button" onclick="mostrarUrgentes()">Ver todas</button>
+                            <button type="button" onclick="mostrarUrgentes()">Ver todas</button>
                         </div>
                     </section>
                     <?php if ($msg): ?>
@@ -164,22 +164,22 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                     <?php elseif ($erro): ?>
                         <p style="width:100%;padding:8px 12px;border-radius:8px;background:#fdecea;color:#8f1d1d;border:1px solid #f5c6c2;text-align:center;margin-bottom:16px"><?= htmlspecialchars($erro) ?></p>
                     <?php endif; ?>
-                    <section class="table-card">
-                        <div class="table-header">
-                            <div class="history-title">
+                    <section class="occurrence-card">
+                        <div class="card-header">
+                            <div>
                                 <h2>Histórico de Ocorrências</h2>
-                                <span class="count"><?= count($ocorrencias) ?> ocorrência(s) encontrada(s)</span>
+                                <p><span id="totalCount"><?= count($ocorrencias) ?></span> ocorrências encontradas</p>
                             </div>
-                            <div class="actions">
-                                <div class="search">
+                            <div class="card-actions">
+                                <div class="search-box">
                                     <i data-lucide="search"></i>
-                                    <input type="text" id="searchInput" placeholder="Pesquisar ocorrência..." onkeyup="pesquisarOcorrencias()">
+                                    <input id="searchInput" type="text" placeholder="Pesquisar ocorrência..." oninput="pesquisarOcorrencias()">
                                 </div>
-                                <button class="filter-btn" onclick="filtrarUrgentes()" title="Filtrar urgentes"><i data-lucide="list-filter"></i></button>
-                                <button class="new-btn" style="position:static" onclick="abrirModal('newModal')"><i data-lucide="plus"></i>Ocorrência</button>
+                                <button class="filter-button" type="button" onclick="filtrarUrgentes()" title="Filtrar urgentes"><i data-lucide="list-filter"></i></button>
+                                <button class="new-occurrence-button" type="button" onclick="abrirModal('newModal')"><i data-lucide="plus"></i>Ocorrência</button>
                             </div>
                         </div>
-                        <div class="table-wrapper">
+                        <div class="table-container">
                             <table>
                                 <thead>
                                     <tr>
@@ -209,7 +209,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                                             <td><?= htmlspecialchars($o['dataFmt']) ?></td>
                                             <td>
                                                 <div class="row-actions">
-                                                    <button type="button" onclick='visualizar(<?= json_encode($o, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' title="Visualizar"><i data-lucide="eye"></i></button>
+                                                    <button type="button" onclick='visualizar(<?= json_encode(array_merge($o, ['pc' => $pc]), JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' title="Visualizar"><i data-lucide="eye"></i></button>
                                                     <?php if ($o['status'] !== 'cancelada'): ?>
                                                     <button type="button" onclick="cancelarOcorrencia(<?= (int) $o['idChamados'] ?>)" title="Cancelar"><i data-lucide="trash-2"></i></button>
                                                     <?php endif; ?>
@@ -228,74 +228,68 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
         </div>
     </div>
 
-    <div class="sind-page">
-    <div class="modal-overlay" id="viewModal">
-        <div class="modal">
-            <div class="modal-top">
-                <div class="modal-title">
-                    <h2 id="viewTitle"></h2>
-                    <button class="close-modal" onclick="fecharModal('viewModal')"><i data-lucide="x"></i></button>
+    <div class="fd-ocorrencias">
+    <div class="modal-overlay" id="viewModal" onclick="fdFecharClicandoFora(event, 'viewModal')">
+        <div class="modal details-modal">
+            <div class="modal-header">
+                <h2 id="viewTitle"></h2>
+                <button type="button" onclick="fecharModal('viewModal')"><i data-lucide="x"></i></button>
+            </div>
+            <div class="details-content">
+                <div class="details-top">
+                    <h3>Ocorrência <span id="viewId"></span></h3>
+                    <span id="viewPriority" class="priority medium"></span>
                 </div>
-                <div class="occurrence-header">
-                    <span class="occurrence-number">Ocorrência <span id="viewId"></span></span>
-                    <span class="modal-priority" id="viewPriority"></span>
+                <div class="detail-grid">
+                    <div class="detail-box"><span>Morador</span><strong id="viewResident"></strong></div>
+                    <div class="detail-box"><span>Apartamento</span><strong id="viewApartment"></strong></div>
+                    <div class="detail-box"><span>Categoria</span><strong id="viewCategory"></strong></div>
+                    <div class="detail-box"><span>Data da Ocorrência</span><strong id="viewDate"></strong></div>
                 </div>
-                <div class="info-grid">
-                    <div class="info-box"><div class="info-label">Morador</div><div class="info-value" id="viewResident"></div></div>
-                    <div class="info-box"><div class="info-label">Apartamento</div><div class="info-value" id="viewApartment"></div></div>
-                    <div class="info-box"><div class="info-label">Categoria</div><div class="info-value" id="viewCategory"></div></div>
-                    <div class="info-box"><div class="info-label">Data da Ocorrência</div><div class="info-value" id="viewDate"></div></div>
-                </div>
-                <div class="description-container">
-                    <span class="description-label">Descrição</span>
-                    <div class="description" id="viewDescription"></div>
-                </div>
-                <div class="status-container">
-                    <div class="status-title">Atualizar Status</div>
-                    <div class="status-options">
-                        <button class="status-option" data-status="resolvida" onclick="alterarStatus(this)">Finalizado</button>
-                        <button class="status-option" data-status="andamento" onclick="alterarStatus(this)">Em andamento</button>
-                        <button class="status-option" data-status="analise" onclick="alterarStatus(this)">Em análise</button>
-                        <button class="status-option" data-status="cancelada" onclick="alterarStatus(this)">Cancelado</button>
-                    </div>
+                <div class="description-title">Descrição</div>
+                <div class="description-box" id="viewDescription"></div>
+                <div class="update-title">Atualizar Status</div>
+                <div class="status-buttons" id="statusButtons">
+                    <button type="button" data-status="resolvida" onclick="alterarStatus(this)">Finalizado</button>
+                    <button type="button" data-status="andamento" onclick="alterarStatus(this)">Em andamento</button>
+                    <button type="button" data-status="analise" onclick="alterarStatus(this)">Em análise</button>
+                    <button type="button" data-status="cancelada" onclick="alterarStatus(this)">Cancelado</button>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="details-footer">
                 <form method="post" id="cancelForm" style="display:inline">
                     <input type="hidden" name="acao" value="cancelar">
                     <input type="hidden" name="id" id="cancelId" value="">
-                    <button type="submit" class="delete-button" onclick="return confirm('Deseja realmente cancelar esta ocorrência?')">Excluir Ocorrência</button>
+                    <button type="submit" onclick="return confirm('Deseja realmente cancelar esta ocorrência?')">Excluir Ocorrência</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="newModal">
+    <div class="modal-overlay" id="newModal" onclick="fdFecharClicandoFora(event, 'newModal')">
         <div class="modal new-modal">
-            <div class="modal-top">
-                <div class="modal-title">
-                    <h2>Nova Ocorrência</h2>
-                    <button class="close-modal" onclick="fecharModal('newModal')"><i data-lucide="x"></i></button>
-                </div>
+            <div class="modal-header">
+                <h2>Nova Ocorrência</h2>
+                <button type="button" onclick="fecharModal('newModal')"><i data-lucide="x"></i></button>
             </div>
-            <form class="new-form" method="post" enctype="multipart/form-data">
+            <form class="new-occurrence-form" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="acao" value="criar">
                 <div class="form-group">
-                    <label class="form-label">Título</label>
-                    <input type="text" class="form-input" name="titulo" placeholder="Descreva o problema brevemente" required>
+                    <label>Título</label>
+                    <input type="text" name="titulo" placeholder="Descreva o problema brevemente" required>
                 </div>
-                <div class="form-row">
+                <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">Categoria</label>
-                        <select class="form-select" name="categoria" required>
+                        <label>Categoria</label>
+                        <select name="categoria" required>
                             <?php foreach ($categorias as $cat): ?>
                             <option value="<?= (int) $cat['idCategoria'] ?>"><?= htmlspecialchars($cat['nome']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Prioridade</label>
-                        <select class="form-select" name="prioridade" required>
+                        <label>Prioridade</label>
+                        <select name="prioridade" required>
                             <option value="2">Baixa</option>
                             <option value="3">Média</option>
                             <option value="7">Alta</option>
@@ -304,25 +298,23 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Morador</label>
-                    <select class="form-select" name="morador" required>
+                    <label>Morador</label>
+                    <select name="morador" required>
                         <?php foreach ($moradoresSel as $mm): ?>
                         <option value="<?= (int) $mm['idMorador'] ?>"><?= htmlspecialchars($mm['nome']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Descrição</label>
-                    <textarea class="form-textarea" name="descricao" placeholder="Descreva detalhadamente a ocorrência..." required></textarea>
+                    <label class="description-label">Descrição</label>
+                    <textarea name="descricao" placeholder="Descreva detalhadamente a ocorrência..." required></textarea>
                 </div>
-                <div class="form-group">
+                <div class="image-area">
                     <input type="file" id="imageInput" name="anexo" accept="image/*" hidden onchange="mostrarArquivo()">
-                    <div>
-                        <button type="button" class="attach-button" onclick="document.getElementById('imageInput').click()">Anexar imagem</button>
-                        <span class="file-name" id="fileName"></span>
-                    </div>
+                    <button type="button" class="attach-button" onclick="document.getElementById('imageInput').click()">Anexar imagem</button>
+                    <span id="fileName"></span>
                 </div>
-                <div class="form-buttons">
+                <div class="modal-form-buttons">
                     <button type="button" class="cancel-button" onclick="fecharModal('newModal')">Cancelar</button>
                     <button type="submit" class="register-button">Registrar Ocorrência</button>
                 </div>
@@ -338,6 +330,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
     </div>
 
     <script src="./js/sindicoPages.js"></script>
+    <script src="./js/FrontDev.js"></script>
     <script>
         lucide.createIcons();
         function pesquisarOcorrencias() {
@@ -359,14 +352,16 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
             atualId = o.idChamados;
             document.getElementById('viewTitle').textContent = o.titulo;
             document.getElementById('viewId').textContent = '#' + String(o.idChamados).padStart(3, '0');
-            document.getElementById('viewPriority').textContent = o.prioridade;
+            const vp = document.getElementById('viewPriority');
+            vp.textContent = o.prioridade;
+            vp.className = 'priority ' + (o.pc || 'medium');
             document.getElementById('viewResident').textContent = o.morador_nome;
             document.getElementById('viewApartment').textContent = o.numResid || '—';
             document.getElementById('viewCategory').textContent = o.categoria;
             document.getElementById('viewDate').textContent = o.dataFmt;
             document.getElementById('viewDescription').textContent = o.descricao;
             document.getElementById('cancelId').value = o.idChamados;
-            document.querySelectorAll('#viewModal .status-option').forEach(b => {
+            document.querySelectorAll('#statusButtons button').forEach(b => {
                 b.classList.toggle('selected', b.dataset.status === o.status);
             });
             abrirModal('viewModal');

@@ -58,7 +58,7 @@ try {
     <title>Moradores - Eden Systems</title>
     <link rel="stylesheet" href="./CSS/dashboard.css">
     <link rel="stylesheet" href="./CSS/reset.css">
-    <link rel="stylesheet" href="./CSS/SindicoPages.css">
+    <link rel="stylesheet" href="./CSS/FrontDev.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 <?php include './Elements/favicon.php'; ?>
 </head>
@@ -70,19 +70,23 @@ try {
             <?php include './Elements/header.php'; ?>
 
             <div class="dashboard-content">
-                <div class="sind-page">
-                    <section class="intro">
-                        <h1>Tela de Moradores Condominiais</h1>
-                        <p>Centraliza todos os moradores cadastrados no condomínio, organizados em uma tabela com suas respectivas
-                            informações. Permite buscar moradores, visualizar seus dados e desativar suas contas.</p>
+                <div class="fd-moradores">
+                    <section class="top-content">
+                        <div>
+                            <h1>Tela de Moradores Condominiais</h1>
+                            <p>Centraliza todos os moradores cadastrados no condomínio,
+                                organizados em uma tabela com suas respectivas informações.
+                                Permite buscar moradores, visualizar seus dados e desativar
+                                suas contas.</p>
+                        </div>
                         <a class="new-btn" href="./cadastro/morador/passo-1.php" style="text-decoration:none"><i data-lucide="plus"></i>Novo Morador</a>
                     </section>
                     <?php if ($msg): ?>
                         <p style="width:100%;padding:8px 12px;border-radius:8px;background:#e9f7ee;color:#1e5c34;border:1px solid #bfe3cb;text-align:center;margin-bottom:16px"><?= htmlspecialchars($msg) ?></p>
                     <?php endif; ?>
-                    <section class="table-card">
-                        <div class="table-header">
-                            <div class="table-title">
+                    <section class="residents-card">
+                        <div class="card-header">
+                            <div>
                                 <h2>Moradores Cadastrados</h2>
                                 <div class="count"><?= count($moradores) ?> morador(es) cadastrado(s)</div>
                             </div>
@@ -116,7 +120,7 @@ try {
                                             <td><?= htmlspecialchars($m['bloco'] ?? '—') ?></td>
                                             <td><?= htmlspecialchars($m['numResid'] ?? '—') ?></td>
                                             <td><?= htmlspecialchars($m['entrada'] ?? '—') ?></td>
-                                            <td><span class="status <?= $ativo ? 'active' : 'inactive' ?>"><?= $ativo ? 'Ativo' : 'Inativo' ?></span></td>
+                                            <td><span class="status <?= $ativo ? 'active-status' : 'inactive-status' ?>"><?= $ativo ? 'Ativo' : 'Inativo' ?></span></td>
                                             <td>
                                                 <div class="row-actions">
                                                     <button type="button" onclick='visualizar(<?= json_encode($m, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' title="Visualizar"><i data-lucide="eye"></i></button>
@@ -138,35 +142,38 @@ try {
         </div>
     </div>
 
-    <div class="sind-page">
-    <div class="modal-overlay" id="residentModal">
-        <section class="modal">
-            <header class="modal-header">
-                <h2>Detalhes do Morador</h2>
-                <button class="close-modal" onclick="fecharModal()"><i data-lucide="x"></i></button>
-            </header>
-            <div class="modal-content">
-                <h3 class="resident-title" id="detailId"></h3>
-                <div class="detail-box"><span class="detail-label">Morador</span><strong class="detail-value" id="detailName"></strong></div>
-                <div class="detail-grid">
-                    <div class="detail-box"><span class="detail-label">Apartamento</span><strong class="detail-value" id="detailApartment"></strong></div>
-                    <div class="detail-box"><span class="detail-label">Bloco</span><strong class="detail-value" id="detailBlock"></strong></div>
+    <div class="fd-moradores">
+    <div class="modal-overlay" id="residentModal" onclick="fdFecharClicandoFora(event, 'residentModal')">
+        <div class="modal resident-modal">
+            <div class="modal-top">
+                <div class="modal-title">
+                    <h2>Detalhes do Morador</h2>
+                    <button class="close-modal" type="button" onclick="fecharModal('residentModal')"><i data-lucide="x"></i></button>
                 </div>
-                <div class="detail-box"><span class="detail-label">E-mail</span><strong class="detail-value" id="detailEmail"></strong></div>
-                <div class="detail-box"><span class="detail-label">Telefone</span><strong class="detail-value" id="detailPhone"></strong></div>
             </div>
-            <footer class="modal-footer">
+            <div class="modal-content">
+                <div class="resident-number" id="detailId"></div>
+                <div class="resident-info-box full"><span class="resident-label">Morador</span><strong id="detailName"></strong></div>
+                <div class="resident-info-grid">
+                    <div class="resident-info-box"><span class="resident-label">Apartamento</span><strong id="detailApartment"></strong></div>
+                    <div class="resident-info-box"><span class="resident-label">Bloco</span><strong id="detailBlock"></strong></div>
+                </div>
+                <div class="resident-info-box full"><span class="resident-label">E-mail</span><strong id="detailEmail"></strong></div>
+                <div class="resident-info-box full"><span class="resident-label">Telefone</span><strong id="detailPhone"></strong></div>
+            </div>
+            <div class="modal-footer">
                 <form method="post" id="deleteForm" style="display:inline">
                     <input type="hidden" name="acao" value="desativar">
                     <input type="hidden" name="id" id="deleteId" value="">
                     <button type="submit" class="delete-button" onclick="return confirm('Deseja realmente desativar este morador?')">Excluir Morador</button>
                 </form>
-            </footer>
-        </section>
+            </div>
+        </div>
     </div>
     </div>
 
     <script src="./js/sindicoPages.js"></script>
+    <script src="./js/FrontDev.js"></script>
     <script>
         lucide.createIcons();
         function pesquisar() {

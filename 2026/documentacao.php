@@ -108,7 +108,7 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
     <title>Documentação - Eden Systems</title>
     <link rel="stylesheet" href="./CSS/dashboard.css">
     <link rel="stylesheet" href="./CSS/reset.css">
-    <link rel="stylesheet" href="./CSS/SindicoPages.css">
+    <link rel="stylesheet" href="./CSS/FrontDev.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 <?php include './Elements/favicon.php'; ?>
 </head>
@@ -120,11 +120,13 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
             <?php include './Elements/header.php'; ?>
 
             <div class="dashboard-content">
-                <div class="sind-page">
+                <div class="fd-documentacao">
                     <section class="intro">
-                        <h1>Tela de Documentações</h1>
+                        <div class="intro-text">
+                            <h1>Tela de Documentações</h1>
                         <p>Centraliza todos os documentos cadastrados no condomínio, organizados em cards para facilitar a consulta. Permite
                             buscar documentos, realizar o download dos arquivos e cadastrar novos documentos.</p>
+                        </div>
                         <button class="new-document-button" onclick="abrirModal('newModal')"><i data-lucide="plus"></i>Novo Documento</button>
                     </section>
                     <?php if ($msg): ?>
@@ -133,20 +135,20 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
                         <p style="width:100%;padding:8px 12px;border-radius:8px;background:#fdecea;color:#8f1d1d;border:1px solid #f5c6c2;text-align:center;margin-bottom:16px"><?= htmlspecialchars($erro) ?></p>
                     <?php endif; ?>
                     <section class="documents-card">
-                        <div class="documents-header">
-                            <div class="documents-title">
+                        <div class="card-header">
+                            <div>
                                 <h2>Documentos Cadastrados</h2>
-                                <span class="documents-count"><?= count($documentos) ?> documento(s) cadastrado(s)</span>
+                                <p><span id="totalDocuments"><?= count($documentos) ?></span> documento(s) cadastrado(s)</p>
                             </div>
-                            <div class="table-actions">
-                                <div class="search">
+                            <div class="card-actions">
+                                <div class="search-box">
                                     <i data-lucide="search"></i>
-                                    <input type="text" id="searchInput" placeholder="Pesquisar documento..." onkeyup="pesquisarDocumentos()">
+                                    <input id="searchInput" type="text" placeholder="Pesquisar documento..." oninput="pesquisarDocumentos()">
                                 </div>
-                                <button class="filter-button" onclick="filtrarComArquivo()" title="Somente com arquivo"><i data-lucide="list-filter"></i></button>
+                                <button class="filter-button" type="button" onclick="filtrarComArquivo()" title="Somente com arquivo"><i data-lucide="list-filter"></i></button>
                             </div>
                         </div>
-                        <div class="table-wrapper">
+                        <div class="table-container">
                             <table>
                                 <thead>
                                     <tr>
@@ -192,25 +194,23 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
         </div>
     </div>
 
-    <div class="sind-page">
-    <div class="modal-overlay" id="newModal">
-        <div class="modal new-modal">
-            <div class="modal-top">
-                <div class="modal-title">
-                    <h2>Novo Documento</h2>
-                    <button class="close-modal" onclick="fecharModal('newModal')"><i data-lucide="x"></i></button>
-                </div>
+    <div class="fd-documentacao">
+    <div class="modal-overlay" id="newModal" onclick="fdFecharClicandoFora(event, 'newModal')">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Novo Documento</h2>
+                <button type="button" onclick="fecharModal('newModal')"><i data-lucide="x"></i></button>
             </div>
-            <form class="document-form" method="post" enctype="multipart/form-data">
+            <form id="documentForm" class="document-form" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="acao" value="criar">
                 <div class="form-group">
-                    <label class="form-label">Nome</label>
-                    <input type="text" class="form-input" name="nome" placeholder="Ex.: Ata da Assembleia - Agosto" required>
+                    <label>Nome</label>
+                    <input type="text" name="nome" placeholder="Ex.: Ata da Assembleia - Agosto" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Categoria</label>
-                        <input type="text" class="form-input" name="tipo" list="tiposExistentes" placeholder="Ex.: Atas" required>
+                        <label>Categoria</label>
+                        <input type="text" name="tipo" list="tiposExistentes" placeholder="Ex.: Atas" required>
                         <datalist id="tiposExistentes">
                             <?php foreach ($tipos as $t): ?>
                             <option value="<?= htmlspecialchars($t) ?>"></option>
@@ -218,20 +218,18 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
                         </datalist>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Condomínio</label>
-                        <select class="form-select" name="condominio" required>
+                        <label>Condomínio</label>
+                        <select name="condominio" required>
                             <?php foreach ($condominios as $cc): ?>
                             <option value="<?= (int) $cc['idCondominio'] ?>"><?= htmlspecialchars($cc['nome']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="file-section">
                     <input type="file" id="docInput" name="arquivo" hidden onchange="mostrarArquivo()">
-                    <div>
-                        <button type="button" class="attach-button" onclick="document.getElementById('docInput').click()">Anexar arquivo</button>
-                        <span class="file-name" id="fileName"></span>
-                    </div>
+                    <button type="button" class="attach-document" onclick="document.getElementById('docInput').click()">Anexar arquivo</button>
+                    <span id="fileName"></span>
                 </div>
                 <div class="form-buttons">
                     <button type="button" class="cancel-button" onclick="fecharModal('newModal')">Cancelar</button>
@@ -248,6 +246,7 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
     </div>
 
     <script src="./js/sindicoPages.js"></script>
+    <script src="./js/FrontDev.js"></script>
     <script>
         lucide.createIcons();
         function pesquisarDocumentos() {

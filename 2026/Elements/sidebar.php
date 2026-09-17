@@ -1,6 +1,6 @@
 <?php
 // Sidebar Component
-// $menuAtivo: chave do item ativo ('dashboard', 'ocorrencias', 'moradores', 'documentacao')
+// $menuAtivo: chave do item ativo ('dashboard', 'ocorrencias', 'moradores', 'apartamentos', 'documentacao', 'relatorios', 'configuracoes', 'permissoes', 'suporte')
 $menuAtivo = $menuAtivo ?? 'dashboard';
 function menuAtivoCls($chave, $menuAtivo) {
     return 'sidebar-menu-link' . ($menuAtivo === $chave ? ' active' : '');
@@ -40,7 +40,7 @@ function menuAtivoCls($chave, $menuAtivo) {
 
             <!-- Apartamentos -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link">
+                <a href="./apartamentos.php" class="<?= menuAtivoCls('apartamentos', $menuAtivo) ?>">
                     <img class="sidebar-icon" src="./assets/icones/house.svg" alt="Apartamentos">
                     Apartamentos
                 </a>
@@ -56,7 +56,7 @@ function menuAtivoCls($chave, $menuAtivo) {
 
             <!-- Relatórios -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link">
+                <a href="./relatorios.php" class="<?= menuAtivoCls('relatorios', $menuAtivo) ?>">
                     <img class="sidebar-icon" src="./assets/icones/chart-column.svg" alt="Relatórios">
                     Relatórios
                 </a>
@@ -66,7 +66,7 @@ function menuAtivoCls($chave, $menuAtivo) {
 
             <!-- Configurações -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link">
+                <a href="./configuracoes.php" class="<?= menuAtivoCls('configuracoes', $menuAtivo) ?>">
                     <img class="sidebar-icon" src="./assets/icones/settings.svg" alt="Configurações">
                     Configurações
                 </a>
@@ -74,7 +74,7 @@ function menuAtivoCls($chave, $menuAtivo) {
 
             <!-- Permissões -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link">
+                <a href="./permissoes.php" class="<?= menuAtivoCls('permissoes', $menuAtivo) ?>">
                     <img class="sidebar-icon" src="./assets/icones/lock-keyhole.svg" alt="Permissões">
                     Permissões
                 </a>
@@ -82,7 +82,7 @@ function menuAtivoCls($chave, $menuAtivo) {
 
             <!-- Suporte -->
             <li class="sidebar-menu-item">
-                <a href="#" class="sidebar-menu-link">
+                <a href="./suporte.php" class="<?= menuAtivoCls('suporte', $menuAtivo) ?>">
                     <img class="sidebar-icon" src="./assets/icones/message-square.svg" alt="Suporte">
                     Suporte
                 </a>

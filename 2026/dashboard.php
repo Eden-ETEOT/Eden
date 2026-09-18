@@ -126,16 +126,7 @@ try {
 <html lang="pt-BR">
 <?php pageHead('Dashboard - Eden Systems', ['./CSS/tabelas.css'], ['https://unpkg.com/lucide@latest']); ?>
 <body>
-    <div class="dashboard-wrapper">
-        <!-- Sidebar -->
-        <?php include './Elements/sidebar.php'; ?>
-
-        <div class="main-content">
-            <!-- Header -->
-            <?php include './Elements/header.php'; ?>
-
-            <!-- Conteúdo Principal -->
-            <div class="dashboard-content">
+    <?php layoutOpen(); ?>
                 <h1 class="page-title">Visão geral</h1>
 
                 <!-- Cards de Estatísticas -->

@@ -64,13 +64,7 @@ $endereco = $cond
 <html lang="pt-BR">
 <?php pageHead('Configurações - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['https://unpkg.com/lucide@latest']); ?>
 <body>
-    <div class="dashboard-wrapper">
-        <?php include './Elements/sidebar.php'; ?>
-
-        <div class="main-content">
-            <?php include './Elements/header.php'; ?>
-
-            <div class="dashboard-content">
+    <?php layoutOpen(); ?>
                 <div class="fd-configuracoes">
                     <div class="page-intro">
                         <h1>Configurações</h1>

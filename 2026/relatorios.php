@@ -104,13 +104,7 @@ try {
 <html lang="pt-BR">
 <?php pageHead('Relatórios - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['https://unpkg.com/lucide@latest', 'https://cdn.jsdelivr.net/npm/chart.js']); ?>
 <body>
-    <div class="dashboard-wrapper">
-        <?php include './Elements/sidebar.php'; ?>
-
-        <div class="main-content">
-            <?php include './Elements/header.php'; ?>
-
-            <div class="dashboard-content">
+    <?php layoutOpen(); ?>
                 <div class="fd-relatorios">
                     <section class="page-title">
                         <h1>Relatórios</h1>

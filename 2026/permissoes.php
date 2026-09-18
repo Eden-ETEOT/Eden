@@ -109,13 +109,7 @@ function iniciais($nome) {
 <html lang="pt-BR">
 <?php pageHead('Permissões - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['https://unpkg.com/lucide@latest']); ?>
 <body>
-    <div class="dashboard-wrapper">
-        <?php include './Elements/sidebar.php'; ?>
-
-        <div class="main-content">
-            <?php include './Elements/header.php'; ?>
-
-            <div class="dashboard-content">
+    <?php layoutOpen(); ?>
                 <div class="fd-permissoes">
                     <section class="page-title">
                         <h1>Permissões</h1>

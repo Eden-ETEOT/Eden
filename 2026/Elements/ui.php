@@ -35,6 +35,20 @@ function pageHead($titulo, $cssExtras = [], $jsExtras = []) {
 }
 
 /**
+ * Abre o esqueleto padrão (sidebar + header + conteúdo).
+ * Uso: pageHead(...); <body> <?php layoutOpen(); ?> ...conteúdo... </div></div></div>
+ */
+function layoutOpen() {
+    // sidebar.php/header.php usam estas variáveis da página
+    global $menuAtivo, $pageTitle, $user_name, $user_type, $user_avatar, $user_foto;
+    echo '<div class="dashboard-wrapper">' . "\n";
+    include __DIR__ . '/sidebar.php';
+    echo '<div class="main-content">' . "\n";
+    include __DIR__ . '/header.php';
+    echo '<div class="dashboard-content">' . "\n";
+}
+
+/**
  * Banner de mensagem de sucesso/erro (mesmo padrão visual em todas as páginas).
  */
 function banner($msg, $erro = '') {

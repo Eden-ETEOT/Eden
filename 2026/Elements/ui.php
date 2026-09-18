@@ -5,6 +5,19 @@
  * Emite o <head> padrão (metas, título, CSS, JS de CDN e favicon).
  * $cssExtras e $jsExtras mantêm a ordem de inclusão.
  */
+/**
+ * URL com cache-busting automático (?v=filemtime) para arquivos locais.
+ * URLs externas (CDN) passam intactas.
+ */
+function assetUrl($rel) {
+    if (strpos($rel, './') === 0) {
+        $file = __DIR__ . '/../' . substr($rel, 2);
+        $v = @filemtime($file);
+        if ($v) return $rel . '?v=' . $v;
+    }
+    return $rel;
+}
+
 function pageHead($titulo, $cssExtras = [], $jsExtras = []) {
     echo "<head>\n";
     echo "    <meta charset=\"UTF-8\">\n";
@@ -12,10 +25,10 @@ function pageHead($titulo, $cssExtras = [], $jsExtras = []) {
     echo '    <title>' . htmlspecialchars($titulo) . "</title>\n";
     $css = array_merge(['./CSS/dashboard.css'], $cssExtras);
     foreach ($css as $c) {
-        echo '    <link rel="stylesheet" href="' . htmlspecialchars($c) . "\">\n";
+        echo '    <link rel="stylesheet" href="' . htmlspecialchars(assetUrl($c)) . "\">\n";
     }
     foreach ($jsExtras as $j) {
-        echo '    <script src="' . htmlspecialchars($j) . "\"></script>\n";
+        echo '    <script src="' . htmlspecialchars(assetUrl($j)) . "\"></script>\n";
     }
     include __DIR__ . '/favicon.php';
     echo "</head>\n";

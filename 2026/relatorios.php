@@ -1,22 +1,6 @@
 <?php
-session_start();
-include './config/conexao.php';
+include './Elements/auth.php';
 
-if (!isset($_SESSION['id_usuario'])) {
-    header('Location: ./auth/login.php');
-    exit;
-}
-
-$idUsuario = $_SESSION['id_usuario'];
-
-// Dados do usuário logado (header)
-$stmt = $conexao->prepare("SELECT nome, foto FROM usuario WHERE idUsuario = :id");
-$stmt->execute(['id' => $idUsuario]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-$user_name = $user ? $user['nome'] : 'Usuário';
-$user_type = 'Síndico';
-$user_avatar = mb_substr($user_name, 0, 1);
-$user_foto = ($user && !empty($user['foto'])) ? $user['foto'] : null;
 $pageTitle = 'Relatórios';
 $menuAtivo = 'relatorios';
 

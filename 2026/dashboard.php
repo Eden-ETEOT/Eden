@@ -1,6 +1,5 @@
 <?php
-session_start();
-include './config/conexao.php';
+include './Elements/auth.php';
 
 $msg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cancelar') {
@@ -23,26 +22,10 @@ function classe_prioridade_nome($nome) {
     return 'urgent';
 }
 
-if (!isset($_SESSION['id_usuario'])) {
-    header('Location: ./auth/login.php');
-    exit;
-}
-
-$idUsuario = $_SESSION['id_usuario'];
-
 // Verificar se é síndico (admin)
 $stmt = $conexao->prepare("SELECT COUNT(*) FROM sindico WHERE idUsuario = :id");
 $stmt->execute(['id' => $idUsuario]);
 $isAdmin = $stmt->fetchColumn() > 0;
-
-// Dados do usuário logado
-$stmt = $conexao->prepare("SELECT nome, foto FROM usuario WHERE idUsuario = :id");
-$stmt->execute(['id' => $idUsuario]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-$user_name = $user ? $user['nome'] : 'Usuário';
-$user_type = 'Síndico';
-$user_avatar = mb_substr($user_name, 0, 1);
-$user_foto = ($user && !empty($user['foto'])) ? $user['foto'] : null;
 
 // Foto do condomínio (vinculado pelo último condomínio criado)
 // TODO futuro: substituir por FK sindico -> condominio quando o schema for atualizado

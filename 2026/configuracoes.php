@@ -1,13 +1,5 @@
 <?php
-session_start();
-include './config/conexao.php';
-
-if (!isset($_SESSION['id_usuario'])) {
-    header('Location: ./auth/login.php');
-    exit;
-}
-
-$idUsuario = $_SESSION['id_usuario'];
+include './Elements/auth.php';
 $msg = '';
 
 // Condomínio de referência (último criado)
@@ -50,14 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'salvar'
     }
 }
 
-// Dados do usuário logado (header + form)
-$stmt = $conexao->prepare("SELECT nome, foto, telefone, email FROM usuario WHERE idUsuario = :id");
-$stmt->execute(['id' => $idUsuario]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-$user_name = $user ? $user['nome'] : 'Usuário';
-$user_type = 'Síndico';
-$user_avatar = mb_substr($user_name, 0, 1);
-$user_foto = ($user && !empty($user['foto'])) ? $user['foto'] : null;
 $pageTitle = 'Configurações';
 $menuAtivo = 'configuracoes';
 

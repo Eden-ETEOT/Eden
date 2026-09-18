@@ -290,7 +290,7 @@ function iniciais($nome) {
 
     <div id="fdToast" class="fd-toast" role="status"></div>
 
-    <script src="./js/FrontDev.js"></script>
+    <script src="./js/app.js"></script>
     <script src="./js/mascaras.js"></script>
     <?php if ($msg): ?>
     <script>document.addEventListener('DOMContentLoaded', () => fdToast(<?= json_encode($msg, JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) ?>));</script>

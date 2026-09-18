@@ -266,6 +266,6 @@ try {
         </div>
     </div>
 
-    <script src="./js/FrontDev.js"></script>
+    <script src="./js/app.js"></script>
 </body>
 </html>

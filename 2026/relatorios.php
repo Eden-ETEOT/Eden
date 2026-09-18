@@ -223,6 +223,6 @@ try {
             infraestrutura: <?= json_encode($csv_infra, JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) ?>
         };
     </script>
-    <script src="./js/FrontDev.js"></script>
+    <script src="./js/app.js"></script>
 </body>
 </html>

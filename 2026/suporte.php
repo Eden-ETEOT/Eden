@@ -113,6 +113,6 @@ $faqs = [
         </div>
     </div>
 
-    <script src="./js/app.js"></script>
+    <script src="<?= assetUrl('./js/app.js') ?>"></script>
 </body>
 </html>

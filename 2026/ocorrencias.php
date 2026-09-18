@@ -307,7 +307,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
     </form>
     </div>
 
-    <script src="./js/app.js"></script>
+    <script src="<?= assetUrl('./js/app.js') ?>"></script>
     <script>
         lucide.createIcons();
         function pesquisarOcorrencias() {

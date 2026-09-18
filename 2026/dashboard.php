@@ -329,7 +329,8 @@ try {
         <input type="hidden" name="id" id="dashCancelId" value="">
     </form>
 
-    <script src="./js/dashboard.js"></script>
+    <script src="<?= assetUrl('./js/app.js') ?>"></script>
+    <script src="<?= assetUrl('./js/dashboard.js') ?>"></script>
     <script>
         if (window.lucide) lucide.createIcons();
         const DV_STATUS = { analise: 'Em análise', andamento: 'Em andamento', resolvida: 'Resolvida', cancelada: 'Cancelada' };

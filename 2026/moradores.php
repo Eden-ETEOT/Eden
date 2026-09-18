@@ -146,7 +146,7 @@ try {
     </div>
     </div>
 
-    <script src="./js/app.js"></script>
+    <script src="<?= assetUrl('./js/app.js') ?>"></script>
     <script>
         lucide.createIcons();
         function pesquisar() {

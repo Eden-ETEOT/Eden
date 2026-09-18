@@ -217,7 +217,7 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
     </form>
     </div>
 
-    <script src="./js/app.js"></script>
+    <script src="<?= assetUrl('./js/app.js') ?>"></script>
     <script>
         lucide.createIcons();
         function pesquisarDocumentos() {

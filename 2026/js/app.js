@@ -165,14 +165,30 @@ function fdCadastrarBloco(event) {
     return false;
 }
 
-/* ===== Toast genérico ===== */
+/* ===== Toast único da área logada ===== */
+function toast(message, type = 'info', duration = 3000) {
+    const colors = { success: '#4D8F14', error: '#C64539', warning: '#FFBF00', info: '#4C90B2' };
+    if (!document.getElementById('fd-toast-keyframes')) {
+        const st = document.createElement('style');
+        st.id = 'fd-toast-keyframes';
+        st.textContent = '@keyframes fdSlideIn{from{transform:translateX(400px);opacity:0}to{transform:translateX(0);opacity:1}}'
+            + '@keyframes fdSlideOut{from{transform:translateX(0);opacity:1}to{transform:translateX(400px);opacity:0}}';
+        document.head.appendChild(st);
+    }
+    const el = document.createElement('div');
+    el.textContent = message;
+    el.style.cssText = 'position:fixed;top:20px;right:20px;padding:16px 24px;'
+        + 'background-color:' + (colors[type] || colors.info) + ';color:#fff;border-radius:8px;'
+        + 'box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:9999;animation:fdSlideIn .3s ease;'
+        + 'font-family:Inter,sans-serif;font-size:14px;';
+    document.body.appendChild(el);
+    setTimeout(() => {
+        el.style.animation = 'fdSlideOut .3s ease';
+        setTimeout(() => el.remove(), 300);
+    }, duration);
+}
 function fdToast(msg) {
-    const t = document.getElementById('fdToast');
-    if (!t) { alert(msg); return; }
-    t.textContent = msg;
-    t.classList.add('show');
-    clearTimeout(window.__fdToastTimer);
-    window.__fdToastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+    toast(msg, 'info');
 }
 
 /* ===== Relatórios: gráfico mensal ===== */

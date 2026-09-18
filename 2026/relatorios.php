@@ -213,7 +213,6 @@ try {
         </div>
     </div>
 
-    <div id="fdToast" class="fd-toast" role="status"></div>
 
     <script>
         const FD_MESES = <?= json_encode(array_values($meses), JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) ?>;
@@ -223,6 +222,6 @@ try {
             infraestrutura: <?= json_encode($csv_infra, JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) ?>
         };
     </script>
-    <script src="./js/app.js"></script>
+    <script src="<?= assetUrl('./js/app.js') ?>"></script>
 </body>
 </html>

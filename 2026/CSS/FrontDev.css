@@ -3440,9 +3440,6 @@
     }
 
 }
-/* Toast genérico das telas front-dev */
-.fd-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #26382d; color: #fff; padding: 12px 20px; border-radius: 12px; font-size: 14px; opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; z-index: 9999; }
-.fd-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 /* Compat: paginacao gerada pelo sindicoPages.js usa .page.active */
 .fd-moradores .pagination button.active,
 .fd-ocorrencias .pagination button.active,

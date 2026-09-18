@@ -1,5 +1,6 @@
 <?php
 include './Elements/auth.php';
+include './Elements/ui.php';
 
 $msg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cancelar') {
@@ -123,16 +124,7 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Eden Systems</title>
-    <link rel="stylesheet" href="./CSS/dashboard.css">
-    <link rel="stylesheet" href="./CSS/reset.css">
-    <link rel="stylesheet" href="./CSS/tabelas.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
-<?php include './Elements/favicon.php'; ?>
-</head>
+<?php pageHead('Dashboard - Eden Systems', ['./CSS/tabelas.css'], ['https://unpkg.com/lucide@latest']); ?>
 <body>
     <div class="dashboard-wrapper">
         <!-- Sidebar -->
@@ -238,9 +230,7 @@ try {
                 <!-- Seção de Ocorrências Pendentes -->
                 <div class="pending-issues">
                     <div class="pending-header">
-                        <?php if ($msg): ?>
-                    <p style="width:100%;padding:8px 12px;border-radius:8px;background:#e9f7ee;color:#1e5c34;border:1px solid #bfe3cb;text-align:center;margin-bottom:16px"><?= htmlspecialchars($msg) ?></p>
-                <?php endif; ?>
+<?php banner($msg); ?>
                 <div>
                             <h2 class="pending-title">Ocorrências pendentes</h2>
                             <p style="font-size: 12px; color: #999; margin-top: 4px;"><?php echo count($pending_issues); ?> ocorrências encontradas</p>

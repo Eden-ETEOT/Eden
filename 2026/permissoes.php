@@ -1,5 +1,6 @@
 <?php
 include './Elements/auth.php';
+include './Elements/ui.php';
 $msg = '';
 $msg_erro = '';
 
@@ -106,17 +107,7 @@ function iniciais($nome) {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Permissões - Eden Systems</title>
-    <link rel="stylesheet" href="./CSS/dashboard.css">
-    <link rel="stylesheet" href="./CSS/reset.css">
-    <link rel="stylesheet" href="./CSS/FrontDev.css">
-    <link rel="stylesheet" href="./CSS/tabelas.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
-<?php include './Elements/favicon.php'; ?>
-</head>
+<?php pageHead('Permissões - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['https://unpkg.com/lucide@latest']); ?>
 <body>
     <div class="dashboard-wrapper">
         <?php include './Elements/sidebar.php'; ?>

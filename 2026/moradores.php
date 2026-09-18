@@ -1,5 +1,6 @@
 <?php
 include './Elements/auth.php';
+include './Elements/ui.php';
 
 // Desativar morador (soft delete via usuario.ativo)
 $msg = '';
@@ -36,17 +37,7 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moradores - Eden Systems</title>
-    <link rel="stylesheet" href="./CSS/dashboard.css">
-    <link rel="stylesheet" href="./CSS/reset.css">
-    <link rel="stylesheet" href="./CSS/FrontDev.css">
-    <link rel="stylesheet" href="./CSS/tabelas.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
-<?php include './Elements/favicon.php'; ?>
-</head>
+<?php pageHead('Moradores - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['https://unpkg.com/lucide@latest']); ?>
 <body>
     <div class="dashboard-wrapper">
         <?php include './Elements/sidebar.php'; ?>
@@ -66,9 +57,7 @@ try {
                         </div>
                         <a class="new-btn" href="./cadastro/morador/passo-1.php" style="text-decoration:none"><i data-lucide="plus"></i>Novo Morador</a>
                     </section>
-                    <?php if ($msg): ?>
-                        <p style="width:100%;padding:8px 12px;border-radius:8px;background:#e9f7ee;color:#1e5c34;border:1px solid #bfe3cb;text-align:center;margin-bottom:16px"><?= htmlspecialchars($msg) ?></p>
-                    <?php endif; ?>
+<?php banner($msg); ?>
                     <section class="residents-card">
                         <div class="card-header">
                             <div>

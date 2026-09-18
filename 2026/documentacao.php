@@ -1,5 +1,6 @@
 <?php
 include './Elements/auth.php';
+include './Elements/ui.php';
 $msg = '';
 $erro = '';
 
@@ -86,17 +87,7 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentação - Eden Systems</title>
-    <link rel="stylesheet" href="./CSS/dashboard.css">
-    <link rel="stylesheet" href="./CSS/reset.css">
-    <link rel="stylesheet" href="./CSS/FrontDev.css">
-    <link rel="stylesheet" href="./CSS/tabelas.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
-<?php include './Elements/favicon.php'; ?>
-</head>
+<?php pageHead('Documentação - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['https://unpkg.com/lucide@latest']); ?>
 <body>
     <div class="dashboard-wrapper">
         <?php include './Elements/sidebar.php'; ?>
@@ -114,11 +105,7 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
                         </div>
                         <button class="new-document-button" onclick="abrirModal('newModal')"><i data-lucide="plus"></i>Novo Documento</button>
                     </section>
-                    <?php if ($msg): ?>
-                        <p style="width:100%;padding:8px 12px;border-radius:8px;background:#e9f7ee;color:#1e5c34;border:1px solid #bfe3cb;text-align:center;margin-bottom:16px"><?= htmlspecialchars($msg) ?></p>
-                    <?php elseif ($erro): ?>
-                        <p style="width:100%;padding:8px 12px;border-radius:8px;background:#fdecea;color:#8f1d1d;border:1px solid #f5c6c2;text-align:center;margin-bottom:16px"><?= htmlspecialchars($erro) ?></p>
-                    <?php endif; ?>
+<?php banner($msg, $erro); ?>
                     <section class="documents-card">
                         <div class="card-header">
                             <div>

@@ -1,5 +1,6 @@
 <?php
 include './Elements/auth.php';
+include './Elements/ui.php';
 
 $pageTitle = 'Relatórios';
 $menuAtivo = 'relatorios';
@@ -101,17 +102,7 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatórios - Eden Systems</title>
-    <link rel="stylesheet" href="./CSS/dashboard.css">
-    <link rel="stylesheet" href="./CSS/reset.css">
-    <link rel="stylesheet" href="./CSS/FrontDev.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<?php include './Elements/favicon.php'; ?>
-</head>
+<?php pageHead('Relatórios - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['https://unpkg.com/lucide@latest', 'https://cdn.jsdelivr.net/npm/chart.js']); ?>
 <body>
     <div class="dashboard-wrapper">
         <?php include './Elements/sidebar.php'; ?>

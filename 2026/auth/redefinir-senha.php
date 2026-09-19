@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $senha = $_POST["password"] ?? '';
     $confirmar = $_POST["confirm-password"] ?? '';
 
-    if (strlen($senha) < 8) {
+    if (strlen($senha) < 6) {
         $msg = 'A senha precisa ter pelo menos 8 caracteres.';
     } elseif ($senha !== $confirmar) {
         $msg = 'As senhas não coincidem.';
@@ -64,96 +64,62 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Criar nova senha</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet"
-  >
-
-  <link rel="stylesheet" href="../CSS/RedefinirSenhaMockup.css">
-<?php include '../Elements/favicon.php'; ?>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../CSS/LoginMockup.css">
 </head>
-
 <body>
 
-  <main class="container">
+  <aside class="panel-left" aria-label="Imagem ilustrativa"></aside>
 
-    <!-- LEFT -->
-    <section class="left-side">
+  <main class="panel-right">
+    <form class="form" method="POST" action="">
 
-      <div class="overlay"></div>
+      <figure aria-label="Logo da empresa">
+        <img src="../assets/Logo.png" alt="Logo da empresa" class="logo-image">
+      </figure>
 
-      <img
-        src="../assets/logomarcadagua.png"
-        alt="Éden Systems"
-        class="logo-left"
-      >
-
-    </section>
-
-    <!-- RIGHT -->
-    <section class="right-side">
-
-      <img
-        src="../assets/original.png"
-        alt="Éden Systems"
-        class="logo"
-      >
-
-      <h1>Criar nova senha</h1>
-
-      <p>
-        Digite sua nova senha abaixo.
-      </p>
+      <header>
+        <h1 class="title">Criar nova senha</h1>
+        <p class="subtitle">Digite sua nova senha abaixo.</p>
+      </header>
 
       <?php if ($msg): ?>
         <p class="msg msg-error"><?= htmlspecialchars($msg) ?></p>
       <?php endif; ?>
 
-      <form class="form" method="POST" action="">
-
-        <div class="input-group">
-          <label for="password">
-            Nova senha
-          </label>
-
+      <section class="content">
+        <div class="field">
+          <label for="password">Nova senha</label>
           <input
             type="password"
             id="password"
             name="password"
             placeholder="Digite sua nova senha"
-            minlength="8"
+            minlength="6"
             required
           >
         </div>
 
-        <div class="input-group">
-          <label for="confirm-password">
-            Confirmar senha
-          </label>
-
+        <div class="field">
+          <label for="confirm-password">Confirmar senha</label>
           <input
             type="password"
             id="confirm-password"
             name="confirm-password"
             placeholder="Digite novamente a senha"
-            minlength="8"
+            minlength="6"
             required
-            class ="input-field-default-sm"
           >
         </div>
+      </section>
 
-        <button type="submit" class="btn-primary-orange-small">
-          Redefinir senha
-        </button>
+      <footer class="footer-form">
+        <button type="submit">Redefinir senha</button>
+      </footer>
 
-      </form>
-
-    </section>
-
+    </form>
   </main>
 
 </body>

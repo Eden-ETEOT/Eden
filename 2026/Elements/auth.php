@@ -20,3 +20,7 @@ $user_name = $user ? $user['nome'] : 'Usuário';
 $user_type = 'Síndico';
 $user_avatar = mb_substr($user_name, 0, 1);
 $user_foto = ($user && !empty($user['foto'])) ? $user['foto'] : null;
+// O cadastro salva só o nome do arquivo; monta o caminho até uploads/usuarios.
+if ($user_foto !== null && strpos($user_foto, '/') === false) {
+    $user_foto = './uploads/usuarios/' . $user_foto;
+}

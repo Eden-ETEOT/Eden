@@ -123,10 +123,11 @@
 
     padding: 0 11px;
 }
-.fd-apartamentos .search i {
-    width: 20px;
+.fd-apartamentos .search svg {
+    width: 19px;
+    height: 19px;
 
-    color: #a8b4ae;
+    color: #a3b0a8;
 }
 .fd-apartamentos .search input {
     width: 100%;
@@ -325,7 +326,7 @@
 .fd-apartamentos .form-group:first-child input {
     background: #f8f6f3;
 
-    border: 0;
+    border: 1px solid #52705d;
 }
 .fd-apartamentos .form-group input::placeholder {
     color: #8d9992;
@@ -347,7 +348,7 @@
     margin-top: 42px;
 }
 .fd-apartamentos .cancel-button, .fd-apartamentos .register-button {
-    height: 74px;
+    height: 48px;
 
     border-radius: 13px;
 
@@ -1305,6 +1306,19 @@
 .fd-permissoes .permissions-table td {
     height: 47px;
 }
+.fd-permissoes .perm-check {
+    display: inline-flex;
+
+    cursor: pointer;
+}
+.fd-permissoes .perm-check input {
+    position: absolute;
+
+    width: 0;
+    height: 0;
+
+    opacity: 0;
+}
 .fd-permissoes .permission-indicator {
     width: 20px;
     height: 20px;
@@ -1313,16 +1327,23 @@
 
     border-radius: 50%;
 
+    background: #f1f3f2;
+
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.fd-permissoes .permission-indicator.allowed {
+.fd-permissoes .perm-check input:checked + .permission-indicator {
     background: #294633;
+
     color: white;
 }
-.fd-permissoes .permission-indicator.denied {
-    background: #f1f3f2;
+.fd-permissoes .perm-check input:not(:checked) + .permission-indicator svg {
+    display: none;
+}
+.fd-permissoes .perm-check input:focus-visible + .permission-indicator {
+    outline: 2px solid #52705d;
+    outline-offset: 2px;
 }
 .fd-permissoes .permission-indicator svg {
     width: 12px;
@@ -2006,10 +2027,11 @@
 
     padding: 0 11px;
 }
-.fd-moradores .search i {
-    width: 20px;
+.fd-moradores .search svg {
+    width: 19px;
+    height: 19px;
 
-    color: #a8b4ae;
+    color: #a3b0a8;
 }
 .fd-moradores .search input {
     width: 100%;
@@ -2400,62 +2422,71 @@
     margin-bottom: 53px;
 }
 .fd-ocorrencias .intro h1 {
-    font-size: 22px;
+    color: #294633;
+
+    font-size: 23px;
     font-weight: 600;
-    margin-bottom: 16px;
+    margin-bottom: 13px;
 }
 .fd-ocorrencias .intro p {
-    color: #6e7772;
+    max-width: 650px;
+
+    color: #69726d;
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.55;
 }
 .fd-ocorrencias .urgent-box {
-    width: 480px;
-    height: 63px;
+    width: 520px;
+    max-width: 100%;
+    height: 68px;
 
     border: 1px solid #e24c41;
-    border-radius: 10px;
+    border-radius: 12px;
 
     background: white;
 
     display: flex;
     align-items: center;
 
-    padding: 0 24px;
+    padding: 0 22px;
 
     color: #c42e26;
 }
-.fd-ocorrencias .urgent-box > svg {
-    width: 29px;
-    height: 29px;
+.fd-ocorrencias .urgent-box > svg,
+.fd-ocorrencias .urgent-box > img {
+    width: 32px;
+    height: 32px;
 
     fill: #d9473d;
     color: #d9473d;
 
-    margin-right: 14px;
+    margin-right: 12px;
 }
 .fd-ocorrencias .urgent-box strong {
-    font-size: 14px;
+    font-size: 15px;
     white-space: nowrap;
 }
 .fd-ocorrencias .urgent-divider {
-    width: 1px;
-    height: 40px;
+    width: 2px;
+    height: 44px;
 
     background: #d9483e;
 
     margin-left: auto;
-    margin-right: 27px;
+    margin-right: 22px;
 }
 .fd-ocorrencias .urgent-box button {
-    width: 125px;
-    height: 30px;
+    min-width: 140px;
+    height: 38px;
 
     border: 0;
-    border-radius: 7px;
+    border-radius: 9px;
 
     background: #d14339;
     color: white;
+
+    font-size: 14px;
+    font-weight: 700;
 
     cursor: pointer;
 }
@@ -2507,6 +2538,7 @@
 }
 .fd-ocorrencias .search-box svg {
     width: 19px;
+    height: 19px;
     color: #a3b0a8;
 }
 .fd-ocorrencias .search-box input {
@@ -2698,8 +2730,8 @@
     font-weight: 600;
 }
 .fd-ocorrencias .form-group .description-label {
-    color: #7c8d83;
-    font-weight: 400;
+    color: #294633;
+    font-weight: 600;
 }
 .fd-ocorrencias .form-group input, .fd-ocorrencias .form-group select, .fd-ocorrencias .form-group textarea {
     width: 100%;
@@ -2709,6 +2741,17 @@
     font-size: 13px;
 
     color: #294633;
+}
+.fd-ocorrencias .form-group input[type="text"] {
+    height: 42px;
+
+    border: 1px solid #52705d;
+
+    border-radius: 10px;
+
+    background: #f8f6f3;
+
+    padding: 0 12px;
 }
 .fd-ocorrencias .soft-input {
     height: 42px;
@@ -2787,7 +2830,7 @@
     margin-top: 32px;
 }
 .fd-ocorrencias .cancel-button, .fd-ocorrencias .register-button {
-    height: 74px;
+    height: 48px;
 
     border-radius: 13px;
 
@@ -2989,39 +3032,43 @@
     justify-content: space-between;
     align-items: flex-start;
 
-    margin-bottom: 43px;
+    margin-bottom: 35px;
 }
 .fd-documentacao .intro h1 {
-    font-size: 22px;
+    color: #294633;
+
+    font-size: 23px;
     font-weight: 600;
 
-    margin-bottom: 8px;
+    margin-bottom: 13px;
 }
 .fd-documentacao .intro p {
-    color: #6e7772;
+    max-width: 650px;
+
+    color: #69726d;
 
     font-size: 14px;
-    line-height: 1.45;
+    line-height: 1.55;
 }
 .fd-documentacao .new-document-button {
-    height: 41px;
+    height: 42px;
 
-    margin-top: 45px;
+    margin-top: 25px;
 
-    padding: 0 16px;
+    padding: 0 18px;
 
     border: 0;
-    border-radius: 11px;
+    border-radius: 13px;
 
     background: #ff8b00;
     color: white;
 
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: 8px;
 
     font-size: 14px;
-    font-weight: 600;
+    font-weight: bold;
 
     cursor: pointer;
 }
@@ -3080,6 +3127,7 @@
 }
 .fd-documentacao .search-box svg {
     width: 19px;
+    height: 19px;
 
     color: #a3b0a8;
 }
@@ -3239,6 +3287,36 @@
 
     margin-bottom: 8px;
 }
+.fd-documentacao .form-group input[type="text"],
+.fd-documentacao .form-group input[type="email"],
+.fd-documentacao .form-group select {
+    width: 100%;
+    height: 42px;
+
+    border: 1px solid #52705d;
+
+    border-radius: 10px;
+
+    background: #f8f6f3;
+
+    outline: none;
+
+    padding: 0 12px;
+
+    color: #294633;
+
+    font-size: 13px;
+}
+.fd-documentacao .form-group input::placeholder {
+    color: #9ca59f;
+}
+.fd-documentacao .form-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+}
 .fd-documentacao .title-input {
     width: 100%;
     height: 42px;
@@ -3358,7 +3436,7 @@
     margin-top: 31px;
 }
 .fd-documentacao .cancel-button, .fd-documentacao .register-button {
-    height: 74px;
+    height: 48px;
 
     border-radius: 13px;
 
@@ -3384,9 +3462,11 @@
 @media (max-width: 650px) {
   .fd-documentacao .intro {
         flex-direction: column;
+
+        gap: 20px;
     }
   .fd-documentacao .new-document-button {
-        margin-top: 20px;
+        margin-top: 0;
     }
   .fd-documentacao .card-header {
         flex-direction: column;

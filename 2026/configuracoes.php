@@ -84,7 +84,7 @@ $endereco = $cond
                                     </div>
                                     <div class="form-group">
                                         <label for="cnpj">CNPJ</label>
-                                        <input type="text" id="cnpj" name="cnpj" value="<?= htmlspecialchars($cond['CNPJ'] ?? '') ?>">
+                                        <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" value="<?= htmlspecialchars($cond['CNPJ'] ?? '') ?>" inputmode="numeric" maxlength="18" autocomplete="off">
                                     </div>
                                     <div class="form-group full">
                                         <label for="endereco">Endereço</label>
@@ -164,6 +164,7 @@ $endereco = $cond
 
 
     <script src="<?= assetUrl('./js/app.js') ?>"></script>
+    <script src="<?= assetUrl('./js/mascaras.js') ?>"></script>
     <?php if ($msg): ?>
     <script>document.addEventListener('DOMContentLoaded', () => fdToast(<?= json_encode($msg, JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) ?>));</script>
     <?php endif; ?>

@@ -68,6 +68,7 @@ INSERT INTO documentos (nome, tipo, caminho, publico, Condominio_idCondominio) V
 -- USUARIO (10) -- admin (id 1) com senha "1234"; demais também "1234"
 -- ==============================================================
 INSERT INTO usuario (email, senha, CPF, telefone, nome, foto, ativo) VALUES
+('Sindico@eden.tcc', '$2y$12$LTbqMIsF5Y91xyxIz82UxuSlT/KznYnKS7W8vtk17QN3Rko0U/gGO', '999.888.777-66', NULL, 'Síndico', NULL, 1),
 ('gui.ferreira365@gmail.com', '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '000.000.000-00', NULL, 'adm', NULL, 1),
 ('maria.souza@teste.com',      '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '111.222.333-44', '(11) 98888-0001', 'Maria Souza', NULL, 1),
 ('joao.pereira@teste.com',     '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '222.333.444-55', '(11) 98888-0002', 'João Pereira', NULL, 1),

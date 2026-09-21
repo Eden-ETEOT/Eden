@@ -1,6 +1,7 @@
 <?php
 include './Elements/auth.php';
 include './Elements/ui.php';
+include './Elements/convites.php';
 
 // Desativar morador (soft delete via usuario.ativo) / Cadastrar morador via modal
 $msg = '';
@@ -44,6 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$stmt->fetchColumn()) {
                 throw new Exception('Apartamento inválido ou inativo.');
             }
+            if (!podeConvidar($conexao, $idUsuario, $idUnidade)) {
+                throw new Exception('Vínculo direto permitido só para síndico (unidade sem proprietário) ou proprietário da unidade. Nos demais casos, gere um convite.');
+            }
 
             $senhaTemp = bin2hex(random_bytes(4));
             $conexao->beginTransaction();
@@ -80,6 +84,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($conexao->inTransaction()) $conexao->rollBack();
             $erro = $e->getMessage();
         }
+    } elseif ($acao === 'convidar') {
+        try {
+            $idUnidade = (int) ($_POST['unidade'] ?? 0);
+            $tipo = $_POST['tipo'] ?? '';
+            $emailEsp = trim($_POST['email_esperado'] ?? '');
+            $dias = (int) ($_POST['dias'] ?? CONVITE_VALIDADE_DIAS);
+            [$okC, $retC] = gerarConvite($conexao, $idUsuario, $idUnidade, $tipo,
+                $emailEsp !== '' ? $emailEsp : null, $dias > 0 ? $dias : CONVITE_VALIDADE_DIAS);
+            if (!$okC) throw new Exception($retC);
+            $linkConvite = './convite/aceitar.php?token=' . $retC;
+            $msg = 'Convite gerado. Link: ' . $linkConvite;
+        } catch (Exception $e) {
+            $erro = $e->getMessage();
+        }
+    } elseif ($acao === 'cancelar-convite') {
+        [$okX, $msgX] = cancelarConvite($conexao, (int) ($_POST['id'] ?? 0), $idUsuario);
+        if ($okX) $msg = $msgX; else $erro = $msgX;
     }
 }
 
@@ -112,6 +133,27 @@ try {
     $unidades = [];
 }
 $blocos = array_values(array_unique(array_column($unidades, 'bloco')));
+
+// Convites pendentes: criados por mim ou de condomínios onde sou síndico
+$convitesPend = [];
+try {
+    $stmt = $conexao->prepare(
+        "SELECT c.idConvite, c.token, c.tipoMorador, c.emailEsperado, c.dataExpiracao,
+                u.numResid, u.bloco, us.nome AS criador
+         FROM convite c
+         JOIN unidade u ON u.idUnidade = c.Unidade_idUnidade
+         JOIN usuario us ON us.idUsuario = c.criadoPor
+         WHERE c.status = 'pendente'
+           AND (c.criadoPor = :u OR EXISTS (
+                SELECT 1 FROM sindico s
+                WHERE s.idUsuario = :u AND s.Condominio_idCondominio = u.Condominio_idCondominio))
+         ORDER BY c.dataCriacao DESC"
+    );
+    $stmt->execute(['u' => $idUsuario]);
+    $convitesPend = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $convitesPend = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -127,7 +169,7 @@ $blocos = array_values(array_unique(array_column($unidades, 'bloco')));
                                 Permite buscar moradores, visualizar seus dados e desativar
                                 suas contas.</p>
                         </div>
-                        <button class="new-btn" type="button" onclick="abrirModal('newResidentModal')"><i data-lucide="plus"></i>Novo Morador</button>
+                        <div style="display:flex;gap:10px"><button class="new-btn" type="button" onclick="abrirModal('inviteModal')"><i data-lucide="mail-plus"></i>Gerar convite</button><button class="new-btn" type="button" onclick="abrirModal('newResidentModal')"><i data-lucide="plus"></i>Novo Morador</button></div>
                     </section>
 <?php banner($msg, $erro); ?>
                     <section class="residents-card">
@@ -183,6 +225,52 @@ $blocos = array_values(array_unique(array_column($unidades, 'bloco')));
                         </div>
                         <div class="pagination" id="pager"></div>
                     </section>
+                    <section class="residents-card">
+                        <div class="card-header">
+                            <div>
+                                <h2>Convites pendentes</h2>
+                                <div class="count"><?= count($convitesPend) ?> convite(s) aguardando aceite</div>
+                            </div>
+                        </div>
+                        <div class="table-wrapper table-scroll">
+                            <table class="issues-table">
+                                <thead>
+                                    <tr>
+                                        <th>Apartamento</th>
+                                        <th>Tipo</th>
+                                        <th>E-mail esperado</th>
+                                        <th>Expira em</th>
+                                        <th>Link</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (empty($convitesPend)): ?>
+                                        <tr><td colspan="6" style="text-align:center">Nenhum convite pendente.</td></tr>
+                                    <?php else: ?>
+                                        <?php foreach ($convitesPend as $cv): ?>
+                                        <tr>
+                                            <td>Bloco <?= htmlspecialchars($cv['bloco']) ?> — <?= htmlspecialchars($cv['numResid']) ?></td>
+                                            <td><span class="badge medium"><?= htmlspecialchars($cv['tipoMorador']) ?></span></td>
+                                            <td><?= htmlspecialchars($cv['emailEsperado'] ?? 'link aberto') ?></td>
+                                            <td><?= date('d/m/Y H:i', strtotime($cv['dataExpiracao'])) ?></td>
+                                            <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="./convite/aceitar.php?token=<?= htmlspecialchars($cv['token']) ?>">./convite/aceitar.php?token=<?= htmlspecialchars(substr($cv['token'], 0, 8)) ?>…</td>
+                                            <td>
+                                                <div class="tbl-actions">
+                                                    <form method="post" style="display:inline" onsubmit="return confirm('Cancelar este convite?')">
+                                                        <input type="hidden" name="acao" value="cancelar-convite">
+                                                        <input type="hidden" name="id" value="<?= (int) $cv['idConvite'] ?>">
+                                                        <button type="submit" class="tbl-action danger" title="Cancelar convite"><i data-lucide="x"></i></button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -220,6 +308,51 @@ $blocos = array_values(array_unique(array_column($unidades, 'bloco')));
 
     <!-- Modal Novo Morador -->
     <div class="fd-moradores">
+    <div class="modal-overlay" id="inviteModal" onclick="fdFecharClicandoFora(event, 'inviteModal')">
+        <div class="modal resident-modal">
+            <div class="modal-top">
+                <div class="modal-title">
+                    <h2>Gerar convite</h2>
+                    <button class="close-modal" type="button" onclick="fecharModal('inviteModal')"><i data-lucide="x"></i></button>
+                </div>
+            </div>
+            <form method="post" class="resident-form">
+                <input type="hidden" name="acao" value="convidar">
+                <div class="form-group">
+                    <label>Apartamento</label>
+                    <select name="unidade" required>
+                        <option value="">Selecione</option>
+                        <?php foreach ($unidades as $u): ?>
+                        <option value="<?= (int) $u['idUnidade'] ?>">Bloco <?= htmlspecialchars($u['bloco']) ?> — <?= htmlspecialchars($u['numResid']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tipo de morador</label>
+                        <select name="tipo" required>
+                            <option value="proprietario">Proprietário</option>
+                            <option value="inquilino">Inquilino</option>
+                            <option value="dependente">Dependente</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Validade (dias)</label>
+                        <input type="number" name="dias" value="7" min="1" max="90">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>E-mail esperado (opcional, recomendado)</label>
+                    <input type="email" name="email_esperado" placeholder="pessoa@email.com">
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="cancel-button" onclick="fecharModal('inviteModal')">Cancelar</button>
+                    <button type="submit" class="register-button">Gerar convite</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="newResidentModal" onclick="fdFecharClicandoFora(event, 'newResidentModal')">
         <div class="modal resident-modal">
             <div class="modal-top">

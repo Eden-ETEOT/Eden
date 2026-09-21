@@ -18,7 +18,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($usuario && password_verify($senha, $usuario["senha"])) {
                 $_SESSION["id_usuario"] = $usuario["idUsuario"];
                 $_SESSION["nome"] = $usuario["nome"];
-                header("Location: ../dashboard.php");
+                if (!empty($_SESSION["convite_token"])) {
+                    header("Location: ../convite/aceitar.php?token=" . urlencode($_SESSION["convite_token"]));
+                } else {
+                    header("Location: ../dashboard.php");
+                }
                 
                 exit();
                 

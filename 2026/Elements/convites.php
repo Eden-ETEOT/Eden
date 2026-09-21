@@ -46,6 +46,15 @@ function eProprietarioUnidade(PDO $pdo, int $idUsuario, int $idUnidade): bool {
     return (bool) $stmt->fetchColumn();
 }
 
+/** É administrador do sistema? (funcionario.funcao = 'Administrador') Passa livre. */
+function eAdmin(PDO $pdo, int $idUsuario): bool {
+    $stmt = $pdo->prepare(
+        "SELECT 1 FROM funcionario WHERE idUsuario = :u AND LOWER(funcao) = 'administrador' LIMIT 1"
+    );
+    $stmt->execute(['u' => $idUsuario]);
+    return (bool) $stmt->fetchColumn();
+}
+
 /** Usuário tem algum vínculo ativo (qualquer unidade)? Retorna a unidade ou null. */
 function vinculoAtivo(PDO $pdo, int $idUsuario): ?array {
     $stmt = $pdo->prepare(
@@ -64,6 +73,7 @@ function vinculoAtivo(PDO $pdo, int $idUsuario): ?array {
  * Síndico (só se a unidade ainda não tem proprietário) ou proprietário da unidade.
  */
 function podeConvidar(PDO $pdo, int $idUsuario, int $idUnidade): bool {
+    if (eAdmin($pdo, $idUsuario)) return true;
     $idCondominio = conviteCondominio($pdo, $idUnidade);
     if ($idCondominio === null) return false;
     if (eProprietarioUnidade($pdo, $idUsuario, $idUnidade)) return true;
@@ -186,7 +196,7 @@ function cancelarConvite(PDO $pdo, int $idConvite, int $idUsuario): array {
     $c = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$c) return [false, 'Convite não encontrado.'];
     if ($c['status'] !== 'pendente') return [false, 'Só é possível cancelar convites pendentes.'];
-    if ((int) $c['criadoPor'] !== $idUsuario && !eSindico($pdo, $idUsuario, (int) $c['condominio'])) {
+    if ((int) $c['criadoPor'] !== $idUsuario && !eAdmin($pdo, $idUsuario) && !eSindico($pdo, $idUsuario, (int) $c['condominio'])) {
         return [false, 'Sem permissão para cancelar este convite.'];
     }
     $stmt = $pdo->prepare("UPDATE convite SET status = 'cancelado' WHERE idConvite = :id");

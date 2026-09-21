@@ -18,72 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute(['id' => $idMorador]);
             $msg = 'Morador desativado com sucesso.';
         }
-    } elseif ($acao === 'novo') {
-        try {
-            $nome = trim($_POST['nome'] ?? '');
-            $email = trim($_POST['email'] ?? '');
-            $cpf = trim($_POST['cpf'] ?? '');
-            $telefone = trim($_POST['telefone'] ?? '');
-            $idUnidade = (int) ($_POST['unidade'] ?? 0);
-            $dataEntrada = trim($_POST['data_entrada'] ?? '');
-            $ativo = ($_POST['status'] ?? '1') === '1' ? 1 : 0;
-            $tipoMorador = $_POST['tipo'] ?? '';
-            $dataNascimento = trim($_POST['data_nascimento'] ?? '');
-
-            if ($nome === '' || $email === '' || $cpf === '' || $idUnidade <= 0
-                || $dataEntrada === '' || $dataNascimento === '') {
-                throw new Exception('Preencha todos os campos obrigatórios.');
-            }
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                throw new Exception('E-mail inválido.');
-            }
-            if (!in_array($tipoMorador, ['proprietario', 'inquilino', 'dependente'], true)) {
-                throw new Exception('Tipo de morador inválido.');
-            }
-            $stmt = $conexao->prepare("SELECT idUnidade FROM unidade WHERE idUnidade = :id AND ativo = 1");
-            $stmt->execute(['id' => $idUnidade]);
-            if (!$stmt->fetchColumn()) {
-                throw new Exception('Apartamento inválido ou inativo.');
-            }
-            if (!podeConvidar($conexao, $idUsuario, $idUnidade)) {
-                throw new Exception('Vínculo direto permitido só para síndico (unidade sem proprietário) ou proprietário da unidade. Nos demais casos, gere um convite.');
-            }
-
-            $senhaTemp = bin2hex(random_bytes(4));
-            $conexao->beginTransaction();
-            $stmt = $conexao->prepare(
-                "INSERT INTO usuario (email, senha, CPF, telefone, nome, foto, ativo)
-                 VALUES (:email, :senha, :cpf, :telefone, :nome, NULL, :ativo)"
-            );
-            $stmt->execute([
-                'email' => $email,
-                'senha' => password_hash($senhaTemp, PASSWORD_DEFAULT),
-                'cpf' => $cpf,
-                'telefone' => $telefone !== '' ? $telefone : null,
-                'nome' => $nome,
-                'ativo' => $ativo,
-            ]);
-            $idUsuarioNovo = (int) $conexao->lastInsertId();
-            $stmt = $conexao->prepare(
-                "INSERT INTO morador (idUsuario, tipoMorador, dataNascimento)
-                 VALUES (:u, :t, :n)"
-            );
-            $stmt->execute(['u' => $idUsuarioNovo, 't' => $tipoMorador, 'n' => $dataNascimento]);
-            $idMoradorNovo = (int) $conexao->lastInsertId();
-            $stmt = $conexao->prepare(
-                "INSERT INTO moradorunidade (Morador_idMorador, Unidade_idUnidade, dataInicio, dataFim)
-                 VALUES (:m, :un, :d, NULL)"
-            );
-            $stmt->execute(['m' => $idMoradorNovo, 'un' => $idUnidade, 'd' => $dataEntrada]);
-            $conexao->commit();
-            $msg = 'Morador cadastrado com sucesso. Senha temporária: ' . $senhaTemp;
-        } catch (PDOException $e) {
-            if ($conexao->inTransaction()) $conexao->rollBack();
-            $erro = ($e->getCode() == 23000) ? 'E-mail ou CPF já cadastrado.' : 'Erro no banco de dados.';
-        } catch (Exception $e) {
-            if ($conexao->inTransaction()) $conexao->rollBack();
-            $erro = $e->getMessage();
-        }
     } elseif ($acao === 'convidar') {
         try {
             $idUnidade = (int) ($_POST['unidade'] ?? 0);
@@ -123,7 +57,7 @@ try {
     $moradores = [];
 }
 
-// Unidades ativas para o modal "Novo Morador"
+// Unidades ativas para o modal de convite
 $unidades = [];
 try {
     $unidades = $conexao->query(
@@ -169,7 +103,7 @@ try {
                                 Permite buscar moradores, visualizar seus dados e desativar
                                 suas contas.</p>
                         </div>
-                        <div style="display:flex;gap:10px"><button class="new-btn" type="button" onclick="abrirModal('inviteModal')"><i data-lucide="mail-plus"></i>Gerar convite</button><button class="new-btn" type="button" onclick="abrirModal('newResidentModal')"><i data-lucide="plus"></i>Novo Morador</button></div>
+                        <button class="new-btn" type="button" onclick="abrirModal('inviteModal')"><i data-lucide="mail-plus"></i>Gerar convite</button>
                     </section>
 <?php banner($msg, $erro); ?>
                     <section class="residents-card">
@@ -306,7 +240,7 @@ try {
     </div>
     </div>
 
-    <!-- Modal Novo Morador -->
+    <!-- Modal Gerar convite -->
     <div class="fd-moradores">
     <div class="modal-overlay" id="inviteModal" onclick="fdFecharClicandoFora(event, 'inviteModal')">
         <div class="modal resident-modal">
@@ -353,96 +287,6 @@ try {
         </div>
     </div>
 
-    <div class="modal-overlay" id="newResidentModal" onclick="fdFecharClicandoFora(event, 'newResidentModal')">
-        <div class="modal resident-modal">
-            <div class="modal-top">
-                <div class="modal-title">
-                    <h2>Novo Morador</h2>
-                    <button class="close-modal" type="button" onclick="fecharModal('newResidentModal')"><i data-lucide="x"></i></button>
-                </div>
-            </div>
-            <form method="post" class="resident-form">
-                <input type="hidden" name="acao" value="novo">
-                <div class="form-group">
-                    <label>Nome do Morador</label>
-                    <input type="text" name="nome" placeholder="Digite o nome completo" required>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Apartamento</label>
-                        <select name="unidade" id="newUnidade" onchange="syncBloco()" required>
-                            <option value="">Ex: 204</option>
-                            <?php if (empty($unidades)): ?>
-                            <option value="" disabled>Nenhum apartamento cadastrado</option>
-                            <?php endif; ?>
-                            <?php foreach ($unidades as $u): ?>
-                            <option value="<?= (int) $u['idUnidade'] ?>" data-bloco="<?= htmlspecialchars($u['bloco']) ?>"><?= htmlspecialchars($u['numResid']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Bloco</label>
-                        <select id="newBloco" onchange="filtrarApts()" required>
-                            <option value="">Ex: 2</option>
-                            <?php if (empty($blocos)): ?>
-                            <option value="" disabled>Nenhum bloco cadastrado</option>
-                            <?php endif; ?>
-                            <?php foreach ($blocos as $b): ?>
-                            <option value="<?= htmlspecialchars($b) ?>"><?= htmlspecialchars($b) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>E-mail</label>
-                    <input type="email" name="email" placeholder="email@exemplo.com" required>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>CPF</label>
-                        <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Telefone</label>
-                        <input type="text" name="telefone" placeholder="(21)99999-9999">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Data de entrada</label>
-                        <input type="date" name="data_entrada" value="<?= date('Y-m-d') ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select name="status" required>
-                            <option value="1">Ativo</option>
-                            <option value="0">Inativo</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Tipo de morador</label>
-                        <select name="tipo" required>
-                            <option value="proprietario">Proprietário</option>
-                            <option value="inquilino">Inquilino</option>
-                            <option value="dependente">Dependente</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Data de nascimento</label>
-                        <input type="date" name="data_nascimento" required>
-                    </div>
-                </div>
-                <div class="form-buttons">
-                    <button type="button" class="cancel-button" onclick="fecharModal('newResidentModal')">Cancelar</button>
-                    <button type="submit" class="register-button">Cadastrar Morador</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    </div>
-
     <script src="<?= assetUrl('./js/app.js') ?>"></script>
     <script src="<?= assetUrl('./js/mascaras.js') ?>"></script>
     <script>
@@ -471,22 +315,6 @@ try {
             if (confirm('Deseja realmente desativar o morador #' + id + '?')) {
                 document.getElementById('deleteForm').submit();
             }
-        }
-        function filtrarApts() {
-            const b = document.getElementById('newBloco').value;
-            const sel = document.getElementById('newUnidade');
-            let first = '';
-            [...sel.options].forEach(o => {
-                const show = o.value === '' || !b || o.dataset.bloco === b;
-                o.hidden = !show;
-                if (show && o.value !== '' && first === '') first = o.value;
-            });
-            sel.value = first;
-        }
-        function syncBloco() {
-            const sel = document.getElementById('newUnidade');
-            const opt = sel.options[sel.selectedIndex];
-            if (opt && opt.dataset.bloco) document.getElementById('newBloco').value = opt.dataset.bloco;
         }
         paginar('residentTable', 'pager', 10);
     </script>

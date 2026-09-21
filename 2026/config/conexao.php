@@ -2,7 +2,8 @@
 // Conexão com o banco de dados
 // Padrão XAMPP: localhost / root / senha vazia / banco 'eden'
 $host     = "localhost";
-$banco    = "eden";
+// Override via ambiente (ex.: EDEN_DB=eden_teste) para testar features sem tocar o banco compartilhado.
+$banco    = getenv("EDEN_DB") ?: "eden";
 $usuario  = "root";
 $senha    = "";
 

@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $senha = $_POST["password"] ?? '';
     $confirmar = $_POST["confirm-password"] ?? '';
 
-    if (strlen($senha) < 6) {
+    if (strlen($senha) < 8) {
         $msg = 'A senha precisa ter pelo menos 8 caracteres.';
     } elseif ($senha !== $confirmar) {
         $msg = 'As senhas não coincidem.';
@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             id="password"
             name="password"
             placeholder="Digite sua nova senha"
-            minlength="6"
+            minlength="8"
             required
           >
         </div>
@@ -109,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             id="confirm-password"
             name="confirm-password"
             placeholder="Digite novamente a senha"
-            minlength="6"
+            minlength="8"
             required
           >
         </div>

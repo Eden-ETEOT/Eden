@@ -157,3 +157,6 @@
     font-size: 13px;
     padding: 6px 14px;
 }
+
+/* Filtro das tabelas (filtrarLinhas/paginação usam esta classe) */
+.issues-table .f-hide { display: none !important; }

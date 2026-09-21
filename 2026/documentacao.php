@@ -71,7 +71,7 @@ try {
                    c.nome AS condominio
             FROM documentos d
             JOIN condominio c ON c.idCondominio = d.Condominio_idCondominio
-            ORDER BY d.dataUpload DESC";
+            ORDER BY d.dataUpload DESC, d.idDocumento DESC";
     $documentos = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $documentos = [];

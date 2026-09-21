@@ -151,3 +151,9 @@
     display: flex;
     justify-content: flex-end;
 }
+
+/* Tags de importância maiores na tela de ocorrências */
+.fd-ocorrencias .badge {
+    font-size: 13px;
+    padding: 6px 14px;
+}

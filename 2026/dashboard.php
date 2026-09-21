@@ -133,7 +133,7 @@ try {
                 <div class="stats-container">
                     <!-- Total de Ocorrências -->
                     <div class="stat-card">
-                        <div class="stat-icon yellow">⚠️</div>
+                        <div class="stat-icon yellow"><img src="./assets/icones/alerta.svg" alt="Total"></div>
                         <div class="stat-value"><?php echo number_format($stats['total_occurrences']); ?></div>
                         <div class="stat-label">Total de Ocorrências</div>
                         <div class="stat-description">Total registrado nesse período</div>
@@ -142,7 +142,7 @@ try {
 
                     <!-- Resolvidas -->
                     <div class="stat-card">
-                        <div class="stat-icon green">✓</div>
+                        <div class="stat-icon green"><img src="./assets/icones/sucesso.svg" alt="Resolvidas"></div>
                         <div class="stat-value"><?php echo number_format($stats['resolved']); ?></div>
                         <div class="stat-label">Resolvidas</div>
                         <div class="stat-description">Ocorrências concluídas com sucesso</div>
@@ -151,7 +151,7 @@ try {
 
                     <!-- Pendentes -->
                     <div class="stat-card">
-                        <div class="stat-icon orange">⏱️</div>
+                        <div class="stat-icon orange"><img src="./assets/icones/relogio.svg" alt="Pendentes"></div>
                         <div class="stat-value"><?php echo number_format($stats['pending']); ?></div>
                         <div class="stat-label">Pendentes</div>
                         <div class="stat-description">Ocorrências esperando análise</div>
@@ -160,7 +160,7 @@ try {
 
                     <!-- Em Análise -->
                     <div class="stat-card">
-                        <div class="stat-icon blue">👁️</div>
+                        <div class="stat-icon blue"><img src="./assets/icones/olho.svg" alt="Em análise"></div>
                         <div class="stat-value"><?php echo number_format($stats['analyzing']); ?></div>
                         <div class="stat-label">Em análise</div>
                         <div class="stat-description">Aguardando triagem e análise</div>

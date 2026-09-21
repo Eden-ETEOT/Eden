@@ -278,15 +278,17 @@ function fdBaixarRelatorio(tipo) {
         { modulo: 'Configurações', sindico: true, administrador: true, porteiro: false, manutencao: false },
         { modulo: 'Permissões', sindico: true, administrador: false, porteiro: false, manutencao: false }
     ];
-    const cel = (v) => v
-        ? '<div class="permission-indicator allowed"><i data-lucide="check"></i></div>'
-        : '<div class="permission-indicator denied"></div>';
+    const cel = (modulo, papel, v) =>
+        '<label class="perm-check" title="' + modulo + ' - ' + papel + '">'
+        + '<input type="checkbox" data-modulo="' + modulo + '" data-papel="' + papel + '"' + (v ? ' checked' : '') + '>'
+        + '<span class="permission-indicator"><i data-lucide="check"></i></span>'
+        + '</label>';
     tbody.innerHTML = matriz.map((item) =>
         '<tr><td>' + item.modulo + '</td>'
-        + '<td>' + cel(item.sindico) + '</td>'
-        + '<td>' + cel(item.administrador) + '</td>'
-        + '<td>' + cel(item.porteiro) + '</td>'
-        + '<td>' + cel(item.manutencao) + '</td></tr>'
+        + '<td>' + cel(item.modulo, 'Síndico', item.sindico) + '</td>'
+        + '<td>' + cel(item.modulo, 'Administrador', item.administrador) + '</td>'
+        + '<td>' + cel(item.modulo, 'Porteiro', item.porteiro) + '</td>'
+        + '<td>' + cel(item.modulo, 'Manutenção', item.manutencao) + '</td></tr>'
     ).join('');
     if (window.lucide) lucide.createIcons();
 })();

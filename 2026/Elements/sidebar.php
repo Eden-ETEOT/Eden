@@ -65,7 +65,6 @@ function menuAtivoCls($chave, $menuAtivo) {
         </ul>
 
         <div class="sidebar-admin">
-            <div class="sidebar-section-label">Administração</div>
             <ul class="sidebar-menu">
 
             <!-- Configurações -->
@@ -98,7 +97,7 @@ function menuAtivoCls($chave, $menuAtivo) {
     <div class="sidebar-footer">
         <a href="./logout.php" class="sidebar-logout">
 <img style="width: 16px; height: 16px;" src="./assets/icones/log-out.svg" alt="Sair">
-            Log out
+            Sair
         </a>
     </div>
 </aside>

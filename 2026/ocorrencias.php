@@ -73,10 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute(['id' => $id]);
             $msg = 'Ocorrência cancelada.';
         }
-    } catch (Exception $e) {
-        $erro = $e->getMessage();
     } catch (PDOException $e) {
         $erro = 'Erro no banco de dados.';
+    } catch (Exception $e) {
+        $erro = $e->getMessage();
     }
 }
 
@@ -114,6 +114,7 @@ foreach ($ocorrencias as $o) {
     }
 }
 $categorias = $conexao->query("SELECT idCategoria, nome FROM categoria ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
+$prioridades = $conexao->query("SELECT idPrioridade, nome FROM prioridade ORDER BY idPrioridade")->fetchAll(PDO::FETCH_ASSOC);
 $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN usuario u ON u.idUsuario = m.idUsuario WHERE u.ativo = 1 ORDER BY u.nome")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
@@ -128,7 +129,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                             <p>Permite consultar, visualizar e excluir as ocorrências, além de registrar novas ocorrências.</p>
                         </div>
                         <div class="urgent-box">
-                            <i data-lucide="triangle-alert"></i>
+                            <img src="./assets/icones/alerta-vermelho.svg" alt="Urgência">
                             <strong><span id="urgentCount"><?= $nUrgentes ?></span> ocorrências com Urgência</strong>
                             <div class="urgent-divider"></div>
                             <button type="button" onclick="mostrarUrgentes()">Ver todas</button>
@@ -262,10 +263,9 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                     <div class="form-group">
                         <label>Prioridade</label>
                         <select name="prioridade" required>
-                            <option value="2">Baixa</option>
-                            <option value="3">Média</option>
-                            <option value="7">Alta</option>
-                            <option value="10">Urgente</option>
+                            <?php foreach ($prioridades as $pp): ?>
+                            <option value="<?= (int) $pp['idPrioridade'] ?>"><?= htmlspecialchars($pp['nome']) ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                 </div>

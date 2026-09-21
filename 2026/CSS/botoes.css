@@ -1,0 +1,96 @@
+/* botoes.css — sistema de botões reutilizável do Eden Systems.
+   Carregado globalmente via pageHead() (Elements/ui.php), ao lado do dashboard.css.
+   Uso em qualquer página (nova ou existente):
+     <button class="btn btn-orange"><i data-lucide="plus"></i>Novo item</button>
+     <a class="btn btn-green" href="./pagina.php">Salvar</a>
+     <button class="btn btn-green-ghost btn-lg">Cancelar</button>
+   Variantes: .btn-orange (ação principal) · .btn-green (confirmar/registrar) ·
+              .btn-green-ghost (cancelar/voltar, estilo fantasma).
+   Tamanhos: padrão 42px · .btn-sm 34px · .btn-lg 48px · .btn-block 100%. */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    height: 42px;
+    padding: 0 18px;
+
+    border: 1px solid transparent;
+    border-radius: 12px;
+
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Laranja preenchido — ações de criação/atalho (ex.: Novo, Filtrar). */
+.btn-orange {
+    background-color: #ff8b00;
+    border-color: #ff8b00;
+    color: white;
+}
+
+.btn-orange:hover {
+    background-color: #e67b00;
+    border-color: #e67b00;
+}
+
+/* Verde preenchido — confirmar/registrar/salvar. */
+.btn-green {
+    background-color: #31563e;
+    border-color: #31563e;
+    color: white;
+}
+
+.btn-green:hover {
+    background-color: #274731;
+    border-color: #274731;
+}
+
+/* Verde fantasma — cancelar/voltar. */
+.btn-green-ghost {
+    background-color: transparent;
+    border-color: #52705d;
+    color: #294633;
+}
+
+.btn-green-ghost:hover {
+    background-color: #f4f7f5;
+}
+
+/* Tamanhos. */
+.btn-sm {
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.btn-lg {
+    height: 48px;
+    padding: 0 22px;
+    border-radius: 13px;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}

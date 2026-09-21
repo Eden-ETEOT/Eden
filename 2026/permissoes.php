@@ -171,7 +171,7 @@ function iniciais($nome) {
                             <p>Acesso por módulo e papel do funcionário</p>
                         </div>
                         <div class="table-container">
-                            <table class="permissions-table">
+                            <table class="permissions-table issues-table">
                                 <thead>
                                     <tr>
                                         <th>MÓDULO</th>

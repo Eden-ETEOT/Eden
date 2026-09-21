@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </header>
 
       <?php if ($msg): ?>
-        <p class="msg msg-<? echo $tipoMsg ?>"><? echo $msg ?></p>
+        <p class="msg msg-<?= $tipoMsg ?>"><?= htmlspecialchars($msg) ?></p>
       <?php endif; ?>
 
       <section class="content">

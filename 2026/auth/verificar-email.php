@@ -103,7 +103,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../CSS/LoginMockup.css">
-<?php include '../Elements/favicon.php'; ?>
 </head>
 <body>
 
@@ -160,7 +159,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
 
       <p class="register">
-        <span> Não recebeu? <button type="submit" name="reenviar" value="1" class="link-button" formnovalidate>Reenviar e-mail</button></span>
+        <div style= "text-align:center" class="nao-recebeu"> Não recebeu? 
+          <button type="submit" name="reenviar" value="1" class="link-button" formnovalidate>Reenviar e-mail</button>
+        </div>
       
       </p>
 

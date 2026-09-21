@@ -25,6 +25,16 @@ function filtrarLinhas(tbodyId, texto, status) {
   });
   if (pagEstado[tbodyId]) { pagEstado[tbodyId].pagina = 1; desenharPaginacao(tbodyId); }
 }
+/* Feedback pós-filtro: marca botão ativo e avisa quando nada corresponde. */
+function retornoFiltro(tbodyId, btn, ativo, porDisplay) {
+  if (btn) btn.classList.toggle('active', !!ativo);
+  let vis = 0;
+  document.querySelectorAll('#' + tbodyId + ' tr').forEach(tr => {
+    if (porDisplay) { if (tr.style.display !== 'none') vis++; }
+    else if (!tr.classList.contains('f-hide')) vis++;
+  });
+  if (vis === 0) toast('Nenhum registro corresponde ao filtro.', 'warning');
+}
 let pagEstado = {};
 function paginar(tbodyId, pagerId, porPagina) {
   if (!document.getElementById(tbodyId) || !document.getElementById(pagerId)) return;
@@ -109,7 +119,7 @@ function fdPesquisarApartamento() {
     });
 }
 let fdAptFiltroInativos = false;
-function fdFiltrarApartamentos() {
+function fdFiltrarApartamentos(btn) {
     fdAptFiltroInativos = !fdAptFiltroInativos;
     document.querySelectorAll('#apartmentTable tr').forEach((row) => {
         if (!fdAptFiltroInativos) {
@@ -118,6 +128,7 @@ function fdFiltrarApartamentos() {
         }
         row.style.display = (row.getAttribute('data-status') === 'Inativo') ? '' : 'none';
     });
+    retornoFiltro('apartmentTable', btn, fdAptFiltroInativos, true);
 }
 
 /* ===== Apartamentos: detalhes e status ===== */

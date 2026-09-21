@@ -160,3 +160,9 @@
 
 /* Filtro das tabelas (filtrarLinhas/paginação usam esta classe) */
 .issues-table .f-hide { display: none !important; }
+/* Botão de filtro com estado ativo visível */
+.filter-btn.active, .filter-button.active {
+    background: var(--orange1-default, #E86A2C) !important;
+    border-color: var(--orange1-default, #E86A2C) !important;
+    color: #fff !important;
+}

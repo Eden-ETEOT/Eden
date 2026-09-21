@@ -148,7 +148,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                                     <i data-lucide="search"></i>
                                     <input id="searchInput" type="text" placeholder="Pesquisar ocorrência..." oninput="pesquisarOcorrencias()">
                                 </div>
-                                <button class="filter-button" type="button" onclick="filtrarUrgentes()" title="Filtrar urgentes"><i data-lucide="list-filter"></i></button>
+                                <button class="filter-button" type="button" onclick="filtrarUrgentes(this)" title="Mostrar somente urgentes"><i data-lucide="list-filter"></i></button>
                                 <button class="new-occurrence-button" type="button" onclick="abrirModal('newModal')"><i data-lucide="plus"></i>Ocorrência</button>
                             </div>
                         </div>
@@ -314,7 +314,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
             document.getElementById('totalCount').textContent = visiveis;
         }
         let urgentes = false;
-        function filtrarUrgentes() {
+        function filtrarUrgentes(btn) {
             urgentes = !urgentes;
             document.getElementById('searchInput').value = '';
             filtrarLinhas('occurrenceTable', '', window.__statusFiltro || '');
@@ -325,6 +325,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
             }
             if (pagEstado['occurrenceTable']) { pagEstado['occurrenceTable'].pagina = 1; desenharPaginacao('occurrenceTable'); }
             atualizarContagemOcc();
+            retornoFiltro('occurrenceTable', btn, urgentes);
         }
         function mostrarUrgentes() { if (!urgentes) filtrarUrgentes(); }
         let atualId = null;

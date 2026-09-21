@@ -111,7 +111,7 @@ try {
                                     <i data-lucide="search"></i>
                                     <input type="text" id="aptSearchInput" placeholder="Pesquisar apartamento..." oninput="fdPesquisarApartamento()">
                                 </div>
-                                <button class="filter-btn" type="button" onclick="fdFiltrarApartamentos()" title="Mostrar inativos"><i data-lucide="list-filter"></i></button>
+                                <button class="filter-btn" type="button" onclick="fdFiltrarApartamentos(this)" title="Mostrar somente inativos"><i data-lucide="list-filter"></i></button>
                             </div>
                         </div>
 

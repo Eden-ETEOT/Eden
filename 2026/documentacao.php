@@ -111,7 +111,7 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
                                     <i data-lucide="search"></i>
                                     <input id="searchInput" type="text" placeholder="Pesquisar documento..." oninput="pesquisarDocumentos()">
                                 </div>
-                                <button class="filter-button" type="button" onclick="filtrarComArquivo()" title="Somente com arquivo"><i data-lucide="list-filter"></i></button>
+                                <button class="filter-button" type="button" onclick="filtrarComArquivo(this)" title="Mostrar somente documentos com arquivo"><i data-lucide="list-filter"></i></button>
                             </div>
                         </div>
                         <div class="table-container table-scroll">
@@ -218,7 +218,7 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
             filtrarLinhas('documentTable', document.getElementById('searchInput').value);
         }
         let soComArquivo = false;
-        function filtrarComArquivo() {
+        function filtrarComArquivo(btn) {
             soComArquivo = !soComArquivo;
             document.getElementById('searchInput').value = '';
             document.querySelectorAll('#documentTable tr').forEach(tr => {
@@ -226,6 +226,7 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
                 tr.classList.toggle('f-hide', !ok);
             });
             if (pagEstado['documentTable']) { pagEstado['documentTable'].pagina = 1; desenharPaginacao('documentTable'); }
+            retornoFiltro('documentTable', btn, soComArquivo);
         }
         function excluirDocumento(id) {
             document.getElementById('deleteId').value = id;

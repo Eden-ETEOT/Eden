@@ -138,7 +138,7 @@ $blocos = array_values(array_unique(array_column($unidades, 'bloco')));
                             </div>
                             <div class="actions">
                                 <label class="search"><i data-lucide="search"></i><input id="searchInput" oninput="pesquisar()" placeholder="Pesquisar morador..."></label>
-                                <button class="filter-btn" onclick="filtrar()" title="Mostrar inativos"><i data-lucide="list-filter"></i></button>
+                                <button class="filter-btn" onclick="filtrar(this)" title="Mostrar somente inativos"><i data-lucide="list-filter"></i></button>
                             </div>
                         </div>
                         <div class="table-wrapper table-scroll">
@@ -318,10 +318,11 @@ $blocos = array_values(array_unique(array_column($unidades, 'bloco')));
             filtrarLinhas('residentTable', document.getElementById('searchInput').value);
         }
         let soInativos = false;
-        function filtrar() {
+        function filtrar(btn) {
             soInativos = !soInativos;
             document.getElementById('searchInput').value = '';
             filtrarLinhas('residentTable', '', soInativos ? 'Inativo' : '');
+            retornoFiltro('residentTable', btn, soInativos);
         }
         function visualizar(m) {
             document.getElementById('detailId').textContent = 'Morador#' + m.idMorador;

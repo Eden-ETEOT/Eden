@@ -94,17 +94,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $usuarioId = $conexao->lastInsertId();
 
-            // Limpa os dados temporários do cadastro
+            // Login automático com as chaves que Elements/auth.php espera.
+            // Conta criada em nível inicial, sem vínculo — o aceite do convite (se houver) vem a seguir.
+            include "../../Elements/condominio.php";
+            session_regenerate_id(true);
+            $_SESSION["id_usuario"] = (int) $usuarioId;
+            $_SESSION["nome"] = $nome;
+            $_SESSION["id_condominio"] = resolverCondominio($conexao, (int) $usuarioId);
+            $tokenPendente = trim($_SESSION["convite_token"] ?? '');
             unset($_SESSION["cadastroMorador"]);
 
-            // Login automático — conta criada em nível inicial, sem vínculo com nenhum condomínio ainda
-            session_regenerate_id(true);
-            $_SESSION["usuario_id"] = $usuarioId;
-            $_SESSION["usuario_nome"] = $nome;
-            $_SESSION["usuario_email"] = $emailRecebido;
-            $_SESSION["logado"] = true;
-
-            header("Location: ../../auth/login.php?cadastro=ok");
+            if ($tokenPendente !== '') {
+                header("Location: ../../convite/aceitar.php?token=" . urlencode($tokenPendente));
+            } else {
+                header("Location: ../../dashboard.php");
+            }
             exit;
         }
     }

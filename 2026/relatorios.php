@@ -23,13 +23,18 @@ for ($i = 5; $i >= 0; $i--) {
 }
 
 try {
-    $stmt = $conexao->query(
-        "SELECT DATE_FORMAT(dataPedida, '%Y-%m') AS ym, COUNT(*) AS total,
-                SUM(status = 'resolvida') AS resolvidas
-         FROM chamados
-         WHERE dataPedida >= DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL 5 MONTH)
+    $stmt = $conexao->prepare(
+        "SELECT DATE_FORMAT(c.dataPedida, '%Y-%m') AS ym, COUNT(*) AS total,
+                SUM(c.status = 'resolvida') AS resolvidas
+         FROM chamados c
+         JOIN morador m0 ON m0.idMorador = c.morador_idMorador
+         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
+         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
+         WHERE c.dataPedida >= DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL 5 MONTH)
+           AND u0.Condominio_idCondominio = :cond
          GROUP BY ym"
     );
+    $stmt->execute(['cond' => $filtroCondominio]);
     foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
         if (isset($meses[$row['ym']])) {
             $meses[$row['ym']]['total'] = (int) $row['total'];
@@ -48,12 +53,16 @@ $taxa = $m['total'] > 0 ? round(($m['resolvidas'] / $m['total']) * 100) : 0;
 $tempo_medio = null;
 try {
     $stmt = $conexao->prepare(
-        "SELECT AVG(TIMESTAMPDIFF(DAY, dataPedida, dataRealizada))
-         FROM chamados
-         WHERE status = 'resolvida' AND dataRealizada IS NOT NULL
-           AND DATE_FORMAT(dataPedida, '%Y-%m') = :ym"
+        "SELECT AVG(TIMESTAMPDIFF(DAY, c.dataPedida, c.dataRealizada))
+         FROM chamados c
+         JOIN morador m0 ON m0.idMorador = c.morador_idMorador
+         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
+         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
+         WHERE c.status = 'resolvida' AND c.dataRealizada IS NOT NULL
+           AND DATE_FORMAT(c.dataPedida, '%Y-%m') = :ym
+           AND u0.Condominio_idCondominio = :cond"
     );
-    $stmt->execute(['ym' => $ym_atual]);
+    $stmt->execute(['ym' => $ym_atual, 'cond' => $filtroCondominio]);
     $tempo_medio = $stmt->fetchColumn();
 } catch (PDOException $e) {
     $tempo_medio = null;
@@ -62,9 +71,14 @@ try {
 // Moradores ativos
 $moradores_ativos = 0;
 try {
-    $moradores_ativos = (int) $conexao->query(
-        "SELECT COUNT(*) FROM morador m JOIN usuario u ON u.idUsuario = m.idUsuario WHERE u.ativo = 1"
-    )->fetchColumn();
+    $stmt = $conexao->prepare(
+        "SELECT COUNT(*) FROM morador m JOIN usuario u ON u.idUsuario = m.idUsuario
+         JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
+         JOIN unidade un ON un.idUnidade = mu.Unidade_idUnidade
+         WHERE u.ativo = 1 AND un.Condominio_idCondominio = :cond"
+    );
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $moradores_ativos = (int) $stmt->fetchColumn();
 } catch (PDOException $e) {
     $moradores_ativos = 0;
 }
@@ -74,28 +88,39 @@ $csv_ocorrencias = [];
 $csv_moradores = [];
 $csv_infra = [];
 try {
-    $csv_ocorrencias = $conexao->query(
+    $stmt = $conexao->prepare(
         "SELECT c.idChamados, c.titulo, cat.nome AS categoria, p.nome AS prioridade,
                 c.status, DATE_FORMAT(c.dataPedida, '%d/%m/%Y') AS data
          FROM chamados c
          JOIN categoria cat ON cat.idCategoria = c.categoria_idCategoria
          JOIN prioridade p ON p.idPrioridade = c.prioridade_idPrioridade
+         JOIN morador m0 ON m0.idMorador = c.morador_idMorador
+         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
+         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
+         WHERE u0.Condominio_idCondominio = :cond
          ORDER BY c.idChamados DESC"
-    )->fetchAll(PDO::FETCH_ASSOC);
-    $csv_moradores = $conexao->query(
+    );
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $csv_ocorrencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conexao->prepare(
         "SELECT u.nome, u.email, u.telefone, un.bloco, un.numResid,
                 IF(u.ativo = 1, 'Ativo', 'Inativo') AS status
          FROM morador m
          JOIN usuario u ON u.idUsuario = m.idUsuario
-         LEFT JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
-         LEFT JOIN unidade un ON un.idUnidade = mu.Unidade_idUnidade
+         JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
+         JOIN unidade un ON un.idUnidade = mu.Unidade_idUnidade
+         WHERE un.Condominio_idCondominio = :cond
          ORDER BY u.nome"
-    )->fetchAll(PDO::FETCH_ASSOC);
-    $csv_infra = $conexao->query(
+    );
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $csv_moradores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conexao->prepare(
         "SELECT numResid AS numero, bloco, andar, metragem,
                 IF(ativo = 1, 'Ativo', 'Inativo') AS status
-         FROM unidade ORDER BY bloco, numResid"
-    )->fetchAll(PDO::FETCH_ASSOC);
+         FROM unidade WHERE Condominio_idCondominio = :cond ORDER BY bloco, numResid"
+    );
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $csv_infra = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     // exportação parcial
 }

@@ -2,13 +2,8 @@
 include './Elements/auth.php';
 include './Elements/ui.php';
 
-// Condomínio de referência (último criado)
-$idCondominio = null;
-try {
-    $idCondominio = $conexao->query("SELECT idCondominio FROM condominio ORDER BY idCondominio DESC LIMIT 1")->fetchColumn();
-} catch (PDOException $e) {
-    $idCondominio = null;
-}
+// Condomínio da sessão
+$idCondominio = $filtroCondominio > 0 ? $filtroCondominio : null;
 
 $msg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -36,9 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = (int) ($_POST['id'] ?? 0);
         $ativo = (int) ($_POST['ativo'] ?? 0) === 1 ? 1 : 0;
         if ($id > 0) {
-            $stmt = $conexao->prepare("UPDATE unidade SET ativo = :a WHERE idUnidade = :id");
-            $stmt->execute(['a' => $ativo, 'id' => $id]);
-            $msg = $ativo ? 'Apartamento reativado com sucesso.' : 'Apartamento desativado com sucesso.';
+            if ($filtroCondominio <= 0 || !pertenceAoCondominio($conexao, 'unidade', $id, $filtroCondominio)) {
+                $msg = 'Sem permissão para este apartamento.';
+            } else {
+                $stmt = $conexao->prepare("UPDATE unidade SET ativo = :a WHERE idUnidade = :id");
+                $stmt->execute(['a' => $ativo, 'id' => $id]);
+                $msg = $ativo ? 'Apartamento reativado com sucesso.' : 'Apartamento desativado com sucesso.';
+            }
         }
     }
 }
@@ -59,9 +58,14 @@ try {
                    AND mu.dataFim IS NULL AND m.tipoMorador = 'proprietario'
                  ORDER BY mu.dataInicio DESC LIMIT 1) AS proprietario
             FROM unidade u
+            WHERE u.Condominio_idCondominio = :cond
             ORDER BY u.idUnidade DESC";
-    $apartamentos = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    $blocos = $conexao->query("SELECT DISTINCT bloco FROM unidade WHERE bloco IS NOT NULL AND bloco <> '' ORDER BY bloco")->fetchAll(PDO::FETCH_COLUMN);
+    $stmt = $conexao->prepare($sql);
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $apartamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conexao->prepare("SELECT DISTINCT bloco FROM unidade WHERE Condominio_idCondominio = :cond AND bloco IS NOT NULL AND bloco <> '' ORDER BY bloco");
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $blocos = $stmt->fetchAll(PDO::FETCH_COLUMN);
 } catch (PDOException $e) {
     $apartamentos = [];
     $blocos = [];

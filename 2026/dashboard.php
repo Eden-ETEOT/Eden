@@ -7,10 +7,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cancela
     $id = (int) ($_POST['id'] ?? 0);
     if ($id > 0) {
         try {
+            if (!chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
+                throw new Exception('Sem permissão.');
+            }
             $stmt = $conexao->prepare("UPDATE chamados SET status = 'cancelada' WHERE idChamados = :id");
             $stmt->execute(['id' => $id]);
             $msg = 'Ocorrência cancelada.';
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $msg = 'Não foi possível cancelar.';
         }
     }
@@ -28,12 +31,12 @@ $stmt = $conexao->prepare("SELECT COUNT(*) FROM sindico WHERE idUsuario = :id");
 $stmt->execute(['id' => $idUsuario]);
 $isAdmin = $stmt->fetchColumn() > 0;
 
-// Foto do condomínio (vinculado pelo último condomínio criado)
-// TODO futuro: substituir por FK sindico -> condominio quando o schema for atualizado
+// Condomínio da sessão
 $cond_name = 'Condomínio';
 $cond_foto = null;
 try {
-    $stmt = $conexao->query("SELECT nome, foto FROM condominio ORDER BY idCondominio DESC LIMIT 1");
+    $stmt = $conexao->prepare("SELECT nome, foto FROM condominio WHERE idCondominio = :c LIMIT 1");
+    $stmt->execute(['c' => $filtroCondominio]);
     $cond = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($cond) {
         $cond_name = $cond['nome'];
@@ -46,28 +49,52 @@ try {
 // Estatísticas do banco
 $stats = [];
 
-$stmt = $conexao->query("SELECT COUNT(*) FROM chamados");
+$stmt = $conexao->prepare("SELECT COUNT(*) FROM chamados c
+     JOIN morador m0 ON m0.idMorador = c.morador_idMorador
+         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
+         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
+     WHERE u0.Condominio_idCondominio = :cond");
+$stmt->execute(['cond' => $filtroCondominio]);
 $stats['total_occurrences'] = $stmt->fetchColumn();
 
-$stmt = $conexao->query("SELECT COUNT(*) FROM chamados WHERE status = 'resolvida'");
+$stmt = $conexao->prepare("SELECT COUNT(*) FROM chamados c
+     JOIN morador m0 ON m0.idMorador = c.morador_idMorador
+         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
+         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
+     WHERE u0.Condominio_idCondominio = :cond AND c.status = 'resolvida'");
+$stmt->execute(['cond' => $filtroCondominio]);
 $stats['resolved'] = $stmt->fetchColumn();
 
-$stmt = $conexao->query("SELECT COUNT(*) FROM chamados WHERE status = 'analise'");
+$stmt = $conexao->prepare("SELECT COUNT(*) FROM chamados c
+     JOIN morador m0 ON m0.idMorador = c.morador_idMorador
+         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
+         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
+     WHERE u0.Condominio_idCondominio = :cond AND c.status = 'analise'");
+$stmt->execute(['cond' => $filtroCondominio]);
 $stats['pending'] = $stmt->fetchColumn();
 
-$stmt = $conexao->query("SELECT COUNT(*) FROM chamados WHERE status = 'andamento'");
+$stmt = $conexao->prepare("SELECT COUNT(*) FROM chamados c
+     JOIN morador m0 ON m0.idMorador = c.morador_idMorador
+         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
+         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
+     WHERE u0.Condominio_idCondominio = :cond AND c.status = 'andamento'");
+$stmt->execute(['cond' => $filtroCondominio]);
 $stats['analyzing'] = $stmt->fetchColumn();
 
 // Distribuição de ocorrências pendentes por categoria (para o card de breakdown)
-$stmt = $conexao->query(
+$stmt = $conexao->prepare(
     "SELECT cat.nome, COUNT(*) AS total
      FROM chamados c
      JOIN categoria cat ON c.categoria_idCategoria = cat.idCategoria
-     WHERE c.status IN ('analise', 'andamento')
+     JOIN morador m0 ON m0.idMorador = c.morador_idMorador
+         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
+         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
+     WHERE c.status IN ('analise', 'andamento') AND u0.Condominio_idCondominio = :cond
      GROUP BY cat.idCategoria, cat.nome
      ORDER BY total DESC
      LIMIT 4"
 );
+$stmt->execute(['cond' => $filtroCondominio]);
 $categorias_pendentes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $max_categoria = 0;
 foreach ($categorias_pendentes as $cat) {
@@ -75,12 +102,17 @@ foreach ($categorias_pendentes as $cat) {
 }
 
 // Tempo médio de resolução (horas) e total de resolvidas no período
-$stmt = $conexao->query(
+$stmt = $conexao->prepare(
     "SELECT AVG(TIMESTAMPDIFF(HOUR, c.dataPedida, c.dataRealizada)) AS media_horas,
             COUNT(*) AS total_resolvidas
      FROM chamados c
-     WHERE c.status = 'resolvida' AND c.dataRealizada IS NOT NULL"
+     JOIN morador m0 ON m0.idMorador = c.morador_idMorador
+         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
+         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
+     WHERE c.status = 'resolvida' AND c.dataRealizada IS NOT NULL
+       AND u0.Condominio_idCondominio = :cond"
 );
+$stmt->execute(['cond' => $filtroCondominio]);
 $tempo_resolucao = $stmt->fetch(PDO::FETCH_ASSOC);
 $media_resolucao_horas = $tempo_resolucao && $tempo_resolucao['media_horas'] !== null
     ? round((float) $tempo_resolucao['media_horas'], 1)
@@ -110,12 +142,14 @@ $sql = "SELECT
         JOIN moradorunidade mu ON m.idMorador = mu.Morador_idMorador AND mu.dataFim IS NULL
         JOIN unidade u ON mu.Unidade_idUnidade = u.idUnidade
         JOIN condominio cond ON u.Condominio_idCondominio = cond.idCondominio
+        WHERE u.Condominio_idCondominio = :cond
         ORDER BY c.dataPedida DESC
         LIMIT 10";
 
 $pending_issues = [];
 try {
-    $stmt = $conexao->query($sql);
+    $stmt = $conexao->prepare($sql);
+    $stmt->execute(['cond' => $filtroCondominio]);
     $pending_issues = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     // Tabelas relacionadas podem não ter dados ainda

@@ -32,6 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($titulo === '' || $descricao === '' || $categoria <= 0 || $prioridade <= 0 || $morador <= 0) {
                 throw new Exception('Preencha todos os campos obrigatórios.');
             }
+            if (!moradorDoCondominio($conexao, $morador, $filtroCondominio)) {
+                throw new Exception('Morador fora do seu condomínio.');
+            }
             $stmt = $conexao->prepare(
                 "INSERT INTO chamados (titulo, descricao, dataPedida, status, prioridade_idPrioridade, categoria_idCategoria, morador_idMorador)
                  VALUES (:titulo, :descricao, NOW(), 'analise', :prioridade, :categoria, :morador)"
@@ -59,6 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($id <= 0 || !in_array($status, ['analise', 'andamento', 'resolvida', 'cancelada'], true)) {
                 throw new Exception('Dados inválidos.');
             }
+            if (!chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
+                throw new Exception('Sem permissão para esta ocorrência.');
+            }
             if ($status === 'resolvida') {
                 $stmt = $conexao->prepare("UPDATE chamados SET status = :s, dataRealizada = COALESCE(dataRealizada, NOW()) WHERE idChamados = :id");
             } else {
@@ -69,6 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($acao === 'cancelar') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id <= 0) throw new Exception('Ocorrência inválida.');
+            if (!chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
+                throw new Exception('Sem permissão para esta ocorrência.');
+            }
             $stmt = $conexao->prepare("UPDATE chamados SET status = 'cancelada' WHERE idChamados = :id");
             $stmt->execute(['id' => $id]);
             $msg = 'Ocorrência cancelada.';
@@ -100,10 +109,13 @@ try {
             JOIN prioridade p ON p.idPrioridade = c.prioridade_idPrioridade
             JOIN morador m ON m.idMorador = c.morador_idMorador
             JOIN usuario u ON u.idUsuario = m.idUsuario
-            LEFT JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
-            LEFT JOIN unidade un ON un.idUnidade = mu.Unidade_idUnidade
+            JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
+            JOIN unidade un ON un.idUnidade = mu.Unidade_idUnidade
+            WHERE un.Condominio_idCondominio = :cond
             ORDER BY c.dataPedida DESC";
-    $ocorrencias = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conexao->prepare($sql);
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $ocorrencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $ocorrencias = [];
 }
@@ -115,7 +127,9 @@ foreach ($ocorrencias as $o) {
 }
 $categorias = $conexao->query("SELECT idCategoria, nome FROM categoria ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
 $prioridades = $conexao->query("SELECT idPrioridade, nome FROM prioridade ORDER BY idPrioridade")->fetchAll(PDO::FETCH_ASSOC);
-$moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN usuario u ON u.idUsuario = m.idUsuario WHERE u.ativo = 1 ORDER BY u.nome")->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $conexao->prepare("SELECT m.idMorador, u.nome FROM morador m JOIN usuario u ON u.idUsuario = m.idUsuario JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL JOIN unidade un ON un.idUnidade = mu.Unidade_idUnidade WHERE u.ativo = 1 AND un.Condominio_idCondominio = :cond ORDER BY u.nome");
+$stmt->execute(['cond' => $filtroCondominio]);
+$moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($acao === 'criar') {
             $nome = trim($_POST['nome'] ?? '');
             $tipo = trim($_POST['tipo'] ?? '');
-            $condominio = (int) ($_POST['condominio'] ?? 0);
+            $condominio = $filtroCondominio > 0 ? $filtroCondominio : 0;
             if ($nome === '' || $tipo === '' || $condominio <= 0) {
                 throw new Exception('Preencha todos os campos obrigatórios.');
             }
@@ -41,6 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($acao === 'excluir') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id <= 0) throw new Exception('Documento inválido.');
+            if (!pertenceAoCondominio($conexao, 'documentos', $id, $filtroCondominio)) {
+                throw new Exception('Sem permissão para este documento.');
+            }
             $stmt = $conexao->prepare("SELECT caminho FROM documentos WHERE idDocumento = :id");
             $stmt->execute(['id' => $id]);
             $doc = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -71,8 +74,11 @@ try {
                    c.nome AS condominio
             FROM documentos d
             JOIN condominio c ON c.idCondominio = d.Condominio_idCondominio
+            WHERE d.Condominio_idCondominio = :cond
             ORDER BY d.dataUpload DESC, d.idDocumento DESC";
-    $documentos = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conexao->prepare($sql);
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $documentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $documentos = [];
 }
@@ -82,8 +88,16 @@ foreach ($documentos as &$d) {
     $d['temArquivo'] = $fs !== null;
 }
 unset($d);
-$tipos = $conexao->query("SELECT DISTINCT tipo FROM documentos ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
-$condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $conexao->prepare("SELECT DISTINCT tipo FROM documentos WHERE Condominio_idCondominio = :cond ORDER BY tipo");
+$stmt->execute(['cond' => $filtroCondominio]);
+$tipos = $stmt->fetchAll(PDO::FETCH_COLUMN);
+$condominioSessaoNome = '—';
+try {
+    $stmt = $conexao->prepare("SELECT nome FROM condominio WHERE idCondominio = :c LIMIT 1");
+    $stmt->execute(['c' => $filtroCondominio]);
+    $condominioSessaoNome = $stmt->fetchColumn() ?: '—';
+} catch (PDOException $e) {
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -185,11 +199,7 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
                     </div>
                     <div class="form-group">
                         <label>Condomínio</label>
-                        <select name="condominio" required>
-                            <?php foreach ($condominios as $cc): ?>
-                            <option value="<?= (int) $cc['idCondominio'] ?>"><?= htmlspecialchars($cc['nome']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <input type="text" value="<?= htmlspecialchars($condominioSessaoNome) ?>" disabled>
                     </div>
                 </div>
                 <div class="file-section">

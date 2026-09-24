@@ -11,6 +11,9 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 $idUsuario = $_SESSION['id_usuario'];
+require_once __DIR__ . '/condominio.php';
+$idCondominio = condominioDaSessao();
+$filtroCondominio = condominioFiltro(); // -1 sem vínculo: não casa com nada
 
 // Dados do usuário logado (header)
 $stmt = $conexao->prepare("SELECT nome, foto, telefone, email FROM usuario WHERE idUsuario = :id");

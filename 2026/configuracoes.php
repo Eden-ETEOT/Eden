@@ -3,10 +3,12 @@ include './Elements/auth.php';
 include './Elements/ui.php';
 $msg = '';
 
-// Condomínio de referência (último criado)
+// Condomínio da sessão
 $cond = null;
 try {
-    $cond = $conexao->query("SELECT * FROM condominio ORDER BY idCondominio DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+    $stmt = $conexao->prepare("SELECT * FROM condominio WHERE idCondominio = :c LIMIT 1");
+    $stmt->execute(['c' => $filtroCondominio]);
+    $cond = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
 } catch (PDOException $e) {
     $cond = null;
 }
@@ -18,6 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'salvar'
             if ($dig !== '' && (strlen($dig) < 10 || strlen($dig) > 11)) {
                 throw new Exception($rotulo . ' inválido! Use DDD + número.');
             }
+        }
+        if (!$cond || !$idCondominio) {
+            throw new Exception('Usuário sem condomínio vinculado.');
         }
         if ($cond) {
             $stmt = $conexao->prepare(

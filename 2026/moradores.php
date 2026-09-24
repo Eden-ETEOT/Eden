@@ -10,12 +10,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($acao === 'desativar') {
         $idMorador = (int) ($_POST['id'] ?? 0);
         if ($idMorador > 0) {
-            $stmt = $conexao->prepare(
-                "UPDATE usuario u JOIN morador m ON m.idUsuario = u.idUsuario
-                 SET u.ativo = 0 WHERE m.idMorador = :id"
-            );
-            $stmt->execute(['id' => $idMorador]);
-            $msg = 'Morador desativado com sucesso.';
+            if (!moradorDoCondominio($conexao, $idMorador, $filtroCondominio)) {
+                $erro = 'Sem permissão para este morador.';
+            } else {
+                $stmt = $conexao->prepare(
+                    "UPDATE usuario u JOIN morador m ON m.idUsuario = u.idUsuario
+                     SET u.ativo = 0 WHERE m.idMorador = :id"
+                );
+                $stmt->execute(['id' => $idMorador]);
+                $msg = 'Morador desativado com sucesso.';
+            }
         }
     } elseif ($acao === 'novo') {
         try {
@@ -39,8 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!in_array($tipoMorador, ['proprietario', 'inquilino', 'dependente'], true)) {
                 throw new Exception('Tipo de morador inválido.');
             }
-            $stmt = $conexao->prepare("SELECT idUnidade FROM unidade WHERE idUnidade = :id AND ativo = 1");
-            $stmt->execute(['id' => $idUnidade]);
+            $stmt = $conexao->prepare("SELECT idUnidade FROM unidade WHERE idUnidade = :id AND ativo = 1 AND Condominio_idCondominio = :cond");
+            $stmt->execute(['id' => $idUnidade, 'cond' => $filtroCondominio]);
             if (!$stmt->fetchColumn()) {
                 throw new Exception('Apartamento inválido ou inativo.');
             }
@@ -94,10 +98,13 @@ try {
                    un.bloco, un.numResid
             FROM morador m
             JOIN usuario u ON u.idUsuario = m.idUsuario
-            LEFT JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
-            LEFT JOIN unidade un ON un.idUnidade = mu.Unidade_idUnidade
+            JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
+            JOIN unidade un ON un.idUnidade = mu.Unidade_idUnidade
+            WHERE un.Condominio_idCondominio = :cond
             ORDER BY m.idMorador DESC";
-    $moradores = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conexao->prepare($sql);
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $moradores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $moradores = [];
 }
@@ -105,9 +112,11 @@ try {
 // Unidades ativas para o modal "Novo Morador"
 $unidades = [];
 try {
-    $unidades = $conexao->query(
-        "SELECT idUnidade, numResid, bloco FROM unidade WHERE ativo = 1 ORDER BY bloco, numResid"
-    )->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conexao->prepare(
+        "SELECT idUnidade, numResid, bloco FROM unidade WHERE ativo = 1 AND Condominio_idCondominio = :cond ORDER BY bloco, numResid"
+    );
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $unidades = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $unidades = [];
 }

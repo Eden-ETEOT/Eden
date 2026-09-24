@@ -4,13 +4,8 @@ include './Elements/ui.php';
 $msg = '';
 $msg_erro = '';
 
-// Condomínio de referência (último criado)
-$idCondominio = null;
-try {
-    $idCondominio = $conexao->query("SELECT idCondominio FROM condominio ORDER BY idCondominio DESC LIMIT 1")->fetchColumn();
-} catch (PDOException $e) {
-    $idCondominio = null;
-}
+// Condomínio da sessão
+$idCondominio = $filtroCondominio > 0 ? $filtroCondominio : null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acao = $_POST['acao'] ?? '';
@@ -50,6 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($acao === 'editar') {
             $idFunc = (int) ($_POST['id'] ?? 0);
             if ($idFunc > 0) {
+                if ($filtroCondominio <= 0 || !funcionarioDoCondominio($conexao, $idFunc, $filtroCondominio)) {
+                    throw new PDOException('Sem permissão.');
+                }
                 $stmt = $conexao->prepare("SELECT idUsuario FROM funcionario WHERE idFuncionario = :id");
                 $stmt->execute(['id' => $idFunc]);
                 $idFuncUsuario = $stmt->fetchColumn();
@@ -80,12 +78,16 @@ $menuAtivo = 'permissoes';
 // Lista de funcionários
 $funcionarios = [];
 try {
-    $funcionarios = $conexao->query(
+    $stmt = $conexao->prepare(
         "SELECT f.idFuncionario, u.nome, u.email, u.ativo, f.funcao
          FROM funcionario f
          JOIN usuario u ON u.idUsuario = f.idUsuario
+         JOIN funcionariocondominio fc ON fc.Funcionario_idFuncionario = f.idFuncionario
+         WHERE fc.Condominio_idCondominio = :cond
          ORDER BY u.nome"
-    )->fetchAll(PDO::FETCH_ASSOC);
+    );
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $funcionarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $funcionarios = [];
 }

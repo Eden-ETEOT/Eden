@@ -18,6 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($usuario && password_verify($senha, $usuario["senha"])) {
                 $_SESSION["id_usuario"] = $usuario["idUsuario"];
                 $_SESSION["nome"] = $usuario["nome"];
+                require_once "../Elements/condominio.php";
+                $_SESSION["id_condominio"] = resolverCondominio($conexao, (int) $usuario["idUsuario"]);
                 header("Location: ../dashboard.php");
                 
                 exit();

@@ -9,8 +9,22 @@ $msg = '';
 $erro = '';
 $convite = null;
 
+// Convite inválido/expirado/usado: manda para o cadastro com aviso (nada de beco sem saída).
+function redirecionaCadastro(string $motivo): void {
+    $avisos = [
+        'invalido' => 'Este link de convite não é válido. Complete seu cadastro e peça um novo link ao síndico.',
+        'expirado' => 'Este convite expirou. Complete seu cadastro e peça um novo link ao síndico.',
+        'usado' => 'Este convite já foi utilizado. Se precisar de outro vínculo, fale com o síndico.',
+        'cancelado' => 'Este convite foi cancelado. Fale com o síndico para um novo link.',
+    ];
+    $_SESSION['erro_moradorEtapa1'] = $avisos[$motivo] ?? $avisos['invalido'];
+    unset($_SESSION['convite_token']);
+    header('Location: ../cadastro/morador/passo-1.php?convite=' . $motivo);
+    exit;
+}
+
 if ($token === '') {
-    $erro = 'Link de convite inválido.';
+    redirecionaCadastro('invalido');
 } else {
     // Guarda o token na sessão para atravessar login/cadastro.
     $_SESSION['convite_token'] = $token;
@@ -20,7 +34,11 @@ if ($token === '') {
     }
     [$ok, $dados] = validarConvite($conexao, $token);
     if (!$ok) {
-        $erro = $dados;
+        $m = mb_strtolower($dados);
+        $motivo = str_contains($m, 'expirou') ? 'expirado'
+            : (str_contains($m, 'utiliz') ? 'usado'
+            : (str_contains($m, 'cancel') ? 'cancelado' : 'invalido'));
+        redirecionaCadastro($motivo);
     } else {
         $convite = $dados;
         $idUsuario = (int) $_SESSION['id_usuario'];

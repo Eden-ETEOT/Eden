@@ -7,23 +7,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cancela
     $id = (int) ($_POST['id'] ?? 0);
     if ($id > 0) {
         try {
-            if (!chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
-                throw new Exception('Sem permissão.');
-            }
             $stmt = $conexao->prepare("UPDATE chamados SET status = 'cancelada' WHERE idChamados = :id");
             $stmt->execute(['id' => $id]);
             $msg = 'Ocorrência cancelada.';
-        } catch (Exception $e) {
+        } catch (PDOException $e) {
             $msg = 'Não foi possível cancelar.';
         }
     }
 }
 
 function classe_prioridade_nome($nome) {
-    if (in_array($nome, ['Muito Baixa', 'Baixa'], true)) return 'low';
-    if (in_array($nome, ['Média', 'Normal', 'Considerável', 'Moderada'], true)) return 'medium';
-    if (in_array($nome, ['Alta', 'Muito Alta'], true)) return 'high';
-    return 'urgent';
+    if ($nome === 'Sem prioridade') return 'badge-prioridade-sem';
+    if (in_array($nome, ['Muito Baixa', 'Baixa'], true)) return 'badge-prioridade-baixa';
+    if (in_array($nome, ['Média', 'Normal', 'Considerável', 'Moderada'], true)) return 'badge-prioridade-media';
+    if (in_array($nome, ['Alta', 'Muito Alta'], true)) return 'badge-prioridade-alta';
+    return 'badge-prioridade-urgente';
+}
+function classe_status_nome($status) {
+    return [
+        'analise' => 'badge-status-analise',
+        'andamento' => 'badge-status-andamento',
+        'resolvida' => 'badge-status-finalizado',
+        'cancelada' => 'badge-status-cancelado',
+    ][$status] ?? 'badge-status-analise';
 }
 
 // Verificar se é síndico (admin)
@@ -31,12 +37,12 @@ $stmt = $conexao->prepare("SELECT COUNT(*) FROM sindico WHERE idUsuario = :id");
 $stmt->execute(['id' => $idUsuario]);
 $isAdmin = $stmt->fetchColumn() > 0;
 
-// Condomínio da sessão
+// Foto do condomínio (vinculado pelo último condomínio criado)
+// TODO futuro: substituir por FK sindico -> condominio quando o schema for atualizado
 $cond_name = 'Condomínio';
 $cond_foto = null;
 try {
-    $stmt = $conexao->prepare("SELECT nome, foto FROM condominio WHERE idCondominio = :c LIMIT 1");
-    $stmt->execute(['c' => $filtroCondominio]);
+    $stmt = $conexao->query("SELECT nome, foto FROM condominio ORDER BY idCondominio DESC LIMIT 1");
     $cond = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($cond) {
         $cond_name = $cond['nome'];
@@ -49,52 +55,28 @@ try {
 // Estatísticas do banco
 $stats = [];
 
-$stmt = $conexao->prepare("SELECT COUNT(*) FROM chamados c
-     JOIN morador m0 ON m0.idMorador = c.morador_idMorador
-         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
-         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
-     WHERE u0.Condominio_idCondominio = :cond");
-$stmt->execute(['cond' => $filtroCondominio]);
+$stmt = $conexao->query("SELECT COUNT(*) FROM chamados");
 $stats['total_occurrences'] = $stmt->fetchColumn();
 
-$stmt = $conexao->prepare("SELECT COUNT(*) FROM chamados c
-     JOIN morador m0 ON m0.idMorador = c.morador_idMorador
-         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
-         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
-     WHERE u0.Condominio_idCondominio = :cond AND c.status = 'resolvida'");
-$stmt->execute(['cond' => $filtroCondominio]);
+$stmt = $conexao->query("SELECT COUNT(*) FROM chamados WHERE status = 'resolvida'");
 $stats['resolved'] = $stmt->fetchColumn();
 
-$stmt = $conexao->prepare("SELECT COUNT(*) FROM chamados c
-     JOIN morador m0 ON m0.idMorador = c.morador_idMorador
-         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
-         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
-     WHERE u0.Condominio_idCondominio = :cond AND c.status = 'analise'");
-$stmt->execute(['cond' => $filtroCondominio]);
+$stmt = $conexao->query("SELECT COUNT(*) FROM chamados WHERE status = 'analise'");
 $stats['pending'] = $stmt->fetchColumn();
 
-$stmt = $conexao->prepare("SELECT COUNT(*) FROM chamados c
-     JOIN morador m0 ON m0.idMorador = c.morador_idMorador
-         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
-         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
-     WHERE u0.Condominio_idCondominio = :cond AND c.status = 'andamento'");
-$stmt->execute(['cond' => $filtroCondominio]);
+$stmt = $conexao->query("SELECT COUNT(*) FROM chamados WHERE status = 'andamento'");
 $stats['analyzing'] = $stmt->fetchColumn();
 
 // Distribuição de ocorrências pendentes por categoria (para o card de breakdown)
-$stmt = $conexao->prepare(
+$stmt = $conexao->query(
     "SELECT cat.nome, COUNT(*) AS total
      FROM chamados c
      JOIN categoria cat ON c.categoria_idCategoria = cat.idCategoria
-     JOIN morador m0 ON m0.idMorador = c.morador_idMorador
-         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
-         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
-     WHERE c.status IN ('analise', 'andamento') AND u0.Condominio_idCondominio = :cond
+     WHERE c.status IN ('analise', 'andamento')
      GROUP BY cat.idCategoria, cat.nome
      ORDER BY total DESC
      LIMIT 4"
 );
-$stmt->execute(['cond' => $filtroCondominio]);
 $categorias_pendentes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $max_categoria = 0;
 foreach ($categorias_pendentes as $cat) {
@@ -102,17 +84,12 @@ foreach ($categorias_pendentes as $cat) {
 }
 
 // Tempo médio de resolução (horas) e total de resolvidas no período
-$stmt = $conexao->prepare(
+$stmt = $conexao->query(
     "SELECT AVG(TIMESTAMPDIFF(HOUR, c.dataPedida, c.dataRealizada)) AS media_horas,
             COUNT(*) AS total_resolvidas
      FROM chamados c
-     JOIN morador m0 ON m0.idMorador = c.morador_idMorador
-         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
-         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
-     WHERE c.status = 'resolvida' AND c.dataRealizada IS NOT NULL
-       AND u0.Condominio_idCondominio = :cond"
+     WHERE c.status = 'resolvida' AND c.dataRealizada IS NOT NULL"
 );
-$stmt->execute(['cond' => $filtroCondominio]);
 $tempo_resolucao = $stmt->fetch(PDO::FETCH_ASSOC);
 $media_resolucao_horas = $tempo_resolucao && $tempo_resolucao['media_horas'] !== null
     ? round((float) $tempo_resolucao['media_horas'], 1)
@@ -142,14 +119,12 @@ $sql = "SELECT
         JOIN moradorunidade mu ON m.idMorador = mu.Morador_idMorador AND mu.dataFim IS NULL
         JOIN unidade u ON mu.Unidade_idUnidade = u.idUnidade
         JOIN condominio cond ON u.Condominio_idCondominio = cond.idCondominio
-        WHERE u.Condominio_idCondominio = :cond
         ORDER BY c.dataPedida DESC
         LIMIT 10";
 
 $pending_issues = [];
 try {
-    $stmt = $conexao->prepare($sql);
-    $stmt->execute(['cond' => $filtroCondominio]);
+    $stmt = $conexao->query($sql);
     $pending_issues = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     // Tabelas relacionadas podem não ter dados ainda
@@ -286,7 +261,7 @@ try {
                                 <?php foreach ($pending_issues as $issue): ?>
                                 <?php
                                 $classe_prio = classe_prioridade_nome($issue['prioridade_nome']);
-                                $classe_status = $issue['status'];
+                                $classe_status = classe_status_nome($issue['status']);
                                 $rotulo_status = [
                                     'analise' => 'Em análise',
                                     'andamento' => 'Em andamento',
@@ -338,8 +313,8 @@ try {
                 <div class="dash-modal-row"><span>Morador</span><strong id="dvResident"></strong></div>
                 <div class="dash-modal-row"><span>Apartamento</span><strong id="dvApt"></strong></div>
                 <div class="dash-modal-row"><span>Categoria</span><strong id="dvCategory"></strong></div>
-                <div class="dash-modal-row"><span>Prioridade</span><strong><span id="dvPriority" class="badge medium"></span></strong></div>
-                <div class="dash-modal-row"><span>Status</span><strong><span id="dvStatus" class="badge analise"></span></strong></div>
+                <div class="dash-modal-row"><span>Prioridade</span><strong><span id="dvPriority" class="badge badge-prioridade-media"></span></strong></div>
+                <div class="dash-modal-row"><span>Status</span><strong><span id="dvStatus" class="badge badge-status-analise"></span></strong></div>
                 <div class="dash-modal-row"><span>Data</span><strong id="dvDate"></strong></div>
                 <div class="dash-modal-desc" id="dvDesc"></div>
             </div>
@@ -367,10 +342,15 @@ try {
             document.getElementById('dvCategory').textContent = o.categoria_nome;
             const vp = document.getElementById('dvPriority');
             vp.textContent = o.prioridade_nome;
-            vp.className = 'badge ' + (o.pc || 'medium');
+            vp.className = 'badge ' + (o.pc || 'badge-prioridade-media');
             const vs = document.getElementById('dvStatus');
             vs.textContent = DV_STATUS[o.status] || o.status;
-            vs.className = 'badge ' + o.status;
+            vs.className = 'badge ' + (({
+                analise: 'badge-status-analise',
+                andamento: 'badge-status-andamento',
+                resolvida: 'badge-status-finalizado',
+                cancelada: 'badge-status-cancelado'
+            })[o.status] || 'badge-status-analise');
             document.getElementById('dvDate').textContent = new Date(o.dataPedida).toLocaleDateString('pt-BR');
             document.getElementById('dvDesc').textContent = o.descricao;
             document.getElementById('dashViewModal').classList.add('active');

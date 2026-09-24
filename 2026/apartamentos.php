@@ -2,8 +2,13 @@
 include './Elements/auth.php';
 include './Elements/ui.php';
 
-// Condomínio da sessão
-$idCondominio = $filtroCondominio > 0 ? $filtroCondominio : null;
+// Condomínio de referência (último criado)
+$idCondominio = null;
+try {
+    $idCondominio = $conexao->query("SELECT idCondominio FROM condominio ORDER BY idCondominio DESC LIMIT 1")->fetchColumn();
+} catch (PDOException $e) {
+    $idCondominio = null;
+}
 
 $msg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,13 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = (int) ($_POST['id'] ?? 0);
         $ativo = (int) ($_POST['ativo'] ?? 0) === 1 ? 1 : 0;
         if ($id > 0) {
-            if ($filtroCondominio <= 0 || !pertenceAoCondominio($conexao, 'unidade', $id, $filtroCondominio)) {
-                $msg = 'Sem permissão para este apartamento.';
-            } else {
-                $stmt = $conexao->prepare("UPDATE unidade SET ativo = :a WHERE idUnidade = :id");
-                $stmt->execute(['a' => $ativo, 'id' => $id]);
-                $msg = $ativo ? 'Apartamento reativado com sucesso.' : 'Apartamento desativado com sucesso.';
-            }
+            $stmt = $conexao->prepare("UPDATE unidade SET ativo = :a WHERE idUnidade = :id");
+            $stmt->execute(['a' => $ativo, 'id' => $id]);
+            $msg = $ativo ? 'Apartamento reativado com sucesso.' : 'Apartamento desativado com sucesso.';
         }
     }
 }
@@ -58,14 +59,9 @@ try {
                    AND mu.dataFim IS NULL AND m.tipoMorador = 'proprietario'
                  ORDER BY mu.dataInicio DESC LIMIT 1) AS proprietario
             FROM unidade u
-            WHERE u.Condominio_idCondominio = :cond
             ORDER BY u.idUnidade DESC";
-    $stmt = $conexao->prepare($sql);
-    $stmt->execute(['cond' => $filtroCondominio]);
-    $apartamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $stmt = $conexao->prepare("SELECT DISTINCT bloco FROM unidade WHERE Condominio_idCondominio = :cond AND bloco IS NOT NULL AND bloco <> '' ORDER BY bloco");
-    $stmt->execute(['cond' => $filtroCondominio]);
-    $blocos = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    $apartamentos = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    $blocos = $conexao->query("SELECT DISTINCT bloco FROM unidade WHERE bloco IS NOT NULL AND bloco <> '' ORDER BY bloco")->fetchAll(PDO::FETCH_COLUMN);
 } catch (PDOException $e) {
     $apartamentos = [];
     $blocos = [];
@@ -113,7 +109,7 @@ try {
                             <div class="actions">
                                 <div class="search">
                                     <i data-lucide="search"></i>
-                                    <input type="text" id="aptSearchInput" placeholder="Pesquisar apartamento..." oninput="fdPesquisarApartamento()">
+                                    <input class="input-field-default-m" type="text" id="aptSearchInput" placeholder="Pesquisar apartamento..." oninput="fdPesquisarApartamento()">
                                 </div>
                                 <button class="filter-btn" type="button" onclick="fdFiltrarApartamentos(this)" title="Mostrar somente inativos"><i data-lucide="list-filter"></i></button>
                             </div>
@@ -176,11 +172,11 @@ try {
                     <div class="form-row">
                         <div class="form-group">
                             <label>Numeração do apartamento</label>
-                            <input type="text" name="num" required>
+                            <input class="input-field-default-m" type="text" name="num" required>
                         </div>
                         <div class="form-group">
                             <label>Bloco</label>
-                            <select name="bloco" id="newBlockSelect" required>
+                            <select name="bloco" id="newBlockSelect" class="select-medium-iconR" required>
                                 <option value="">Selecione</option>
                                 <?php foreach ($blocos as $b): ?>
                                 <option value="<?= htmlspecialchars($b) ?>"><?= htmlspecialchars($b) ?></option>
@@ -191,11 +187,11 @@ try {
                     <div class="form-row">
                         <div class="form-group">
                             <label>Andar</label>
-                            <input type="number" name="andar" min="0" value="0" required>
+                            <input class="input-field-default-m" type="number" name="andar" min="0" value="0" required>
                         </div>
                         <div class="form-group">
                             <label>Área do apartamento (m²)</label>
-                            <input type="number" name="area" min="1" step="0.01">
+                            <input class="input-field-default-m" type="number" name="area" min="1" step="0.01">
                         </div>
                     </div>
                     <div class="form-buttons">
@@ -218,7 +214,7 @@ try {
                 <form class="modal-form" onsubmit="return fdCadastrarBloco(event)">
                     <div class="form-group">
                         <label>Nome do bloco</label>
-                        <input type="text" id="blockName" placeholder="Digite aqui..." required>
+                        <input class="input-field-default-m" type="text" id="blockName" placeholder="Digite aqui..." required>
                     </div>
                     <div class="form-buttons block-buttons">
                         <button type="button" class="cancel-button" onclick="fdFecharModal('newBlockModal')">Cancelar</button>

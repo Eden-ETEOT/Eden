@@ -5,17 +5,18 @@ $msg = '';
 $erro = '';
 
 function mapaPrioridade($nome) {
-    if (preg_match('/urgente|cr[ií]tica/i', $nome)) return ['urgent', 'Urgente'];
-    if (preg_match('/baixa/i', $nome)) return ['low', 'Baixa'];
-    if (preg_match('/alta/i', $nome)) return ['high', 'Alta'];
-    return ['medium', 'Média'];
+    if (preg_match('/sem prioridade/i', $nome)) return ['none', 'Sem prioridade', 'badge-prioridade-sem'];
+    if (preg_match('/urgente|cr[ií]tica/i', $nome)) return ['urgent', 'Urgente', 'badge-prioridade-urgente'];
+    if (preg_match('/baixa/i', $nome)) return ['low', 'Baixa', 'badge-prioridade-baixa'];
+    if (preg_match('/alta/i', $nome)) return ['high', 'Alta', 'badge-prioridade-alta'];
+    return ['medium', 'Média', 'badge-prioridade-media'];
 }
 function mapaStatus($status) {
     return [
-        'analise' => ['analise', 'Em análise'],
-        'andamento' => ['andamento', 'Em andamento'],
-        'resolvida' => ['resolvida', 'Finalizado'],
-        'cancelada' => ['cancelada', 'Cancelado'],
+        'analise' => ['badge-status-analise', 'Em análise'],
+        'andamento' => ['badge-status-andamento', 'Em andamento'],
+        'resolvida' => ['badge-status-finalizado', 'Finalizado'],
+        'cancelada' => ['badge-status-cancelado', 'Cancelado'],
     ][$status] ?? ['analysis', $status];
 }
 
@@ -29,11 +30,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $categoria = (int) ($_POST['categoria'] ?? 0);
             $prioridade = (int) ($_POST['prioridade'] ?? 0);
             $morador = (int) ($_POST['morador'] ?? 0);
+            if ($prioridade <= 0) {
+                $prioridade = (int) $conexao->query("SELECT idPrioridade FROM prioridade WHERE nome = 'Sem prioridade' LIMIT 1")->fetchColumn();
+                if ($prioridade <= 0) {
+                    $stmtSemPrioridade = $conexao->prepare("INSERT INTO prioridade (ordem, nome, descricao) VALUES (0, 'Sem prioridade', 'Prioridade ainda não definida')");
+                    $stmtSemPrioridade->execute();
+                    $prioridade = (int) $conexao->lastInsertId();
+                }
+            }
             if ($titulo === '' || $descricao === '' || $categoria <= 0 || $prioridade <= 0 || $morador <= 0) {
                 throw new Exception('Preencha todos os campos obrigatórios.');
-            }
-            if (!moradorDoCondominio($conexao, $morador, $filtroCondominio)) {
-                throw new Exception('Morador fora do seu condomínio.');
             }
             $stmt = $conexao->prepare(
                 "INSERT INTO chamados (titulo, descricao, dataPedida, status, prioridade_idPrioridade, categoria_idCategoria, morador_idMorador)
@@ -56,14 +62,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             $msg = 'Ocorrência registrada com sucesso.';
+        } elseif ($acao === 'definir_prioridade') {
+            $id = (int) ($_POST['id'] ?? 0);
+            $prioridade = (int) ($_POST['prioridade'] ?? 0);
+            $prioridadeStmt = $conexao->prepare("SELECT nome FROM prioridade WHERE idPrioridade = :id");
+            $prioridadeStmt->execute(['id' => $prioridade]);
+            $nomePrioridade = $prioridadeStmt->fetchColumn();
+            if ($id <= 0 || !in_array($nomePrioridade, ['Baixa', 'Média', 'Alta', 'Urgente'], true)) {
+                throw new Exception('Defina uma prioridade válida.');
+            }
+            $stmt = $conexao->prepare("UPDATE chamados SET prioridade_idPrioridade = :prioridade WHERE idChamados = :id AND status = 'analise'");
+            $stmt->execute(['prioridade' => $prioridade, 'id' => $id]);
+            $msg = 'Prioridade definida com sucesso.';
         } elseif ($acao === 'status') {
             $id = (int) ($_POST['id'] ?? 0);
             $status = $_POST['status'] ?? '';
             if ($id <= 0 || !in_array($status, ['analise', 'andamento', 'resolvida', 'cancelada'], true)) {
                 throw new Exception('Dados inválidos.');
             }
-            if (!chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
-                throw new Exception('Sem permissão para esta ocorrência.');
+            if ($status !== 'analise') {
+                $prioridadeAtual = $conexao->prepare(
+                    "SELECT p.nome FROM chamados c JOIN prioridade p ON p.idPrioridade = c.prioridade_idPrioridade WHERE c.idChamados = :id"
+                );
+                $prioridadeAtual->execute(['id' => $id]);
+                if (stripos((string) $prioridadeAtual->fetchColumn(), 'sem prioridade') !== false) {
+                    throw new Exception('Defina uma prioridade antes de avançar o status.');
+                }
             }
             if ($status === 'resolvida') {
                 $stmt = $conexao->prepare("UPDATE chamados SET status = :s, dataRealizada = COALESCE(dataRealizada, NOW()) WHERE idChamados = :id");
@@ -75,9 +99,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($acao === 'cancelar') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id <= 0) throw new Exception('Ocorrência inválida.');
-            if (!chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
-                throw new Exception('Sem permissão para esta ocorrência.');
-            }
             $stmt = $conexao->prepare("UPDATE chamados SET status = 'cancelada' WHERE idChamados = :id");
             $stmt->execute(['id' => $id]);
             $msg = 'Ocorrência cancelada.';
@@ -100,7 +121,7 @@ $rotuloFiltro = ['analise' => 'Em análise', 'andamento' => 'Em andamento', 'res
 // Lista de ocorrências
 $ocorrencias = [];
 try {
-    $sql = "SELECT c.idChamados, c.titulo, c.descricao, c.status, c.dataPedida,
+            $sql = "SELECT c.idChamados, c.titulo, c.descricao, c.status, c.prioridade_idPrioridade, c.dataPedida,
                    DATE_FORMAT(c.dataPedida, '%d/%m/%Y') AS dataFmt,
                    cat.nome AS categoria, p.nome AS prioridade,
                    u.nome AS morador_nome, un.numResid
@@ -109,13 +130,10 @@ try {
             JOIN prioridade p ON p.idPrioridade = c.prioridade_idPrioridade
             JOIN morador m ON m.idMorador = c.morador_idMorador
             JOIN usuario u ON u.idUsuario = m.idUsuario
-            JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
-            JOIN unidade un ON un.idUnidade = mu.Unidade_idUnidade
-            WHERE un.Condominio_idCondominio = :cond
+            LEFT JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
+            LEFT JOIN unidade un ON un.idUnidade = mu.Unidade_idUnidade
             ORDER BY c.dataPedida DESC";
-    $stmt = $conexao->prepare($sql);
-    $stmt->execute(['cond' => $filtroCondominio]);
-    $ocorrencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $ocorrencias = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $ocorrencias = [];
 }
@@ -126,14 +144,18 @@ foreach ($ocorrencias as $o) {
     }
 }
 $categorias = $conexao->query("SELECT idCategoria, nome FROM categoria ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
+$semPrioridade = $conexao->query("SELECT idPrioridade FROM prioridade WHERE nome = 'Sem prioridade' LIMIT 1")->fetchColumn();
+if (!$semPrioridade) {
+    $stmtSemPrioridade = $conexao->prepare("INSERT INTO prioridade (ordem, nome, descricao) VALUES (0, 'Sem prioridade', 'Prioridade ainda não definida')");
+    $stmtSemPrioridade->execute();
+}
 $prioridades = $conexao->query("SELECT idPrioridade, nome FROM prioridade ORDER BY idPrioridade")->fetchAll(PDO::FETCH_ASSOC);
-$stmt = $conexao->prepare("SELECT m.idMorador, u.nome FROM morador m JOIN usuario u ON u.idUsuario = m.idUsuario JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL JOIN unidade un ON un.idUnidade = mu.Unidade_idUnidade WHERE u.ativo = 1 AND un.Condominio_idCondominio = :cond ORDER BY u.nome");
-$stmt->execute(['cond' => $filtroCondominio]);
-$moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$prioridadesPermitidas = ['Sem prioridade', 'Baixa', 'Média', 'Alta', 'Urgente'];
+$moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN usuario u ON u.idUsuario = m.idUsuario WHERE u.ativo = 1 ORDER BY u.nome")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<?php pageHead('Ocorrências - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['https://unpkg.com/lucide@latest']); ?>
+<?php pageHead('Ocorrências - Eden Systems', ['', './CSS/FrontDev.css', './CSS/tabelas.css', './CSS/variaveis.css'], ['https://unpkg.com/lucide@latest']); ?>
 <body>
     <?php layoutOpen(); ?>
                 <div class="fd-ocorrencias">
@@ -160,7 +182,7 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <div class="card-actions">
                                 <div class="search-box">
                                     <i data-lucide="search"></i>
-                                    <input id="searchInput" type="text" placeholder="Pesquisar ocorrência..." oninput="pesquisarOcorrencias()">
+                                    <input id="searchInput" class="input-field-default-m" type="text" placeholder="Pesquisar ocorrência..." oninput="pesquisarOcorrencias()">
                                 </div>
                                 <button class="filter-button" type="button" onclick="filtrarUrgentes(this)" title="Mostrar somente urgentes"><i data-lucide="list-filter"></i></button>
                                 <button class="new-occurrence-button" type="button" onclick="abrirModal('newModal')"><i data-lucide="plus"></i>Ocorrência</button>
@@ -185,18 +207,18 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <tr><td colspan="8"><div class="empty-state">Nenhuma ocorrência registrada.</div></td></tr>
                                     <?php else: ?>
                                         <?php foreach ($ocorrencias as $o): ?>
-                                        <?php [$pc, $pl] = mapaPrioridade($o['prioridade']); [$sc, $sl] = mapaStatus($o['status']); ?>
+                                        <?php [$pc, $pl, $pcBadge] = mapaPrioridade($o['prioridade']); [$sc, $sl] = mapaStatus($o['status']); ?>
                                         <tr data-prioridade="<?= $pc ?>" data-status-valor="<?= $o['status'] ?>" data-status="<?= $o['status'] ?>">
                                             <td class="resident-id">#<?= str_pad((int) $o['idChamados'], 3, '0', STR_PAD_LEFT) ?></td>
                                             <td><?= htmlspecialchars($o['titulo']) ?></td>
                                             <td><?= htmlspecialchars($o['categoria']) ?></td>
                                             <td><?= htmlspecialchars($o['numResid'] ?? '—') ?></td>
-                                            <td><span class="badge <?= $pc ?>"><?= $pl ?></span></td>
+                                            <td><span class="badge <?= $pcBadge ?>"><?= $pl ?></span></td>
                                             <td><span class="badge <?= $sc ?>"><?= $sl ?></span></td>
                                             <td><?= htmlspecialchars($o['dataFmt']) ?></td>
                                             <td>
                                                 <div class="tbl-actions">
-                                                    <button type="button" class="tbl-action" onclick='visualizar(<?= json_encode(array_merge($o, ['pc' => $pc]), JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' title="Visualizar"><i data-lucide="eye"></i></button>
+                                                    <button type="button" class="tbl-action" onclick='visualizar(<?= json_encode(array_merge($o, ['pc' => $pc, 'pcBadge' => $pcBadge]), JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' title="Visualizar"><i data-lucide="eye"></i></button>
                                                     <?php if ($o['status'] !== 'cancelada'): ?>
                                                     <button type="button" class="tbl-action danger" onclick="cancelarOcorrencia(<?= (int) $o['idChamados'] ?>)" title="Cancelar"><i data-lucide="trash-2"></i></button>
                                                     <?php endif; ?>
@@ -225,7 +247,7 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="details-content">
                 <div class="details-top">
                     <h3>Ocorrência <span id="viewId"></span></h3>
-                    <span id="viewPriority" class="badge medium"></span>
+                    <span id="viewPriority" class="badge badge-prioridade-media"></span>
                 </div>
                 <div class="detail-grid">
                     <div class="detail-box"><span>Morador</span><strong id="viewResident"></strong></div>
@@ -235,6 +257,18 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="description-title">Descrição</div>
                 <div class="description-box" id="viewDescription"></div>
+                <div class="update-title">Atualizar prioridade</div>
+                <form method="post" class="priority-form">
+                    <input type="hidden" name="acao" value="definir_prioridade">
+                    <input type="hidden" name="id" id="priorityId" value="">
+                    <select name="prioridade" id="prioritySelect" class="select-medium-iconR" onchange="this.form.submit()" required>
+                        <option value="">Definir prioridade</option>
+                        <?php foreach ($prioridades as $pp): ?>
+                        <?php if (!in_array($pp['nome'], ['Baixa', 'Média', 'Alta', 'Urgente'], true)) continue; ?>
+                        <option value="<?= (int) $pp['idPrioridade'] ?>"><?= htmlspecialchars($pp['nome']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </form>
                 <div class="update-title">Atualizar Status</div>
                 <div class="status-buttons" id="statusButtons">
                     <button type="button" data-status="resolvida" onclick="alterarStatus(this)">Finalizado</button>
@@ -263,29 +297,19 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <input type="hidden" name="acao" value="criar">
                 <div class="form-group">
                     <label>Título</label>
-                    <input type="text" name="titulo" placeholder="Descreva o problema brevemente" required>
+                            <input class="input-field-default-m" type="text" name="titulo" placeholder="Descreva o problema brevemente" required>
                 </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Categoria</label>
-                        <select name="categoria" required>
-                            <?php foreach ($categorias as $cat): ?>
-                            <option value="<?= (int) $cat['idCategoria'] ?>"><?= htmlspecialchars($cat['nome']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Prioridade</label>
-                        <select name="prioridade" required>
-                            <?php foreach ($prioridades as $pp): ?>
-                            <option value="<?= (int) $pp['idPrioridade'] ?>"><?= htmlspecialchars($pp['nome']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select name="categoria" class="select-medium-iconR" required>
+                        <?php foreach ($categorias as $cat): ?>
+                        <option value="<?= (int) $cat['idCategoria'] ?>"><?= htmlspecialchars($cat['nome']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Morador</label>
-                    <select name="morador" required>
+                    <select name="morador" class="select-medium-iconR" required>
                         <?php foreach ($moradoresSel as $mm): ?>
                         <option value="<?= (int) $mm['idMorador'] ?>"><?= htmlspecialchars($mm['nome']) ?></option>
                         <?php endforeach; ?>
@@ -293,7 +317,7 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="form-group">
                     <label class="description-label">Descrição</label>
-                    <textarea name="descricao" placeholder="Descreva detalhadamente a ocorrência..." required></textarea>
+                    <textarea class="input-field-default-l" name="descricao" placeholder="Descreva detalhadamente a ocorrência..." required></textarea>
                 </div>
                 <div class="image-area">
                     <input type="file" id="imageInput" name="anexo" accept="image/*" hidden onchange="mostrarArquivo()">
@@ -349,7 +373,9 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById('viewId').textContent = '#' + String(o.idChamados).padStart(3, '0');
             const vp = document.getElementById('viewPriority');
             vp.textContent = o.prioridade;
-            vp.className = 'badge ' + (o.pc || 'medium');
+            vp.className = 'badge ' + (o.pcBadge || 'badge-prioridade-media');
+            document.getElementById('priorityId').value = o.idChamados;
+            document.getElementById('prioritySelect').value = o.prioridade_idPrioridade;
             document.getElementById('viewResident').textContent = o.morador_nome;
             document.getElementById('viewApartment').textContent = o.numResid || '—';
             document.getElementById('viewCategory').textContent = o.categoria;

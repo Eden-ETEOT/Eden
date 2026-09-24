@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($acao === 'criar') {
             $nome = trim($_POST['nome'] ?? '');
             $tipo = trim($_POST['tipo'] ?? '');
-            $condominio = $filtroCondominio > 0 ? $filtroCondominio : 0;
+            $condominio = (int) ($_POST['condominio'] ?? 0);
             if ($nome === '' || $tipo === '' || $condominio <= 0) {
                 throw new Exception('Preencha todos os campos obrigatórios.');
             }
@@ -41,9 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($acao === 'excluir') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id <= 0) throw new Exception('Documento inválido.');
-            if (!pertenceAoCondominio($conexao, 'documentos', $id, $filtroCondominio)) {
-                throw new Exception('Sem permissão para este documento.');
-            }
             $stmt = $conexao->prepare("SELECT caminho FROM documentos WHERE idDocumento = :id");
             $stmt->execute(['id' => $id]);
             $doc = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -74,11 +71,8 @@ try {
                    c.nome AS condominio
             FROM documentos d
             JOIN condominio c ON c.idCondominio = d.Condominio_idCondominio
-            WHERE d.Condominio_idCondominio = :cond
             ORDER BY d.dataUpload DESC, d.idDocumento DESC";
-    $stmt = $conexao->prepare($sql);
-    $stmt->execute(['cond' => $filtroCondominio]);
-    $documentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $documentos = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $documentos = [];
 }
@@ -88,20 +82,12 @@ foreach ($documentos as &$d) {
     $d['temArquivo'] = $fs !== null;
 }
 unset($d);
-$stmt = $conexao->prepare("SELECT DISTINCT tipo FROM documentos WHERE Condominio_idCondominio = :cond ORDER BY tipo");
-$stmt->execute(['cond' => $filtroCondominio]);
-$tipos = $stmt->fetchAll(PDO::FETCH_COLUMN);
-$condominioSessaoNome = '—';
-try {
-    $stmt = $conexao->prepare("SELECT nome FROM condominio WHERE idCondominio = :c LIMIT 1");
-    $stmt->execute(['c' => $filtroCondominio]);
-    $condominioSessaoNome = $stmt->fetchColumn() ?: '—';
-} catch (PDOException $e) {
-}
+$tipos = $conexao->query("SELECT DISTINCT tipo FROM documentos ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
+$condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<?php pageHead('Documentação - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['https://unpkg.com/lucide@latest']); ?>
+<?php pageHead('Documentação - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css', './CSS/variaveis.css'], ['https://unpkg.com/lucide@latest']); ?>
 <body>
     <?php layoutOpen(); ?>
                 <div class="fd-documentacao">
@@ -123,7 +109,7 @@ try {
                             <div class="card-actions">
                                 <div class="search-box">
                                     <i data-lucide="search"></i>
-                                    <input id="searchInput" type="text" placeholder="Pesquisar documento..." oninput="pesquisarDocumentos()">
+                                    <input id="searchInput" class="input-field-default-m" type="text" placeholder="Pesquisar documento..." oninput="pesquisarDocumentos()">
                                 </div>
                                 <button class="filter-button" type="button" onclick="filtrarComArquivo(this)" title="Mostrar somente documentos com arquivo"><i data-lucide="list-filter"></i></button>
                             </div>
@@ -156,7 +142,7 @@ try {
                                             <td>
                                                 <div class="tbl-actions">
                                                     <?php if ($d['temArquivo']): ?>
-                                                    <a class="tbl-action" href="./download.php?id=<?= (int) $d['idDocumento'] ?>" title="Baixar"><i data-lucide="download"></i></a>
+                                                    <a class="tbl-action" href="./<?= htmlspecialchars($d['caminho']) ?>" download title="Baixar"><i data-lucide="download"></i></a>
                                                     <?php endif; ?>
                                                     <button type="button" class="tbl-action danger" onclick="excluirDocumento(<?= (int) $d['idDocumento'] ?>)" title="Excluir"><i data-lucide="trash-2"></i></button>
                                                 </div>
@@ -185,12 +171,12 @@ try {
                 <input type="hidden" name="acao" value="criar">
                 <div class="form-group">
                     <label>Nome</label>
-                    <input type="text" name="nome" placeholder="Ex.: Ata da Assembleia - Agosto" required>
+                    <input class="input-field-default-m" type="text" name="nome" placeholder="Ex.: Ata da Assembleia - Agosto" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Categoria</label>
-                        <input type="text" name="tipo" list="tiposExistentes" placeholder="Ex.: Atas" required>
+                        <input class="input-field-default-m" type="text" name="tipo" list="tiposExistentes" placeholder="Ex.: Atas" required>
                         <datalist id="tiposExistentes">
                             <?php foreach ($tipos as $t): ?>
                             <option value="<?= htmlspecialchars($t) ?>"></option>
@@ -199,7 +185,11 @@ try {
                     </div>
                     <div class="form-group">
                         <label>Condomínio</label>
-                        <input type="text" value="<?= htmlspecialchars($condominioSessaoNome) ?>" disabled>
+                        <select name="condominio" class="select-medium-iconR" required>
+                            <?php foreach ($condominios as $cc): ?>
+                            <option value="<?= (int) $cc['idCondominio'] ?>"><?= htmlspecialchars($cc['nome']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                 </div>
                 <div class="file-section">

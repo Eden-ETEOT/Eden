@@ -745,7 +745,7 @@ body {
 
 .issues-table td {
     padding: var(--spacing400) var(--spacing300);
-    font-size: 14px;
+    font-size: 16px;
     color: var(--green1-default);
     border-bottom: 1px solid var(--green1-100);
 }
@@ -754,43 +754,7 @@ body {
     background-color: var(--green1-50);
 }
 
-.badge {
-    display: inline-block;
-    padding: var(--spacing100) 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: var(--semi-bold);
-}
 
-.badge.low {
-    background-color: var(--green3-50);
-    color: var(--green3-default);
-}
-
-.badge.medium {
-    background-color: var(--yellow-50);
-    color: var(--yellow-default);
-}
-
-.badge.high {
-    background-color: var(--red-50);
-    color: var(--red-default);
-}
-
-.badge.pending {
-    background-color: var(--yellow-50);
-    color: var(--yellow-default);
-}
-
-.badge.resolved {
-    background-color: var(--green3-50);
-    color: var(--green3-default);
-}
-
-.badge.analyzing {
-    background-color: var(--blue-50);
-    color: var(--blue-default);
-}
 
 
 

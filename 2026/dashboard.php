@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cancela
     $id = (int) ($_POST['id'] ?? 0);
     if ($id > 0) {
         try {
-            if (!chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
+            if (!$podeGerenciar || !chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
                 throw new Exception('Sem permissão.');
             }
             $stmt = $conexao->prepare("UPDATE chamados SET status = 'cancelada' WHERE idChamados = :id");
@@ -312,7 +312,7 @@ try {
                                     <td>
                                         <div class="tbl-actions">
                                             <button type="button" class="tbl-action" title="Visualizar" onclick='visualizarDash(<?= json_encode(array_merge($issue, ['pc' => $classe_prio]), JSON_HEX_APOS | JSON_HEX_QUOT) ?>)'><i data-lucide="eye"></i></button>
-                                            <button type="button" class="tbl-action danger" title="Cancelar" onclick="cancelarDash(<?= (int) $issue['idChamados'] ?>)"><i data-lucide="trash-2"></i></button>
+                                            <?php if ($podeGerenciar): ?><button type="button" class="tbl-action danger" title="Cancelar" onclick="cancelarDash(<?= (int) $issue['idChamados'] ?>)"><i data-lucide="trash-2"></i></button><?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>

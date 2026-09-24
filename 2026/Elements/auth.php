@@ -20,7 +20,8 @@ $stmt = $conexao->prepare("SELECT nome, foto, telefone, email FROM usuario WHERE
 $stmt->execute(['id' => $idUsuario]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 $user_name = $user ? $user['nome'] : 'Usuário';
-$user_type = 'Síndico';
+$user_type = papelUsuario($conexao, $idUsuario, $idCondominio);
+$podeGerenciar = podeGerenciar($conexao, $idUsuario, $idCondominio);
 $user_avatar = mb_substr($user_name, 0, 1);
 $user_foto = ($user && !empty($user['foto'])) ? $user['foto'] : null;
 // O cadastro salva só o nome do arquivo; monta o caminho até uploads/usuarios.

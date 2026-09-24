@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($id <= 0 || !in_array($status, ['analise', 'andamento', 'resolvida', 'cancelada'], true)) {
                 throw new Exception('Dados inválidos.');
             }
-            if (!chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
+            if (!$podeGerenciar || !chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
                 throw new Exception('Sem permissão para esta ocorrência.');
             }
             if ($status === 'resolvida') {
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($acao === 'cancelar') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id <= 0) throw new Exception('Ocorrência inválida.');
-            if (!chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
+            if (!$podeGerenciar || !chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
                 throw new Exception('Sem permissão para esta ocorrência.');
             }
             $stmt = $conexao->prepare("UPDATE chamados SET status = 'cancelada' WHERE idChamados = :id");
@@ -197,7 +197,7 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <td>
                                                 <div class="tbl-actions">
                                                     <button type="button" class="tbl-action" onclick='visualizar(<?= json_encode(array_merge($o, ['pc' => $pc]), JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' title="Visualizar"><i data-lucide="eye"></i></button>
-                                                    <?php if ($o['status'] !== 'cancelada'): ?>
+                                                    <?php if ($o['status'] !== 'cancelada' && $podeGerenciar): ?>
                                                     <button type="button" class="tbl-action danger" onclick="cancelarOcorrencia(<?= (int) $o['idChamados'] ?>)" title="Cancelar"><i data-lucide="trash-2"></i></button>
                                                     <?php endif; ?>
                                                 </div>
@@ -235,13 +235,13 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="description-title">Descrição</div>
                 <div class="description-box" id="viewDescription"></div>
-                <div class="update-title">Atualizar Status</div>
+                <?php if ($podeGerenciar): ?><div class="update-title">Atualizar Status</div>
                 <div class="status-buttons" id="statusButtons">
                     <button type="button" data-status="resolvida" onclick="alterarStatus(this)">Finalizado</button>
                     <button type="button" data-status="andamento" onclick="alterarStatus(this)">Em andamento</button>
                     <button type="button" data-status="analise" onclick="alterarStatus(this)">Em análise</button>
                     <button type="button" data-status="cancelada" onclick="alterarStatus(this)">Cancelado</button>
-                </div>
+                </div><?php endif; ?>
             </div>
             <div class="details-footer">
                 <form method="post" id="cancelForm" style="display:inline">

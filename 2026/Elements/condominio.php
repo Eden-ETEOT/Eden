@@ -30,6 +30,45 @@ function resolverCondominio(PDO $pdo, int $idUsuario): ?int {
     return null;
 }
 
+/** Funcionário com vínculo ativo no condomínio? Retorna a função ou null. */
+function funcaoNoCondominio(PDO $pdo, int $idUsuario, int $idCondominio): ?string {
+    $stmt = $pdo->prepare(
+        "SELECT f.funcao FROM funcionario f
+         JOIN funcionariocondominio fc ON fc.Funcionario_idFuncionario = f.idFuncionario
+         WHERE f.idUsuario = :u AND fc.Condominio_idCondominio = :c
+           AND fc.dataDesligamento IS NULL LIMIT 1"
+    );
+    $stmt->execute(['u' => $idUsuario, 'c' => $idCondominio]);
+    $f = $stmt->fetchColumn();
+    return $f === false ? null : (string) $f;
+}
+
+/** Papel de exibição: Síndico > função > tipo de morador > Usuário. */
+function papelUsuario(PDO $pdo, int $idUsuario, ?int $idCondominio): string {
+    if ($idCondominio !== null) {
+        if (eSindico($pdo, $idUsuario, $idCondominio)) return 'Síndico';
+        $f = funcaoNoCondominio($pdo, $idUsuario, $idCondominio);
+        if ($f !== null && $f !== '') return $f;
+        $stmt = $pdo->prepare(
+            "SELECT m.tipoMorador FROM morador m
+             JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
+             JOIN unidade u ON u.idUnidade = mu.Unidade_idUnidade
+             WHERE m.idUsuario = :u AND u.Condominio_idCondominio = :c LIMIT 1"
+        );
+        $stmt->execute(['u' => $idUsuario, 'c' => $idCondominio]);
+        $t = $stmt->fetchColumn();
+        if ($t !== false) return ucfirst((string) $t);
+    }
+    return 'Usuário';
+}
+
+/** Pode gerenciar (síndico ou funcionário ativo do condomínio)? */
+function podeGerenciar(PDO $pdo, int $idUsuario, ?int $idCondominio): bool {
+    if ($idCondominio === null) return false;
+    if (eSindico($pdo, $idUsuario, $idCondominio)) return true;
+    return funcaoNoCondominio($pdo, $idUsuario, $idCondominio) !== null;
+}
+
 /** Condomínio da sessão (null = sem vínculo: telas mostram vazio). */
 function condominioDaSessao(): ?int {
     $c = $_SESSION['id_condominio'] ?? null;

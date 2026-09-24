@@ -13,8 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (empty($nomeRecebido) || empty($cpfRecebido)) {
             $erroEtapa1 = "Preencha todos os campos!";
-        } elseif (empty($_FILES["foto"]["name"])) {
-            $erroEtapa1 = "Envie uma foto!";
         } else {
             $stmt = $conexao->prepare("SELECT idUsuario FROM usuario WHERE CPF = :cpf");
             $stmt->execute(["cpf" => $cpfRecebido]);
@@ -31,11 +29,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit;
         }
 
-        // Move a foto para uma pasta permanente com nome único
-        $extensao = pathinfo($_FILES["foto"]["name"], PATHINFO_EXTENSION);
-        $nomeArquivo = uniqid("foto_") . "." . $extensao;
-        $pastaDestino = "../../uploads/usuarios/";
-        move_uploaded_file($_FILES["foto"]["tmp_name"], $pastaDestino . $nomeArquivo);
+        // Foto opcional: move para pasta permanente só se enviada
+        $nomeArquivo = null;
+        if (!empty($_FILES["foto"]["name"]) && $_FILES["foto"]["error"] === UPLOAD_ERR_OK) {
+            $extensao = pathinfo($_FILES["foto"]["name"], PATHINFO_EXTENSION);
+            $nomeArquivo = uniqid("foto_") . "." . $extensao;
+            $pastaDestino = "../../uploads/usuarios/";
+            move_uploaded_file($_FILES["foto"]["tmp_name"], $pastaDestino . $nomeArquivo);
+        }
 
         $_SESSION["cadastroMorador"]["nome"] = $nomeRecebido;
         $_SESSION["cadastroMorador"]["cpf"] = $cpfRecebido;

@@ -20,7 +20,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["nome"] = $usuario["nome"];
                 require_once "../Elements/condominio.php";
                 $_SESSION["id_condominio"] = resolverCondominio($conexao, (int) $usuario["idUsuario"]);
-                header("Location: ../dashboard.php");
+                if (!empty($_SESSION["convite_token"])) {
+                    header("Location: ../convite/aceitar.php?token=" . urlencode($_SESSION["convite_token"]));
+                } else {
+                    header("Location: ../dashboard.php");
+                }
                 
                 exit();
                 

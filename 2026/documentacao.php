@@ -156,7 +156,7 @@ try {
                                             <td>
                                                 <div class="tbl-actions">
                                                     <?php if ($d['temArquivo']): ?>
-                                                    <a class="tbl-action" href="./<?= htmlspecialchars($d['caminho']) ?>" download title="Baixar"><i data-lucide="download"></i></a>
+                                                    <a class="tbl-action" href="./download.php?id=<?= (int) $d['idDocumento'] ?>" title="Baixar"><i data-lucide="download"></i></a>
                                                     <?php endif; ?>
                                                     <button type="button" class="tbl-action danger" onclick="excluirDocumento(<?= (int) $d['idDocumento'] ?>)" title="Excluir"><i data-lucide="trash-2"></i></button>
                                                 </div>

@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'salvar'
                 throw new Exception($rotulo . ' inválido! Use DDD + número.');
             }
         }
-        if (!$cond || !$idCondominio) {
+        if (!$cond || $filtroCondominio <= 0) {
             throw new Exception('Usuário sem condomínio vinculado.');
         }
         if ($cond) {

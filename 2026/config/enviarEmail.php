@@ -19,6 +19,7 @@ function enviarEmail(string $destinatario, string $assunto, string $corpoHtml): 
         $mail->Password   = MAIL_PASSWORD;
         $mail->SMTPSecure = MAIL_ENCRYPTION;
         $mail->Port       = MAIL_PORT;
+        $mail->Timeout    = 10;
         $mail->CharSet    = 'UTF-8';
 
         $mail->setFrom(MAIL_FROM_ADDRESS, MAIL_FROM_NAME);

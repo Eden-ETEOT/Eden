@@ -42,11 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <p>Esse código expira em 15 minutos. Se você não solicitou isso, ignore este e-mail.</p>
                 ";
 
+                $_SESSION['reset_email'] = $email;
+                $_SESSION['reset_id_usuario'] = $usuario['idUsuario'];
+                session_write_close(); // libera a trava: outros cliques não enfileiram atrás do SMTP
                 $resultado = enviarEmail($email, 'Código para redefinir sua senha', $corpo);
 
                 if ($resultado['ok']) {
-                    $_SESSION['reset_email'] = $email;
-                    $_SESSION['reset_id_usuario'] = $usuario['idUsuario'];
                     header("Location: verificar-email.php");
                     exit();
                 } else {

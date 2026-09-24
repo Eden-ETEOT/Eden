@@ -40,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h2 style='letter-spacing:4px'>{$codigo}</h2>
                 <p>Esse código expira em 15 minutos.</p>
             ";
+            session_write_close(); // idem: não serializa cliques atrás do SMTP
             $resultado = enviarEmail($_SESSION['reset_email'], 'Novo código para redefinir sua senha', $corpo);
 
             if($resultado['ok']){

@@ -29,7 +29,7 @@ if ($token === '') {
     // Guarda o token na sessão para atravessar login/cadastro.
     $_SESSION['convite_token'] = $token;
     if (!isset($_SESSION['id_usuario'])) {
-        header('Location: ../auth/login.php?convite=1');
+        header('Location: ../cadastro/morador/passo-1.php?convite=1');
         exit;
     }
     [$ok, $dados] = validarConvite($conexao, $token);

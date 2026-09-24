@@ -6,6 +6,14 @@ $cpf = $_SESSION["cadastroMorador"]["cpf"] ?? "";
 
 $erro = $_SESSION["erro_moradorEtapa1"] ?? "";
 unset($_SESSION["erro_moradorEtapa1"]);
+$conviteInfo = null;
+try {
+    include "../../config/conexao.php";
+    include "../../Elements/convites.php";
+    $conviteInfo = conviteDaSessao($conexao);
+} catch (Throwable $e) {
+    $conviteInfo = null;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -35,6 +43,11 @@ unset($_SESSION["erro_moradorEtapa1"]);
 
       <?php if (!empty($erro)): ?>
       <p class="alerta-danger"><?php echo htmlspecialchars($erro); ?></p>
+      <?php endif; ?>
+      <?php if ($conviteInfo !== null): ?>
+      <p class="alerta-info">Você foi convidado(a) para <strong><?= htmlspecialchars($conviteInfo['condominioNome']) ?></strong>
+      — Bloco <?= htmlspecialchars($conviteInfo['bloco']) ?>, apto <?= htmlspecialchars($conviteInfo['numResid']) ?>
+      (<?= htmlspecialchars($conviteInfo['tipoMorador']) ?>). Complete seu cadastro para aceitar.</p>
       <?php endif; ?>
 
       <section class="content">

@@ -81,6 +81,14 @@ function podeConvidar(PDO $pdo, int $idUsuario, int $idUnidade): bool {
     return false;
 }
 
+/** Convite guardado na sessão (fluxo cadastro), já validado. Retorna dados ou null. */
+function conviteDaSessao(PDO $pdo): ?array {
+    $token = trim($_SESSION['convite_token'] ?? '');
+    if ($token === '') return null;
+    [$ok, $dados] = validarConvite($pdo, $token);
+    return $ok ? $dados : null;
+}
+
 /** Valida estado do convite. Retorna [ok, dados|erro]. */
 function validarConvite(PDO $pdo, string $token): array {
     $stmt = $pdo->prepare(

@@ -119,6 +119,13 @@ if (empty($_SESSION["cadastroMorador"]["cpf"])) {
 $email = $_POST["email"] ?? ($_SESSION["cadastroMorador"]["email"] ?? "");
 $telefone = $_POST["telefone"] ?? "";
 $erro = $erro ?? "";
+$conviteInfo = null;
+try {
+    include "../../Elements/convites.php";
+    $conviteInfo = conviteDaSessao($conexao);
+} catch (Throwable $e) {
+    $conviteInfo = null;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -148,6 +155,11 @@ $erro = $erro ?? "";
 
       <?php if (!empty($erro)): ?>
       <p class="alerta-danger"><?php echo htmlspecialchars($erro); ?></p>
+      <?php endif; ?>
+      <?php if ($conviteInfo !== null): ?>
+      <p class="alerta-info">Cadastro referente ao convite para <strong><?= htmlspecialchars($conviteInfo['condominioNome']) ?></strong>
+      — Bloco <?= htmlspecialchars($conviteInfo['bloco']) ?>, apto <?= htmlspecialchars($conviteInfo['numResid']) ?>
+      (<?= htmlspecialchars($conviteInfo['tipoMorador']) ?>).</p>
       <?php endif; ?>
 
       <section class="content">

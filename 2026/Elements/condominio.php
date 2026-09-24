@@ -1,6 +1,7 @@
 <?php
 // Isolamento por condomínio (multi-tenancy: 1 banco central + filtro por sessão).
 // Resolve o condomínio do usuário: sindico > morador (vínculo ativo) > funcionario (ativo).
+require_once __DIR__ . '/convites.php';
 
 /** Condomínio do usuário ou null (sem vínculo). */
 function resolverCondominio(PDO $pdo, int $idUsuario): ?int {

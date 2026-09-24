@@ -182,7 +182,7 @@ $conviteTokenInvalido = (trim($_SESSION['convite_token'] ?? '') !== '' && $convi
         <div class="field">
           <label for="telefone">Telefone</label>
           <input
-            type="number"
+            type="tel"
             id="telefone" placeholder="(00) 00000-0000" maxlength="15"
             name="telefone"
             value="<?php echo htmlspecialchars($telefone); ?>"

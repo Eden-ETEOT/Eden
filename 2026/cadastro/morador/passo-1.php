@@ -11,6 +11,7 @@ try {
     include "../../config/conexao.php";
     include "../../Elements/convites.php";
     $conviteInfo = conviteDaSessao($conexao);
+$conviteTokenInvalido = (trim($_SESSION['convite_token'] ?? '') !== '' && $conviteInfo === null);
 } catch (Throwable $e) {
     $conviteInfo = null;
 }
@@ -48,6 +49,9 @@ try {
       <p class="alerta-info">Você foi convidado(a) para <strong><?= htmlspecialchars($conviteInfo['condominioNome']) ?></strong>
       — Bloco <?= htmlspecialchars($conviteInfo['bloco']) ?>, apto <?= htmlspecialchars($conviteInfo['numResid']) ?>
       (<?= htmlspecialchars($conviteInfo['tipoMorador']) ?>). Complete seu cadastro para aceitar.</p>
+      <?php endif; ?>
+      <?php if ($conviteTokenInvalido): ?>
+      <p class="alerta-danger">Este link de convite não é mais válido (expirou ou já foi usado). Você pode concluir o cadastro, mas será preciso pedir um novo link ao síndico para vincular seu apartamento.</p>
       <?php endif; ?>
 
       <section class="content">

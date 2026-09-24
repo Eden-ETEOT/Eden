@@ -202,7 +202,9 @@ try {
                                             <td><span class="badge medium"><?= htmlspecialchars($cv['tipoMorador']) ?></span></td>
                                             <td><?= htmlspecialchars($cv['emailEsperado'] ?? 'link aberto') ?></td>
                                             <td><?= date('d/m/Y H:i', strtotime($cv['dataExpiracao'])) ?></td>
-                                            <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="./convite/aceitar.php?token=<?= htmlspecialchars($cv['token']) ?>">./convite/aceitar.php?token=<?= htmlspecialchars(substr($cv['token'], 0, 8)) ?>…</td>
+                                            <td>
+                                                <button type="button" class="tbl-action" title="Copiar link do convite" onclick="copiarConvite(this, './convite/aceitar.php?token=<?= htmlspecialchars($cv['token']) ?>')"><i data-lucide="link"></i></button>
+                                            </td>
                                             <td>
                                                 <div class="tbl-actions">
                                                     <form method="post" style="display:inline" onsubmit="return confirm('Cancelar este convite?')">
@@ -305,6 +307,20 @@ try {
     <script src="<?= assetUrl('./js/mascaras.js') ?>"></script>
     <script>
         lucide.createIcons();
+        function copiarConvite(btn, path) {
+            const url = new URL(path, window.location.href).href;
+            const done = () => toast('Link do convite copiado.', 'success');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(done).catch(() => toast('Não foi possível copiar.', 'error'));
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = url;
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); done(); } catch (e) { toast('Não foi possível copiar.', 'error'); }
+                ta.remove();
+            }
+        }
         function pesquisar() {
             filtrarLinhas('residentTable', document.getElementById('searchInput').value);
         }

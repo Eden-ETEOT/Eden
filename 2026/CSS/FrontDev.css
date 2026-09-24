@@ -1973,6 +1973,9 @@
     width: 25px;
     height: 25px;
 }
+.fd-moradores .residents-card + .residents-card {
+    margin-top: 24px;
+}
 .fd-moradores .residents-card {
     background: white;
 

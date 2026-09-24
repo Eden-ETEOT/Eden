@@ -17,6 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($telefone) || empty($senha) || empty($confirmar_senha)) {
         $erro = "Preencha todos os campos!";
+    } elseif (strlen(preg_replace('/\D/', '', $telefone)) < 10 || strlen(preg_replace('/\D/', '', $telefone)) > 11) {
+        $erro = "Telefone inválido! Use DDD + número.";
     } elseif (strlen($senha) < 6) {
         $erro = "A senha deve ter pelo menos 6 caracteres!";
     } elseif ($senha !== $confirmar_senha) {
@@ -66,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="field">
           <label for="telefone">Telefone</label>
-          <input type="text" id="telefone" name="telefone" value="<?php echo htmlspecialchars($telefone); ?>" required>
+          <input type="text" id="telefone" name="telefone" placeholder="(00) 00000-0000" maxlength="15" value="<?php echo htmlspecialchars($telefone); ?>" required>
         </div>
 
         <div class="field">
@@ -99,5 +101,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <aside class="panel-left" aria-label="Imagem ilustrativa"></aside>
 
+  <script src="../../js/mascaras.js"></script>
 </body>
 </html>

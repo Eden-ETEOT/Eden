@@ -13,6 +13,12 @@ try {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'salvar') {
     try {
+        foreach (['tel_cond' => 'Telefone do condomínio', 'tel_sind' => 'Telefone do síndico'] as $campo => $rotulo) {
+            $dig = preg_replace('/\D/', '', $_POST[$campo] ?? '');
+            if ($dig !== '' && (strlen($dig) < 10 || strlen($dig) > 11)) {
+                throw new Exception($rotulo . ' inválido! Use DDD + número.');
+            }
+        }
         if ($cond) {
             $stmt = $conexao->prepare(
                 "UPDATE condominio SET nome = :nome, CNPJ = :cnpj, telefone = :tel, email = :email,
@@ -38,8 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'salvar'
             'id' => $idUsuario,
         ]);
         $msg = 'Alterações salvas com sucesso.';
-    } catch (PDOException $e) {
-        $msg = 'Não foi possível salvar. Verifique os dados e tente novamente.';
+    } catch (Exception $e) {
+        $msg = $e instanceof PDOException
+            ? 'Não foi possível salvar. Verifique os dados e tente novamente.'
+            : $e->getMessage();
     }
 }
 
@@ -92,7 +100,7 @@ $endereco = $cond
                                     </div>
                                     <div class="form-group">
                                         <label for="telCond">Telefone</label>
-                                        <input type="text" id="telCond" name="tel_cond" value="<?= htmlspecialchars($cond['telefone'] ?? '') ?>">
+                                        <input type="text" id="telCond" name="tel_cond" placeholder="(00) 00000-0000" maxlength="15" value="<?= htmlspecialchars($cond['telefone'] ?? '') ?>">
                                     </div>
                                     <div class="form-group">
                                         <label for="emailCond">E-mail</label>
@@ -120,7 +128,7 @@ $endereco = $cond
                                     </div>
                                     <div class="form-group">
                                         <label for="telefoneSindico">Telefone</label>
-                                        <input type="tel" id="telefoneSindico" name="tel_sind" value="<?= htmlspecialchars($user['telefone'] ?? '') ?>">
+                                        <input type="tel" id="telefoneSindico" name="tel_sind" placeholder="(00) 00000-0000" maxlength="15" value="<?= htmlspecialchars($user['telefone'] ?? '') ?>">
                                     </div>
                                     <div class="form-group full">
                                         <label for="emailSindico">E-mail</label>

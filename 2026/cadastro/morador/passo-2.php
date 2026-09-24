@@ -54,6 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $erro = "Preencha todos os campos!";
         } elseif (!filter_var($emailRecebido, FILTER_VALIDATE_EMAIL)) {
             $erro = "E-mail inválido!";
+        } elseif (strlen(preg_replace('/\D/', '', $telefoneRecebido)) < 10 || strlen(preg_replace('/\D/', '', $telefoneRecebido)) > 11) {
+            $erro = "Telefone inválido! Use DDD + número.";
         } elseif (strlen($senhaRecebida) < 6) {
             $erro = "A senha deve ter pelo menos 6 caracteres!";
         } elseif ($senhaRecebida !== $confirmarSenhaRecebida) {
@@ -164,7 +166,7 @@ $erro = $erro ?? "";
           <label for="telefone">Telefone</label>
           <input
             type="number"
-            id="telefone"
+            id="telefone" placeholder="(00) 00000-0000" maxlength="15"
             name="telefone"
             value="<?php echo htmlspecialchars($telefone); ?>"
             required
@@ -219,5 +221,6 @@ $erro = $erro ?? "";
   <aside class="panel-rigth" aria-label="Imagem ilustrativa"></aside>
 
 
+  <script src="../../js/mascaras.js"></script>
 </body>
 </html>

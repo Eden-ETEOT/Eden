@@ -19,6 +19,20 @@
     return v;
   }
 
+  function mascaraTelefone(v) {
+    v = soDigitos(v).slice(0, 11);
+    if (v.length > 10) return v.replace(/(\d{2})(\d{5})(\d{1,4})/, "($1) $2-$3");
+    if (v.length > 6) return v.replace(/(\d{2})(\d{4})(\d{1,4})/, "($1) $2-$3");
+    if (v.length > 2) return v.replace(/(\d{2})(\d{1,5})/, "($1) $2");
+    return v;
+  }
+
+  function mascaraCEP(v) {
+    v = soDigitos(v).slice(0, 8);
+    if (v.length > 5) return v.replace(/(\d{5})(\d{1,3})/, "$1-$2");
+    return v;
+  }
+
   function aplicar(id, fn) {
     var el = document.getElementById(id);
     if (!el) return;
@@ -36,5 +50,10 @@
   document.addEventListener("DOMContentLoaded", function () {
     aplicar("cpf", mascaraCPF);
     aplicar("cnpj", mascaraCNPJ);
+    aplicar("telefone", mascaraTelefone);
+    aplicar("telCond", mascaraTelefone);
+    aplicar("telefoneSindico", mascaraTelefone);
+    aplicar("CEP", mascaraCEP);
+    aplicar("cep", mascaraCEP);
   });
 })();

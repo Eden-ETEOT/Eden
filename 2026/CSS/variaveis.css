@@ -351,3 +351,31 @@
   height: 2.5rem;
   padding: var(--spacing200);
 }
+
+/* ===== Compat: classes antigas ainda usadas em telas não migradas ===== */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.badge.ativo {
+    background-color: var(--green3-50);
+    color: var(--green3-default);
+}
+.badge.inativo {
+    background-color: var(--red-50);
+    color: var(--red-default);
+}
+.input-field-default-sm {
+    width: 100%;
+    padding: var(--spacing200) var(--spacing300);
+    border: 1px solid var(--gray200);
+    color: var(--corNeutra2);
+    font-size: 1rem;
+    outline: none;
+    border-radius: 8px;
+    height: 2rem;
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Suporte | Éden Systems</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <img class="logo" src="../assets/logo-negativo.png" alt="Éden Systems">
+        <div class="line"></div>
+        <nav><a class="" href="../dashboard/index.html"><i data-lucide="layout-dashboard"></i>Dashboard</a><a class="" href="../ocorrencias/index.html"><i data-lucide="badge-alert"></i>Ocorrências</a><a class="" href="../apartamentos/index.html"><i data-lucide="building-2"></i>Apartamentos</a></nav>
+        <div class="tools">
+            <div class="line"></div><b>FERRAMENTAS</b><a class="" href="../configuracoes/index.html"><i data-lucide="settings"></i>Configurações</a><a class="active" href="../suporte/index.html"><i data-lucide="message-square-text"></i>Suporte</a></div>
+        <div class="logout">
+            <div class="line"></div><a href="#"><i data-lucide="log-out"></i>Log out</a></div>
+    </aside>
+    <div class="app">
+        <header class="header">
+            <div class="header-page">Suporte</div>
+            <div class="profile" id="profileButton">
+                <div class="avatar"><i data-lucide="user-round"></i></div>
+                <div class="profile-info"><strong>Ana da Silva</strong><small>Morador(a)</small></div><i data-lucide="chevron-down"></i>
+                <div class="profile-menu" id="profileMenu">
+                    <div class="head"><strong>Ana da Silva</strong><small>Morador(a)</small></div><a href="../perfil/index.html"><i data-lucide="user"></i>Meu Perfil</a><a href="../configuracoes/index.html"><i data-lucide="settings"></i>Configurações</a><a class="exit"
+                        href="#"><i data-lucide="log-out"></i>Sair</a></div>
+            </div>
+        </header>
+        <main>
+            <section class="page-title">
+                <h1>Suporte</h1>
+                <p>Central de ajuda e atendimento</p>
+            </section>
+            <div class="contact-cards">
+                <div class="contact">
+                    <div class="cico" style="background:#fff0e0;color:#d77a00"><i data-lucide="mail"></i></div>
+                    <div>
+                        <h3>E-mail</h3><small>suporte@edensystems.com.br</small></div>
+                </div>
+                <div class="contact">
+                    <div class="cico" style="background:#e5efdf"><i data-lucide="phone"></i></div>
+                    <div>
+                        <h3>Telefone</h3><small>(11) 4002-8922</small></div>
+                </div>
+                <div class="contact">
+                    <div class="cico" style="background:#e5f0f5;color:#4c7891"><i data-lucide="messages-square"></i></div>
+                    <div>
+                        <h3>Chat Online</h3><small>Seg–Sex, 9h–18h</small></div>
+                </div>
+            </div>
+            <div class="panel faq">
+                <h2 class="panel-title">Perguntas Frequentes</h2>
+                <div class="faq-row open">
+                    <div class="faq-q">Como registrar uma nova ocorrência?<span>⌄</span></div>
+                    <div class="faq-answer">Acesse Ocorrências e clique em “+ Ocorrência”. Preencha título, categoria e descrição e finalize o registro.</div>
+                </div>
+                <div class="faq-row">
+                    <div class="faq-q">Como acompanhar o status da minha ocorrência?<span>›</span></div>
+                    <div class="faq-answer">Na tela de Ocorrências, o status aparece ao lado de cada solicitação.</div>
+                </div>
+                <div class="faq-row">
+                    <div class="faq-q">Como atualizar meus dados de contato?<span>›</span></div>
+                    <div class="faq-answer">Acesse Configurações e altere seus dados cadastrais.</div>
+                </div>
+            </div>
+            <div class="panel support-form">
+                <h2 class="panel-title" style="margin-bottom:20px">Abrir Chamado</h2>
+                <div class="two">
+                    <div class="field"><label>Tipo</label><select><option>Dúvida</option><option>Problema técnico</option></select></div>
+                    <div class="field"><label>Assunto *</label><input class="input" placeholder="Assunto do chamado"></div>
+                </div>
+                <div class="field"><label>Mensagem *</label><textarea placeholder="Descreva detalhadamente o que precisa de ajuda..."></textarea></div>
+                <div class="form-actions"><button class="btn green">Enviar Chamado</button></div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+
+</html>

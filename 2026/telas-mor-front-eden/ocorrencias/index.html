@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Ocorrências | Éden Systems</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <img class="logo" src="../assets/logo-negativo.png" alt="Éden Systems">
+        <div class="line"></div>
+        <nav><a class="" href="../dashboard/index.html"><i data-lucide="layout-dashboard"></i>Dashboard</a><a class="active" href="../ocorrencias/index.html"><i data-lucide="badge-alert"></i>Ocorrências</a><a class="" href="../apartamentos/index.html"><i data-lucide="building-2"></i>Apartamentos</a></nav>
+        <div class="tools">
+            <div class="line"></div><b>FERRAMENTAS</b><a class="" href="../configuracoes/index.html"><i data-lucide="settings"></i>Configurações</a><a class="" href="../suporte/index.html"><i data-lucide="message-square-text"></i>Suporte</a></div>
+        <div class="logout">
+            <div class="line"></div><a href="#"><i data-lucide="log-out"></i>Log out</a></div>
+    </aside>
+    <div class="app">
+        <header class="header">
+            <div class="header-page">Ocorrências</div>
+            <div class="profile" id="profileButton">
+                <div class="avatar"><i data-lucide="user-round"></i></div>
+                <div class="profile-info"><strong>Ana da Silva</strong><small>Morador(a)</small></div><i data-lucide="chevron-down"></i>
+                <div class="profile-menu" id="profileMenu">
+                    <div class="head"><strong>Ana da Silva</strong><small>Morador(a)</small></div><a href="../perfil/index.html"><i data-lucide="user"></i>Meu Perfil</a><a href="../configuracoes/index.html"><i data-lucide="settings"></i>Configurações</a><a class="exit"
+                        href="#"><i data-lucide="log-out"></i>Sair</a></div>
+            </div>
+        </header>
+        <main>
+            <section class="page-title">
+                <h1>Suas Ocorrências</h1>
+                <p>Permite consultar, visualizar e excluir as ocorrências, além de registrar novas ocorrências.</p>
+            </section>
+            <div class="toolbar">
+                <div class="alert"><i data-lucide="triangle-alert"></i>1 ocorrência(s) em aberto</div><button class="btn" data-open="nova"><i data-lucide="plus"></i>Ocorrência</button></div>
+            <div class="tabs"><button class="tab active">Todos</button><button class="tab">Em andamento</button><button class="tab">Finalizado</button><button class="tab">Cancelada</button></div>
+            <div class="panel" style="margin-top:14px">
+                <div class="occ"><i></i>
+                    <div class="occ-body">
+                        <div class="occ-top">
+                            <div>
+                                <h3>Barulho excessivo após 22h</h3><small>OC001 · Barulho · Registrada em 2026-08-28</small></div>
+                            <div><em class="pill analysis">Em análise</em> <em class="pill high">Alta</em></div>
+                        </div>
+                        <p>Morador relata barulho constante vindo do apartamento acima após as 22h nos finais de semana.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-overlay" id="nova">
+                <div class="modal">
+                    <div class="modal-title">
+                        <h2>Nova Ocorrência</h2><i data-lucide="x" data-close style="cursor:pointer"></i></div>
+                    <div class="modal-content">
+                        <div class="field"><label>Título</label><input class="input" placeholder="Descreva o problema brevemente"></div>
+                        <div class="field"><label>Categoria</label><select><option>Selecione</option><option>Barulho</option><option>Manutenção</option><option>Área comum</option></select></div>
+                        <div class="field"><label>Descrição</label><textarea placeholder="Descreva detalhadamente a ocorrência..."></textarea></div><button class="btn green">Anexar imagem</button>
+                        <div class="modal-actions"><button class="btn outline" data-close>Cancelar</button><button class="btn green">Registrar Ocorrência</button></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+
+</html>

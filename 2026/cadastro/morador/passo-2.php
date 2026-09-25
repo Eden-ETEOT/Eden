@@ -13,8 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (empty($nomeRecebido) || empty($cpfRecebido)) {
             $erroEtapa1 = "Preencha todos os campos!";
-        } elseif (empty($_FILES["foto"]["name"])) {
-            $erroEtapa1 = "Envie uma foto!";
         } else {
             $stmt = $conexao->prepare("SELECT idUsuario FROM usuario WHERE CPF = :cpf");
             $stmt->execute(["cpf" => $cpfRecebido]);
@@ -27,15 +25,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["erro_moradorEtapa1"] = $erroEtapa1;
             $_SESSION["cadastroMorador"]["nome"] = $nomeRecebido;
             $_SESSION["cadastroMorador"]["cpf"] = $cpfRecebido;
-            header("Location: CadastroMorador1.php");
+            header("Location: passo-1.php");
             exit;
         }
 
-        // Move a foto para uma pasta permanente com nome único
-        $extensao = pathinfo($_FILES["foto"]["name"], PATHINFO_EXTENSION);
-        $nomeArquivo = uniqid("foto_") . "." . $extensao;
-        $pastaDestino = "../../uploads/usuarios/";
-        move_uploaded_file($_FILES["foto"]["tmp_name"], $pastaDestino . $nomeArquivo);
+        // Foto opcional: move para pasta permanente só se enviada
+        $nomeArquivo = null;
+        if (!empty($_FILES["foto"]["name"]) && $_FILES["foto"]["error"] === UPLOAD_ERR_OK) {
+            $extensao = pathinfo($_FILES["foto"]["name"], PATHINFO_EXTENSION);
+            $nomeArquivo = uniqid("foto_") . "." . $extensao;
+            $pastaDestino = "../../uploads/usuarios/";
+            move_uploaded_file($_FILES["foto"]["tmp_name"], $pastaDestino . $nomeArquivo);
+        }
 
         $_SESSION["cadastroMorador"]["nome"] = $nomeRecebido;
         $_SESSION["cadastroMorador"]["cpf"] = $cpfRecebido;
@@ -54,6 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $erro = "Preencha todos os campos!";
         } elseif (!filter_var($emailRecebido, FILTER_VALIDATE_EMAIL)) {
             $erro = "E-mail inválido!";
+        } elseif (strlen(preg_replace('/\D/', '', $telefoneRecebido)) < 10 || strlen(preg_replace('/\D/', '', $telefoneRecebido)) > 11) {
+            $erro = "Telefone inválido! Use DDD + número.";
         } elseif (strlen($senhaRecebida) < 6) {
             $erro = "A senha deve ter pelo menos 6 caracteres!";
         } elseif ($senhaRecebida !== $confirmarSenhaRecebida) {
@@ -91,17 +94,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $usuarioId = $conexao->lastInsertId();
 
-            // Limpa os dados temporários do cadastro
+            // Login automático com as chaves que Elements/auth.php espera.
+            // Conta criada em nível inicial, sem vínculo — o aceite do convite (se houver) vem a seguir.
+            include "../../Elements/condominio.php";
+            session_regenerate_id(true);
+            $_SESSION["id_usuario"] = (int) $usuarioId;
+            $_SESSION["nome"] = $nome;
+            $_SESSION["id_condominio"] = resolverCondominio($conexao, (int) $usuarioId);
+            $tokenPendente = trim($_SESSION["convite_token"] ?? '');
             unset($_SESSION["cadastroMorador"]);
 
-            // Login automático — conta criada em nível inicial, sem vínculo com nenhum condomínio ainda
-            session_regenerate_id(true);
-            $_SESSION["usuario_id"] = $usuarioId;
-            $_SESSION["usuario_nome"] = $nome;
-            $_SESSION["usuario_email"] = $emailRecebido;
-            $_SESSION["logado"] = true;
-
-            header("Location: ../../dashboard.php?tipo=success&msg=" . urlencode("Cadastro realizado com sucesso!"));
+            if ($tokenPendente !== '') {
+                header("Location: ../../convite/aceitar.php?token=" . urlencode($tokenPendente));
+            } else {
+                header("Location: ../../dashboard.php");
+            }
             exit;
         }
     }
@@ -116,6 +123,14 @@ if (empty($_SESSION["cadastroMorador"]["cpf"])) {
 $email = $_POST["email"] ?? ($_SESSION["cadastroMorador"]["email"] ?? "");
 $telefone = $_POST["telefone"] ?? "";
 $erro = $erro ?? "";
+$conviteInfo = null;
+try {
+    require_once "../../Elements/convites.php";
+    $conviteInfo = conviteDaSessao($conexao);
+$conviteTokenInvalido = (trim($_SESSION['convite_token'] ?? '') !== '' && $conviteInfo === null);
+} catch (Throwable $e) {
+    $conviteInfo = null;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -146,6 +161,14 @@ $erro = $erro ?? "";
       <?php if (!empty($erro)): ?>
       <p class="alerta-danger"><?php echo htmlspecialchars($erro); ?></p>
       <?php endif; ?>
+      <?php if ($conviteInfo !== null): ?>
+      <p class="alerta-info">Cadastro referente ao convite para <strong><?= htmlspecialchars($conviteInfo['condominioNome']) ?></strong>
+      — Bloco <?= htmlspecialchars($conviteInfo['bloco']) ?>, apto <?= htmlspecialchars($conviteInfo['numResid']) ?>
+      (<?= htmlspecialchars($conviteInfo['tipoMorador']) ?>).</p>
+      <?php endif; ?>
+      <?php if ($conviteTokenInvalido): ?>
+      <p class="alerta-danger">Este link de convite não é mais válido (expirou ou já foi usado). Você pode concluir o cadastro, mas será preciso pedir um novo link ao síndico para vincular seu apartamento.</p>
+      <?php endif; ?>
 
       <section class="content">
 
@@ -163,8 +186,8 @@ $erro = $erro ?? "";
         <div class="field">
           <label for="telefone">Telefone</label>
           <input
-            type="number"
-            id="telefone"
+            type="tel"
+            id="telefone" placeholder="(00) 00000-0000" maxlength="15"
             name="telefone"
             value="<?php echo htmlspecialchars($telefone); ?>"
             required
@@ -219,5 +242,6 @@ $erro = $erro ?? "";
   <aside class="panel-rigth" aria-label="Imagem ilustrativa"></aside>
 
 
+  <script src="../../js/mascaras.js"></script>
 </body>
 </html>

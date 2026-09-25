@@ -1,27 +1,44 @@
 <?php
-session_start();
-include './config/conexao.php';
+include './Elements/auth.php';
+include './Elements/ui.php';
 
-if (!isset($_SESSION['id_usuario'])) {
-    header('Location: ./auth/login.php');
-    exit;
+$msg = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cancelar') {
+    $id = (int) ($_POST['id'] ?? 0);
+    if ($id > 0) {
+        try {
+            if (!$podeGerenciar || !chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
+                throw new Exception('Sem permissão.');
+            }
+            $stmt = $conexao->prepare("UPDATE chamados SET status = 'cancelada' WHERE idChamados = :id");
+            $stmt->execute(['id' => $id]);
+            $msg = 'Ocorrência cancelada.';
+        } catch (PDOException $e) {
+            $msg = 'Não foi possível cancelar.';
+        }
+    }
 }
 
-$idUsuario = $_SESSION['id_usuario'];
+function classe_prioridade_nome($nome) {
+    if ($nome === 'Sem prioridade') return 'badge-prioridade-sem';
+    if (in_array($nome, ['Muito Baixa', 'Baixa'], true)) return 'badge-prioridade-baixa';
+    if (in_array($nome, ['Média', 'Normal', 'Considerável', 'Moderada'], true)) return 'badge-prioridade-media';
+    if (in_array($nome, ['Alta', 'Muito Alta'], true)) return 'badge-prioridade-alta';
+    return 'badge-prioridade-urgente';
+}
+function classe_status_nome($status) {
+    return [
+        'analise' => 'badge-status-analise',
+        'andamento' => 'badge-status-andamento',
+        'resolvida' => 'badge-status-finalizado',
+        'cancelada' => 'badge-status-cancelado',
+    ][$status] ?? 'badge-status-analise';
+}
 
 // Verificar se é síndico (admin)
 $stmt = $conexao->prepare("SELECT COUNT(*) FROM sindico WHERE idUsuario = :id");
 $stmt->execute(['id' => $idUsuario]);
 $isAdmin = $stmt->fetchColumn() > 0;
-
-// Dados do usuário logado
-$stmt = $conexao->prepare("SELECT nome, foto FROM usuario WHERE idUsuario = :id");
-$stmt->execute(['id' => $idUsuario]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-$user_name = $user ? $user['nome'] : 'Usuário';
-$user_type = 'Síndico';
-$user_avatar = mb_substr($user_name, 0, 1);
-$user_foto = ($user && !empty($user['foto'])) ? $user['foto'] : null;
 
 // Foto do condomínio (vinculado pelo último condomínio criado)
 // TODO futuro: substituir por FK sindico -> condominio quando o schema for atualizado
@@ -95,6 +112,7 @@ $sql = "SELECT
             u.numResid,
             u.bloco,
             u.andar,
+            us.nome as morador_nome,
             cond.nome as condominio_nome
         FROM chamados c
         JOIN prioridade p ON c.prioridade_idPrioridade = p.idPrioridade
@@ -118,63 +136,47 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Eden Systems</title>
-    <link rel="stylesheet" href="./CSS/dashboard.css">
-    <link rel="stylesheet" href="./CSS/reset.css">
-<?php include './Elements/favicon.php'; ?>
-</head>
+<?php pageHead('Dashboard - Eden Systems', ['./CSS/tabelas.css'], ['https://unpkg.com/lucide@latest']); ?>
 <body>
-    <div class="dashboard-wrapper">
-        <!-- Sidebar -->
-        <?php include './Elements/sidebar.php'; ?>
-
-        <div class="main-content">
-            <!-- Header -->
-            <?php include './Elements/header.php'; ?>
-
-            <!-- Conteúdo Principal -->
-            <div class="dashboard-content">
+    <?php layoutOpen(); ?>
                 <h1 class="page-title">Visão geral</h1>
 
                 <!-- Cards de Estatísticas -->
                 <div class="stats-container">
                     <!-- Total de Ocorrências -->
                     <div class="stat-card">
-                        <div class="stat-icon yellow">⚠️</div>
+                        <div class="stat-icon yellow"><img src="./assets/icones/alerta.svg" alt="Total"></div>
                         <div class="stat-value"><?php echo number_format($stats['total_occurrences']); ?></div>
                         <div class="stat-label">Total de Ocorrências</div>
                         <div class="stat-description">Total registrado nesse período</div>
-                        <a href="#" class="stat-link">Ver mais</a>
+                        <a href="./ocorrencias.php" class="stat-link">Ver mais</a>
                     </div>
 
                     <!-- Resolvidas -->
                     <div class="stat-card">
-                        <div class="stat-icon green">✓</div>
+                        <div class="stat-icon green"><img src="./assets/icones/sucesso.svg" alt="Resolvidas"></div>
                         <div class="stat-value"><?php echo number_format($stats['resolved']); ?></div>
                         <div class="stat-label">Resolvidas</div>
                         <div class="stat-description">Ocorrências concluídas com sucesso</div>
-                        <a href="#" class="stat-link">Ver mais</a>
+                        <a href="./ocorrencias.php?status=resolvida" class="stat-link">Ver mais</a>
                     </div>
 
                     <!-- Pendentes -->
                     <div class="stat-card">
-                        <div class="stat-icon orange">⏱️</div>
+                        <div class="stat-icon orange"><img src="./assets/icones/relogio.svg" alt="Pendentes"></div>
                         <div class="stat-value"><?php echo number_format($stats['pending']); ?></div>
                         <div class="stat-label">Pendentes</div>
                         <div class="stat-description">Ocorrências esperando análise</div>
-                        <a href="#" class="stat-link">Ver mais</a>
+                        <a href="./ocorrencias.php?status=analise" class="stat-link">Ver mais</a>
                     </div>
 
                     <!-- Em Análise -->
                     <div class="stat-card">
-                        <div class="stat-icon blue">👁️</div>
+                        <div class="stat-icon blue"><img src="./assets/icones/olho.svg" alt="Em análise"></div>
                         <div class="stat-value"><?php echo number_format($stats['analyzing']); ?></div>
                         <div class="stat-label">Em análise</div>
                         <div class="stat-description">Aguardando triagem e análise</div>
-                        <a href="#" class="stat-link">Ver mais</a>
+                        <a href="./ocorrencias.php?status=andamento" class="stat-link">Ver mais</a>
                     </div>
                 </div>
 
@@ -231,7 +233,8 @@ try {
                 <!-- Seção de Ocorrências Pendentes -->
                 <div class="pending-issues">
                     <div class="pending-header">
-                        <div>
+<?php banner($msg); ?>
+                <div>
                             <h2 class="pending-title">Ocorrências pendentes</h2>
                             <p style="font-size: 12px; color: #999; margin-top: 4px;"><?php echo count($pending_issues); ?> ocorrências encontradas</p>
                         </div>
@@ -260,9 +263,8 @@ try {
                                 <?php else: ?>
                                 <?php foreach ($pending_issues as $issue): ?>
                                 <?php
-                                $mapa_prioridade = [1 => 'low', 2 => 'medium', 3 => 'high'];
-                                $classe_prio = $mapa_prioridade[$issue['prioridade_ordem']] ?? 'low';
-                                $classe_status = $issue['status'];
+                                $classe_prio = classe_prioridade_nome($issue['prioridade_nome']);
+                                $classe_status = classe_status_nome($issue['status']);
                                 $rotulo_status = [
                                     'analise' => 'Em análise',
                                     'andamento' => 'Em andamento',
@@ -286,7 +288,10 @@ try {
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="actions-dropdown">Ações</span>
+                                        <div class="tbl-actions">
+                                            <button type="button" class="tbl-action" title="Visualizar" onclick='visualizarDash(<?= json_encode(array_merge($issue, ['pc' => $classe_prio]), JSON_HEX_APOS | JSON_HEX_QUOT) ?>)'><i data-lucide="eye"></i></button>
+                                            <?php if ($podeGerenciar): ?><button type="button" class="tbl-action danger" title="Cancelar" onclick="cancelarDash(<?= (int) $issue['idChamados'] ?>)"><i data-lucide="trash-2"></i></button><?php endif; ?>
+                                        </div>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
@@ -299,6 +304,72 @@ try {
         </div>
     </div>
 
-    <script src="./js/dashboard.js"></script>
+    <!-- Modal visualizar ocorrência -->
+    <div class="dash-modal-overlay" id="dashViewModal">
+        <div class="dash-modal">
+            <div class="dash-modal-header">
+                <h2 id="dvTitle"></h2>
+                <button type="button" class="dash-modal-close" onclick="fecharDashModal()"><i data-lucide="x"></i></button>
+            </div>
+            <div class="dash-modal-body">
+                <div class="dash-modal-row"><span>Ocorrência</span><strong id="dvId"></strong></div>
+                <div class="dash-modal-row"><span>Morador</span><strong id="dvResident"></strong></div>
+                <div class="dash-modal-row"><span>Apartamento</span><strong id="dvApt"></strong></div>
+                <div class="dash-modal-row"><span>Categoria</span><strong id="dvCategory"></strong></div>
+                <div class="dash-modal-row"><span>Prioridade</span><strong><span id="dvPriority" class="badge badge-prioridade-media"></span></strong></div>
+                <div class="dash-modal-row"><span>Status</span><strong><span id="dvStatus" class="badge badge-status-analise"></span></strong></div>
+                <div class="dash-modal-row"><span>Data</span><strong id="dvDate"></strong></div>
+                <div class="dash-modal-desc" id="dvDesc"></div>
+            </div>
+            <div class="dash-modal-footer">
+                <a href="./ocorrencias.php" style="font-size:14px;color:var(--orange1-default);font-weight:600">Abrir em Ocorrências →</a>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" id="dashCancelForm" style="display:none">
+        <input type="hidden" name="acao" value="cancelar">
+        <input type="hidden" name="id" id="dashCancelId" value="">
+    </form>
+
+    <script src="<?= assetUrl('./js/app.js') ?>"></script>
+    <script src="<?= assetUrl('./js/dashboard.js') ?>"></script>
+    <script>
+        if (window.lucide) lucide.createIcons();
+        const DV_STATUS = { analise: 'Em análise', andamento: 'Em andamento', resolvida: 'Resolvida', cancelada: 'Cancelada' };
+        function visualizarDash(o) {
+            document.getElementById('dvTitle').textContent = o.titulo;
+            document.getElementById('dvId').textContent = '#' + String(o.idChamados).padStart(3, '0');
+            document.getElementById('dvResident').textContent = o.morador_nome || '—';
+            document.getElementById('dvApt').textContent = (o.numResid || '—') + ' · Bloco ' + (o.bloco || '—');
+            document.getElementById('dvCategory').textContent = o.categoria_nome;
+            const vp = document.getElementById('dvPriority');
+            vp.textContent = o.prioridade_nome;
+            vp.className = 'badge ' + (o.pc || 'badge-prioridade-media');
+            const vs = document.getElementById('dvStatus');
+            vs.textContent = DV_STATUS[o.status] || o.status;
+            vs.className = 'badge ' + (({
+                analise: 'badge-status-analise',
+                andamento: 'badge-status-andamento',
+                resolvida: 'badge-status-finalizado',
+                cancelada: 'badge-status-cancelado'
+            })[o.status] || 'badge-status-analise');
+            document.getElementById('dvDate').textContent = new Date(o.dataPedida).toLocaleDateString('pt-BR');
+            document.getElementById('dvDesc').textContent = o.descricao;
+            document.getElementById('dashViewModal').classList.add('active');
+        }
+        function fecharDashModal() {
+            document.getElementById('dashViewModal').classList.remove('active');
+        }
+        function cancelarDash(id) {
+            document.getElementById('dashCancelId').value = id;
+            if (confirm('Deseja realmente cancelar a ocorrência #' + id + '?')) {
+                document.getElementById('dashCancelForm').submit();
+            }
+        }
+        document.getElementById('dashViewModal').addEventListener('click', function (e) {
+            if (e.target === this) fecharDashModal();
+        });
+    </script>
 </body>
 </html>

@@ -20,6 +20,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $erro = "Preencha todos os campos!";
     } elseif (!filter_var($email_condominio, FILTER_VALIDATE_EMAIL)) {
         $erro = "E-mail do condomínio inválido!";
+    } elseif (strlen(preg_replace('/\D/', '', $telefone_condominio)) < 10 || strlen(preg_replace('/\D/', '', $telefone_condominio)) > 11) {
+        $erro = "Telefone inválido! Use DDD + número.";
     }
 
     if (empty($erro)) {
@@ -165,7 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="field">
           <label for="telefone">Telefone</label>
-          <input type="text" id="telefone" name="telefone" value="<?php echo htmlspecialchars($telefone_condominio); ?>" required>
+          <input type="text" id="telefone" name="telefone" placeholder="(00) 00000-0000" maxlength="15" value="<?php echo htmlspecialchars($telefone_condominio); ?>" required>
         </div>
 
         <div class="field">
@@ -193,5 +195,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <aside class="panel-left" aria-label="Imagem ilustrativa"></aside>
 
+  <script src="../../js/mascaras.js"></script>
 </body>
 </html>

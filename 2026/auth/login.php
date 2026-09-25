@@ -18,7 +18,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($usuario && password_verify($senha, $usuario["senha"])) {
                 $_SESSION["id_usuario"] = $usuario["idUsuario"];
                 $_SESSION["nome"] = $usuario["nome"];
-                header("Location: ../dashboard.php");
+                require_once "../Elements/condominio.php";
+                $_SESSION["id_condominio"] = resolverCondominio($conexao, (int) $usuario["idUsuario"]);
+                if (!empty($_SESSION["convite_token"])) {
+                    header("Location: ../convite/aceitar.php?token=" . urlencode($_SESSION["convite_token"]));
+                } else {
+                    header("Location: ../dashboard.php");
+                }
                 
                 exit();
                 
@@ -63,6 +69,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <?php if ($msg): ?>
         <p class="msg msg-error"><?= htmlspecialchars($msg) ?></p>
+      <?php elseif (isset($_GET["cadastro"]) && $_GET["cadastro"] === "ok"): ?>
+        <p class="msg msg-success">Cadastro realizado com sucesso! Faça login para continuar.</p>
       <?php endif; ?>
 
       <section class="content">

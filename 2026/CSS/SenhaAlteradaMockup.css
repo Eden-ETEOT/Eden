@@ -30,7 +30,7 @@ body{
 .container{
   width: 100%;
   max-width: 1280px;
-  min-height: 700px;
+  min-height: min(700px, calc(100vh - 48px));
 
   background: var(--white);
 
@@ -45,7 +45,7 @@ body{
 .left-side{
   position: relative;
 
-  background-image: url('./assets/image.png');
+  background-image: url(../assets/image.png);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

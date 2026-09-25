@@ -67,6 +67,8 @@ body {
   font-weight: var(--semi-bold);
   color: var(--green1-default);
   font-family: var(--fonteTítulos);
+  text-align: center;
+  width: 500px;
 }
 
 header{
@@ -165,6 +167,15 @@ button {
   font-weight: var(--normal);
 }
 
+.link-a{
+  text-decoration: none;
+  color: var(--corNeutra1);
+  font-size: 1rem;
+  font-family: var(--fonteTítulos);
+
+  text-align: center;
+  align-items: center;
+}
 
   /* Divisor */
 .divider {
@@ -223,4 +234,11 @@ button {
   padding: 0;
   margin: 0;
   cursor: pointer;
+}
+
+.nao-recebeu {
+  font-size: 1rem;
+  font-weight: var(--bold);
+  color: var(--green1-default);
+  font-family: var(--fonteTextos);
 }

@@ -13,12 +13,16 @@ function enviarEmail(string $destinatario, string $assunto, string $corpoHtml): 
 
     try {
         $mail->isSMTP();
-        $mail->Host       = MAIL_HOST;
+        // IPv6 da VM sem saída: resolve para IPv4 literal (evita travar na rota morta).
+        // peer_name preserva a verificação do certificado TLS.
+        $mail->Host       = gethostbyname(MAIL_HOST);
+        $mail->SMTPOptions = ['ssl' => ['peer_name' => MAIL_HOST]];
         $mail->SMTPAuth   = true;
         $mail->Username   = MAIL_USERNAME;
         $mail->Password   = MAIL_PASSWORD;
         $mail->SMTPSecure = MAIL_ENCRYPTION;
         $mail->Port       = MAIL_PORT;
+        $mail->Timeout    = 10;
         $mail->CharSet    = 'UTF-8';
 
         $mail->setFrom(MAIL_FROM_ADDRESS, MAIL_FROM_NAME);

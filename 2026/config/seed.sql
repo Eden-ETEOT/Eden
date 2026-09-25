@@ -68,6 +68,7 @@ INSERT INTO documentos (nome, tipo, caminho, publico, Condominio_idCondominio) V
 -- USUARIO (10) -- admin (id 1) com senha "1234"; demais também "1234"
 -- ==============================================================
 INSERT INTO usuario (email, senha, CPF, telefone, nome, foto, ativo) VALUES
+('Sindico@eden.tcc', '$2y$12$LTbqMIsF5Y91xyxIz82UxuSlT/KznYnKS7W8vtk17QN3Rko0U/gGO', '999.888.777-66', NULL, 'Síndico', NULL, 1),
 ('gui.ferreira365@gmail.com', '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '000.000.000-00', NULL, 'adm', NULL, 1),
 ('maria.souza@teste.com',      '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '111.222.333-44', '(11) 98888-0001', 'Maria Souza', NULL, 1),
 ('joao.pereira@teste.com',     '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '222.333.444-55', '(11) 98888-0002', 'João Pereira', NULL, 1),
@@ -248,17 +249,17 @@ INSERT INTO chamadoAnexo (caminho, nomeArquivo, dataUpload, chamados_idChamados)
 -- ==============================================================
 -- CONVITE (10)
 -- ==============================================================
-INSERT INTO convite (token, Unidade_idUnidade, tipoMorador, criadoPor, dataCriacao, dataExpiracao, usado) VALUES
-('641820cf65dd705ceabcb08164e0e097', 1,  'proprietario', 2,  NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR), 0),
-('f1da07d7ee5201bcd3266494895e629b', 2,  'inquilino',    3,  NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR), 0),
-('8c76de424df986d67edbf50c3cea2e9e', 3,  'proprietario', 4,  NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR), 1),
-('c26baded1bf988dc919f569f27dd4128', 4,  'dependente',   5,  NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR), 0),
-('d0e00175268d3b3dbb7f742d7b63263e', 5,  'proprietario', 6,  NOW(), DATE_ADD(NOW(), INTERVAL 24 HOUR), 0),
-('4fa7fd9a6522212b1c132523d73459cb', 6,  'inquilino',    7,  NOW(), DATE_ADD(NOW(), INTERVAL 24 HOUR), 0),
-('26cfd48d48d2f900b289ebc3578e95f8', 7,  'proprietario', 8,  NOW(), DATE_ADD(NOW(), INTERVAL 24 HOUR), 1),
-('dedb5edb616ef0d8ddc3be6bc391f3a0', 8,  'dependente',   9,  NOW(), DATE_ADD(NOW(), INTERVAL 48 HOUR), 0),
-('5b6a0c70f5ec97256ea63938b59750e5', 9,  'proprietario', 10, NOW(), DATE_ADD(NOW(), INTERVAL 48 HOUR), 0),
-('d6345e0bc548161942245dfab340d597', 10, 'inquilino',    1,  NOW(), DATE_ADD(NOW(), INTERVAL 48 HOUR), 0);
+INSERT INTO convite (token, Unidade_idUnidade, tipoMorador, criadoPor, dataCriacao, dataExpiracao, status, dataUso) VALUES
+('641820cf65dd705ceabcb08164e0e097', 1, 'proprietario', 2, NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR), 'pendente', NULL),
+('f1da07d7ee5201bcd3266494895e629b', 2, 'inquilino', 3, NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR), 'pendente', NULL),
+('8c76de424df986d67edbf50c3cea2e9e', 3, 'proprietario', 4, NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR), 'usado', NULL),
+('c26baded1bf988dc919f569f27dd4128', 4, 'dependente', 5, NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR), 'pendente', NULL),
+('d0e00175268d3b3dbb7f742d7b63263e', 5, 'proprietario', 6, NOW(), DATE_ADD(NOW(), INTERVAL 24 HOUR), 'pendente', NULL),
+('4fa7fd9a6522212b1c132523d73459cb', 6, 'inquilino', 7, NOW(), DATE_ADD(NOW(), INTERVAL 24 HOUR), 'pendente', NULL),
+('26cfd48d48d2f900b289ebc3578e95f8', 7, 'proprietario', 8, NOW(), DATE_ADD(NOW(), INTERVAL 24 HOUR), 'usado', NULL),
+('dedb5edb616ef0d8ddc3be6bc391f3a0', 8, 'dependente', 9, NOW(), DATE_ADD(NOW(), INTERVAL 48 HOUR), 'pendente', NULL),
+('5b6a0c70f5ec97256ea63938b59750e5', 9, 'proprietario', 10, NOW(), DATE_ADD(NOW(), INTERVAL 48 HOUR), 'pendente', NULL),
+('d6345e0bc548161942245dfab340d597', 10, 'inquilino', 1, NOW(), DATE_ADD(NOW(), INTERVAL 48 HOUR), 'pendente', NULL);
 
 -- ==============================================================
 -- RESETSENHA (10)

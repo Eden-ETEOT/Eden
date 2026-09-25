@@ -1,5 +1,9 @@
 @charset "utf-8";
 @import url("../../CSS/variaveis.css");
+
+html {
+  scroll-behavior: smooth;
+}
 /* =========================================================
 PALETA DE CORES
 ============================================================*/

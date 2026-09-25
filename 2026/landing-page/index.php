@@ -29,10 +29,10 @@ require_once "../config/conexao.php";
             </figure>
 
             <nav class="menu-principal">
-                <a href="#" class="ativo">Home</a>
-                <a href="#">Planos</a>
-                <a href="#">Serviços</a>
-                <a href="#">Suporte</a>
+                <a href="#inicio" class="ativo">Home</a>
+                <a href="#planos">Planos</a>
+                <a href="#diferenciais">Serviços</a>
+                <a href="#faq">Suporte</a>
             </nav>
 
             <a href="../auth/login.php"><button class="botao-primario">Entrar</button></a>
@@ -41,7 +41,7 @@ require_once "../config/conexao.php";
         <!-- Início seção HERO -->
 
 
-        <section class="secao-hero">
+        <section class="secao-hero" id="inicio">
             <div class="conteudo-hero">
 
                 <h1 class="titulo-hero">Transforme sua gestão <br>
@@ -51,9 +51,9 @@ require_once "../config/conexao.php";
                     Temos a solução perfeita para gerenciamento condominial, pensado visando máxima eficiência
                 </p>
 
-                <button class="botao-secundario">
+                <a href="#planos"><button class="botao-secundario">
                     Assine já!
-                </button>
+                </button></a>
             </div>
 
             <div class="modelos-dispositivos">
@@ -67,7 +67,7 @@ require_once "../config/conexao.php";
 
         <!-- Inicio seção sobre -->
 
-        <section class="secao-sobre">
+        <section class="secao-sobre" id="sobre">
 
 
             <div class="container-sobre">
@@ -83,9 +83,9 @@ require_once "../config/conexao.php";
                         único sistema com histórico completo e comunicação em tempo real.
                     </p>
 
-                    <button class="botao-primario-sc-sobre">
+                    <a href="#diferenciais"><button class="botao-primario-sc-sobre">
                         Saiba mais
-                    </button>
+                    </button></a>
                 </div>
 
                 <div class="imagem-sobre">
@@ -101,7 +101,7 @@ require_once "../config/conexao.php";
 
         <!-- Início seção diferenciais -->
 
-        <section class="secao-recursos">
+        <section class="secao-recursos" id="diferenciais">
 
             <div class="cabecalho-recursos">
                 <h1 class="titulo-recursos">Nossos diferenciais</h1>
@@ -186,7 +186,7 @@ require_once "../config/conexao.php";
 
         <!-- Início seção planos -->
 
-        <section class="secao-precos">
+        <section class="secao-precos" id="planos">
             <div class="cabecalho-secao-precos">
                 <h1 class="titulo-principal-precos">Escolha o plano ideal <br> para o seu condomínio</h1>
                 <br><!-- remover -->
@@ -349,7 +349,7 @@ require_once "../config/conexao.php";
 
         <!-- Início seção faq -->
 
-        <section class="container-faq">
+        <section class="container-faq" id="faq">
             <div class="cabecalho-faq">
                 <h1 class="titulo-faq">FAQ - Perguntas frequentes</h1>
                 <hr class="linha-faq">
@@ -459,21 +459,21 @@ require_once "../config/conexao.php";
                 <div class="coluna-rodape coluna-links">
                     <h4 class="titulo-rodape">Links rápidos</h4>
                     <ul class="links-rodape">
-                        <li><a href="#">Início</a></li>
-                        <li><a href="#">Sobre nós</a></li>
-                        <li><a href="#">Funcionalidades</a></li>
-                        <li><a href="#">Planos</a></li>
-                        <li><a href="#">Contato</a></li>
+                        <li><a href="#inicio">Início</a></li>
+                        <li><a href="#sobre">Sobre nós</a></li>
+                        <li><a href="#diferenciais">Funcionalidades</a></li>
+                        <li><a href="#planos">Planos</a></li>
+                        <li><a href="#faq">Contato</a></li>
                     </ul>
                 </div>
 
                 <div class="coluna-rodape coluna-links">
                     <h4 class="titulo-rodape">Recursos</h4>
                     <ul class="links-rodape">
-                        <li><a href="#">Abrir chamado</a></li>
-                        <li><a href="#">Painel do síndico</a></li>
-                        <li><a href="#">Área do morador</a></li>
-                        <li><a href="#">Suporte</a></li>
+                        <li><a href="../auth/login.php">Abrir chamado</a></li>
+                        <li><a href="../dashboard.php">Painel do síndico</a></li>
+                        <li><a href="../dashboard.php">Área do morador</a></li>
+                        <li><a href="#faq">Suporte</a></li>
                     </ul>
                 </div>
 

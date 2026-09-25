@@ -9,21 +9,26 @@
   padding: 0; 
 }
 
+html,
 body {
-  height: 100vh;
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  align-items: stretch;
 }
 
 
 .panel-left {
-  background: var(--gray300);
   background-image: url(../assets/imageLogin.png);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  width: 50vw;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
 }
 
 .panel-left-image {
@@ -38,14 +43,21 @@ body {
   align-items: center;
   justify-content: center;
   background: var(--corNeutra1);
+  min-height: 100vh;
+  height: auto;
+  padding: 24px 16px;
 }
 
 .form {
+  padding-top: 24px;
+  padding-bottom: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 404px;
-  gap: var(--spacing600);
+  width: min(680px, 100%);
+  max-height: 100vh;
+  gap: var(--spacing400);
+  zoom: 0.9;
 }
 
   header{
@@ -71,14 +83,14 @@ body {
 }
 
 .title {
-  font-size: 36px;
+  font-size: 30px;
   font-weight: var(--semi-bold);
   color: var(--green3-800);
   font-family: var(--fonteTítulos);
 }
 
 .subtitle {
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   font-weight: var(--medium);
   font-family: var(--fonteTítulos);
   color: var(--green3-800);
@@ -87,7 +99,8 @@ body {
   /* Campos */
 .content{
   display: flex;
-  gap: var(--spacing700);
+  gap: var(--spacing400);
+  max-width: 100%;
 }
 
 
@@ -120,8 +133,9 @@ button {
 .card-1{
     display: flex;
     flex-direction: column;
-    width:308px;
-    height:448px;
+    width:min(308px, 100%);
+    height:min(448px, calc(100vh - 280px));
+    min-height:300px;
     border-radius: 15px;
     border: solid 1px #EAEAEA;
     gap: var(--spacing400);

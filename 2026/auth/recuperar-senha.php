@@ -18,8 +18,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute(["email" => $email]);
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $msg = 'Se este e-mail estiver cadastrado, um código de verificação foi enviado.';
-            $tipoMsg = 'success';
+            if (!$usuario) {
+                $msg = 'Este e-mail não está cadastrado no sistema.';
+                $tipoMsg = 'error';
+            } else {
+                $msg = 'Se este e-mail estiver cadastrado, um código de verificação foi enviado.';
+                $tipoMsg = 'success';
+            }
 
             if ($usuario) {
                 $codigo = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
@@ -42,11 +47,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <p>Esse código expira em 15 minutos. Se você não solicitou isso, ignore este e-mail.</p>
                 ";
 
+                $_SESSION['reset_email'] = $email;
+                $_SESSION['reset_id_usuario'] = $usuario['idUsuario'];
+                session_write_close(); // libera a trava: outros cliques não enfileiram atrás do SMTP
                 $resultado = enviarEmail($email, 'Código para redefinir sua senha', $corpo);
 
                 if ($resultado['ok']) {
-                    $_SESSION['reset_email'] = $email;
-                    $_SESSION['reset_id_usuario'] = $usuario['idUsuario'];
                     header("Location: verificar-email.php");
                     exit();
                 } else {
@@ -94,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </header>
 
       <?php if ($msg): ?>
-        <p class="msg msg-<? echo $tipoMsg ?>"><? echo $msg ?></p>
+        <p class="msg msg-<?= $tipoMsg ?>"><?= htmlspecialchars($msg) ?></p>
       <?php endif; ?>
 
       <section class="content">

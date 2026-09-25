@@ -45,6 +45,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($cnpj) || empty($nome_condominio) || empty($cep)) {
         $erro = "Preencha todos os campos!";
+    } elseif (strlen(preg_replace('/\D/', '', $cep)) !== 8) {
+        $erro = "CEP inválido! Use 8 dígitos.";
     } else {
         // Verifica se o CNPJ já está cadastrado
         $stmt = $conexao->prepare("SELECT idCondominio FROM condominio WHERE CNPJ = :cnpj");
@@ -99,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="field">
           <label for="cnpj">CNPJ</label>
-          <input type="text" id="cnpj" name="cnpj" value="<?php echo htmlspecialchars($cnpj); ?>" required>
+          <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" value="<?php echo htmlspecialchars($cnpj); ?>" inputmode="numeric" maxlength="18" autocomplete="off" required>
         </div>
 
         <div class="field">
@@ -109,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="field">
           <label for="CEP">CEP</label>
-          <input type="text" id="CEP" name="CEP" value="<?php echo htmlspecialchars($cep); ?>" required>
+          <input type="text" id="CEP" name="CEP" placeholder="00000-000" maxlength="9" value="<?php echo htmlspecialchars($cep); ?>" required>
         </div>
 
         <div class="field">
@@ -137,5 +139,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <aside class="panel-left" aria-label="Imagem ilustrativa"></aside>
 
+  <script src="../../js/mascaras.js"></script>
 </body>
 </html>

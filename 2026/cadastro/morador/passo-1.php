@@ -6,6 +6,15 @@ $cpf = $_SESSION["cadastroMorador"]["cpf"] ?? "";
 
 $erro = $_SESSION["erro_moradorEtapa1"] ?? "";
 unset($_SESSION["erro_moradorEtapa1"]);
+$conviteInfo = null;
+try {
+    include "../../config/conexao.php";
+    require_once "../../Elements/convites.php";
+    $conviteInfo = conviteDaSessao($conexao);
+$conviteTokenInvalido = (trim($_SESSION['convite_token'] ?? '') !== '' && $conviteInfo === null);
+} catch (Throwable $e) {
+    $conviteInfo = null;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -36,6 +45,14 @@ unset($_SESSION["erro_moradorEtapa1"]);
       <?php if (!empty($erro)): ?>
       <p class="alerta-danger"><?php echo htmlspecialchars($erro); ?></p>
       <?php endif; ?>
+      <?php if ($conviteInfo !== null): ?>
+      <p class="alerta-info">Você foi convidado(a) para <strong><?= htmlspecialchars($conviteInfo['condominioNome']) ?></strong>
+      — Bloco <?= htmlspecialchars($conviteInfo['bloco']) ?>, apto <?= htmlspecialchars($conviteInfo['numResid']) ?>
+      (<?= htmlspecialchars($conviteInfo['tipoMorador']) ?>). Complete seu cadastro para aceitar.</p>
+      <?php endif; ?>
+      <?php if ($conviteTokenInvalido): ?>
+      <p class="alerta-danger">Este link de convite não é mais válido (expirou ou já foi usado). Você pode concluir o cadastro, mas será preciso pedir um novo link ao síndico para vincular seu apartamento.</p>
+      <?php endif; ?>
 
       <section class="content">
 
@@ -52,11 +69,14 @@ unset($_SESSION["erro_moradorEtapa1"]);
         <div class="field foto">
           <label for="cpf">CPF</label>
           <input
-            type="number"
+            type="text"
             id="cpf"
             name="cpf"
-            placeholder="000.000.000.00"
+            placeholder="000.000.000-00"
             value="<?php echo htmlspecialchars($cpf); ?>"
+            inputmode="numeric"
+            maxlength="14"
+            autocomplete="off"
             required
           >
         </div>
@@ -92,5 +112,6 @@ unset($_SESSION["erro_moradorEtapa1"]);
 
   <aside class="panel-rigth" aria-label="Imagem ilustrativa"></aside>
 
+  <script src="../../js/mascaras.js"></script>
 </body>
 </html>

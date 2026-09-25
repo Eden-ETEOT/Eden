@@ -184,7 +184,7 @@
   align-items: center;
 }
 
-.input-field-default-sm{
+.input-field-default-m{
   width: 100%;
   padding: var(--spacing200) var(--spacing300);
   border: 1px solid var(--gray200);
@@ -192,5 +192,190 @@
   font-size: 1rem;
   outline: none;
   border-radius: 8px;
-  height: 2rem;
+  height: 2.5rem;
+}
+
+.input-field-default-l{
+  width: 100%;
+  padding: var(--spacing200) var(--spacing300);
+  border: 1px solid var(--gray200);
+  color: var(--corNeutra2);
+  font-size: 1rem;
+  outline: none;
+  border-radius: 8px;
+  height: 3rem;
+}
+
+.badge-status-finalizado{
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding: var(--spacing300) var(--spacing400);
+  background-color: var(--green3-50);
+  color: var(--green3-default);
+  font-size: 1rem;
+  font-weight: var(--normal);
+  border-radius: 20px;
+  outline: none;
+}
+
+.badge-status-analise{
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding: var(--spacing300) var(--spacing400);
+  background-color: var(--blue-50);
+  color: var(--blue-default);
+  font-size: 1rem;
+  font-weight: var(--normal);
+  border-radius: 20px;
+  outline: none;
+}
+
+.badge-status-andamento{
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding: var(--spacing300) var(--spacing400);
+  background-color: var(--yellow-50);
+  color: var(--yellow-default);
+  font-size: 1rem;
+  font-weight: var(--normal);
+  border-radius: 20px;
+  outline: none;
+}
+
+.badge-status-cancelado{
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding: var(--spacing300) var(--spacing400);
+  background-color: var(--red-50);
+  color: var(--red-default);
+  font-size: 1rem;
+  font-weight: var(--normal);
+  border-radius: 20px;
+  outline: none;
+}
+
+.badge-prioridade-baixa{
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding: var(--spacing300) var(--spacing400);
+  background-color: var(--green3-50);
+  color: var(--green3-400);
+  font-size: 1rem;
+  font-weight: var(--normal);
+  border-radius: 20px;
+  outline: none;
+}
+
+.badge-prioridade-sem{
+  width: auto;
+  display: inline;
+  white-space: nowrap;
+  padding: 0;
+  background-color: transparent;
+  color: var(--corNeutra2);
+  font-size: 1rem;
+  font-weight: var(--normal);
+  border-radius: 0;
+  outline: none;
+}
+
+.badge-prioridade-media{
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding: var(--spacing300) var(--spacing400);
+  background-color: var(--yellow-50);
+  color: var(--yellow-400);
+  font-size: 1rem;
+  font-weight: var(--normal);
+  border-radius: 20px;
+  outline: none;
+}
+
+.badge-prioridade-alta{
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding: var(--spacing300) var(--spacing400);
+  background-color: var(--orange1-50);
+  color: var(--orange1-default);
+  font-size: 1rem;
+  font-weight: var(--normal);
+  border-radius: 20px;
+  outline: none;
+}
+
+.badge-prioridade-urgente{
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding: var(--spacing300) var(--spacing400);
+  background-color: var(--red-50);
+  color: var(--red-400);
+  font-size: 1rem;
+  font-weight: var(--normal);
+  border-radius: 20px;
+  outline: none;
+}
+
+.select-medium-iconR{
+  width: 100%;
+  line-height: 2.5rem;
+  background: none;
+  border: none;
+  color: var(--corNeutra2);
+  font-size: 1rem;
+  outline: 1px solid var(--gray200);
+  border-radius: 8px;
+  height: 2.5rem;
+  padding: var(--spacing200);
+}
+
+/* ===== Compat: classes antigas ainda usadas em telas não migradas ===== */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.badge.ativo {
+    background-color: var(--green3-50);
+    color: var(--green3-default);
+}
+.badge.inativo {
+    background-color: var(--red-50);
+    color: var(--red-default);
+}
+.input-field-default-sm {
+    width: 100%;
+    padding: var(--spacing200) var(--spacing300);
+    border: 1px solid var(--gray200);
+    color: var(--corNeutra2);
+    font-size: 1rem;
+    outline: none;
+    border-radius: 8px;
+    height: 2rem;
 }

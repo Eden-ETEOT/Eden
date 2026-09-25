@@ -272,6 +272,9 @@ try {
                     <label>Apartamento</label>
                     <select name="unidade" required>
                         <option value="">Selecione</option>
+                        <?php if (empty($unidades)): ?>
+                        <option value="" disabled>Nenhum apartamento no seu condomínio</option>
+                        <?php endif; ?>
                         <?php foreach ($unidades as $u): ?>
                         <option value="<?= (int) $u['idUnidade'] ?>">Bloco <?= htmlspecialchars($u['bloco']) ?> — <?= htmlspecialchars($u['numResid']) ?></option>
                         <?php endforeach; ?>

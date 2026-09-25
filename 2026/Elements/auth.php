@@ -12,6 +12,10 @@ if (!isset($_SESSION['id_usuario'])) {
 
 $idUsuario = $_SESSION['id_usuario'];
 require_once __DIR__ . '/condominio.php';
+// Sessões criadas antes do isolamento não têm id_condominio: resolve e grava (1 query).
+if (condominioDaSessao() === null) {
+    $_SESSION['id_condominio'] = resolverCondominio($conexao, (int) $idUsuario);
+}
 $idCondominio = condominioDaSessao();
 $filtroCondominio = condominioFiltro(); // -1 sem vínculo: não casa com nada
 

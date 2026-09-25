@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Falha no pagamento</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="split">
+        <main class="left"><a class="back" href="javascript:history.back()">Voltar</a>
+            <div class="panel">
+                <div class="logo">SUA LOGO<br>ÉDEN SYSTEMS</div>
+                <h1>Pagamento por cartão</h1>
+                <p class="lead">Insira os dados abaixo para realizar<br>o pagamento.</p>
+                <div class="field"><label>Titular do cartão</label><input placeholder="Nome impresso no cartão"></div>
+                <div class="field"><label>Número do cartão</label><input placeholder="0000 0000 0000 0000"></div>
+                <div class="field"><label>Modo de pagamento</label><select>
+                        <option>Forma de pagamento com o cartão</option>
+                        <option>Crédito</option>
+                        <option>Débito</option>
+                    </select></div>
+                <div class="field"><label>Data de validade</label><input placeholder="MM/AA"></div>
+                <div class="field"><label>Código de segurança</label><input placeholder="CVV"></div><a class="btn"
+                    style="margin-top:18px" href="pagamento-sucesso.html">Continuar</a>
+            </div>
+        </main>
+        <aside class="image-side">
+            <div class="placeholder"><b>▧</b>
+                <p>INSIRA AQUI A IMAGEM OFICIAL</p>
+            </div>
+        </aside>
+    </div>
+    <div class="overlay">
+        <div class="modal">
+            <h1>Falha no pagamento</h1>
+            <div class="status warning">⚠</div>
+            <p>Não foi possível concluir o pagamento do plano.<br>Verifique os dados inseridos ou tente<br>novamente
+                mais tarde.</p><a class="btn" style="background:#ffbd00" href="pagamento-cartao.html">Tente
+                novamente</a>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

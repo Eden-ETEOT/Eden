@@ -18,8 +18,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute(["email" => $email]);
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $msg = 'Se este e-mail estiver cadastrado, um código de verificação foi enviado.';
-            $tipoMsg = 'success';
+            if (!$usuario) {
+                $msg = 'Este e-mail não está cadastrado no sistema.';
+                $tipoMsg = 'error';
+            } else {
+                $msg = 'Se este e-mail estiver cadastrado, um código de verificação foi enviado.';
+                $tipoMsg = 'success';
+            }
 
             if ($usuario) {
                 $codigo = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);

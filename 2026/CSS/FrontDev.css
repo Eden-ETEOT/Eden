@@ -1,3 +1,6 @@
+@import url('variaveis.css');
+
+
 /* FrontDev.css — conteudo das telas-front-dev (sem sidebar/header do mockup).
    Cada pagina usa seu escopo (.fd-*) junto ao layout do dashboard. */
 
@@ -116,7 +119,7 @@
 
     border-radius: 10px;
 
-    background: #f7faf8;
+    background: none;
 
     display: flex;
     align-items: center;
@@ -292,45 +295,18 @@
 .fd-apartamentos .modal-form {
     padding: 28px 28px 35px;
 }
-.fd-apartamentos .form-group {
-    margin-bottom: 20px;
-}
+
 .fd-apartamentos .form-group label {
     display: block;
 
     color: #294633;
 
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
 
     margin-bottom: 8px;
 }
-.fd-apartamentos .form-group input, .fd-apartamentos .form-group select {
-    width: 100%;
-    height: 42px;
 
-    border: 1px solid #52705d;
-
-    border-radius: 11px;
-
-    background: white;
-
-    outline: none;
-
-    padding: 0 11px;
-
-    color: #294633;
-
-    font-size: 13px;
-}
-.fd-apartamentos .form-group:first-child input {
-    background: #f8f6f3;
-
-    border: 1px solid #52705d;
-}
-.fd-apartamentos .form-group input::placeholder {
-    color: #8d9992;
-}
 .fd-apartamentos .form-row {
     display: grid;
 
@@ -1219,22 +1195,7 @@
 
     font-size: 11px;
 }
-.fd-permissoes .role-sindico {
-    color: #7d2ed8;
-    background: #f0e2ff;
-}
-.fd-permissoes .role-administrador {
-    color: #d35a18;
-    background: #fff0df;
-}
-.fd-permissoes .role-porteiro {
-    color: #148647;
-    background: #dcf8e6;
-}
-.fd-permissoes .role-manutencao {
-    color: #52606a;
-    background: #eef0f2;
-}
+
 .fd-permissoes .status {
     display: inline-flex;
 
@@ -2023,7 +1984,7 @@
 
     border-radius: 10px;
 
-    background: #f7faf8;
+    background: none;
 
     display: flex;
     align-items: center;
@@ -2529,10 +2490,10 @@
     width: 265px;
     height: 41px;
 
-    border: 1px solid #ced8d2;
+    border: 1px solid var(--gray200);
     border-radius: 10px;
 
-    background: #f8fbf9;
+    background: none;
 
     display: flex;
     align-items: center;
@@ -2603,34 +2564,7 @@
 
     border-radius: 25px;
 }
-.fd-ocorrencias .priority.low {
-    background: #eff6e9;
-    color: #79ad50;
-}
-.fd-ocorrencias .priority.medium {
-    background: #fff8df;
-    color: #f1bb23;
-}
-.fd-ocorrencias .priority.high {
-    background: #fff1e2;
-    color: #f28a0b;
-}
-.fd-ocorrencias .priority.urgent {
-    background: #fdeceb;
-    color: #e25950;
-}
-.fd-ocorrencias .status-finalizado {
-    color: #5b9f31;
-}
-.fd-ocorrencias .status-andamento {
-    color: #f0a000;
-}
-.fd-ocorrencias .status-analise {
-    color: #4a9bc8;
-}
-.fd-ocorrencias .status-cancelado {
-    color: #df4b43;
-}
+
 .fd-ocorrencias .pagination {
     display: flex;
     justify-content: flex-end;
@@ -2736,26 +2670,7 @@
     color: #294633;
     font-weight: 600;
 }
-.fd-ocorrencias .form-group input, .fd-ocorrencias .form-group select, .fd-ocorrencias .form-group textarea {
-    width: 100%;
 
-    outline: none;
-
-    font-size: 13px;
-
-    color: #294633;
-}
-.fd-ocorrencias .form-group input[type="text"] {
-    height: 42px;
-
-    border: 1px solid #52705d;
-
-    border-radius: 10px;
-
-    background: #f8f6f3;
-
-    padding: 0 12px;
-}
 .fd-ocorrencias .soft-input {
     height: 42px;
 
@@ -2772,31 +2687,8 @@
     grid-template-columns: 1fr 1fr;
     gap: 40px;
 }
-.fd-ocorrencias .form-group select {
-    height: 36px;
 
-    border: 1px solid #294633;
 
-    border-radius: 7px;
-
-    background: white;
-
-    padding: 0 8px;
-}
-.fd-ocorrencias .form-group textarea {
-    height: 82px;
-
-    resize: none;
-
-    border: 1px solid #52705d;
-
-    border-radius: 13px;
-
-    padding: 13px;
-}
-.fd-ocorrencias .form-group input::placeholder, .fd-ocorrencias .form-group textarea::placeholder {
-    color: #9ca59f;
-}
 .fd-ocorrencias .image-area {
     display: flex;
     align-items: center;
@@ -3121,7 +3013,7 @@
     border: 1px solid #ced8d2;
     border-radius: 10px;
 
-    background: #f8fbf9;
+    background: none;
 
     display: flex;
     align-items: center;
@@ -3277,41 +3169,20 @@
 .fd-documentacao .document-form {
     padding: 27px 28px 35px;
 }
-.fd-documentacao .form-group {
-    margin-bottom: 27px;
-}
+
 .fd-documentacao .form-group label {
     display: block;
 
     color: #294633;
 
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
 
     margin-bottom: 8px;
 }
-.fd-documentacao .form-group input[type="text"],
-.fd-documentacao .form-group input[type="email"],
-.fd-documentacao .form-group select {
-    width: 100%;
-    height: 42px;
 
-    border: 1px solid #52705d;
-
-    border-radius: 10px;
-
-    background: #f8f6f3;
-
-    outline: none;
-
-    padding: 0 12px;
-
-    color: #294633;
-
-    font-size: 13px;
-}
-.fd-documentacao .form-group input::placeholder {
-    color: #9ca59f;
+.fd-documentacao .form-group{
+    margin-bottom: 20px;
 }
 .fd-documentacao .form-row {
     display: grid;

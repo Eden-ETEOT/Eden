@@ -125,7 +125,7 @@ $telefone = $_POST["telefone"] ?? "";
 $erro = $erro ?? "";
 $conviteInfo = null;
 try {
-    include "../../Elements/convites.php";
+    require_once "../../Elements/convites.php";
     $conviteInfo = conviteDaSessao($conexao);
 $conviteTokenInvalido = (trim($_SESSION['convite_token'] ?? '') !== '' && $conviteInfo === null);
 } catch (Throwable $e) {

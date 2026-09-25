@@ -1,7 +1,7 @@
 <?php
 include './Elements/auth.php';
 include './Elements/ui.php';
-include './Elements/convites.php';
+require_once './Elements/convites.php';
 
 // Desativar morador (soft delete via usuario.ativo) / Cadastrar morador via modal
 $msg = '';

@@ -9,7 +9,7 @@ unset($_SESSION["erro_moradorEtapa1"]);
 $conviteInfo = null;
 try {
     include "../../config/conexao.php";
-    include "../../Elements/convites.php";
+    require_once "../../Elements/convites.php";
     $conviteInfo = conviteDaSessao($conexao);
 $conviteTokenInvalido = (trim($_SESSION['convite_token'] ?? '') !== '' && $conviteInfo === null);
 } catch (Throwable $e) {

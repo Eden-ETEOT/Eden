@@ -80,8 +80,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($id <= 0 || !in_array($status, ['analise', 'andamento', 'resolvida', 'cancelada'], true)) {
                 throw new Exception('Dados inválidos.');
             }
-            if (!$podeGerenciar || !chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
-                throw new Exception('Sem permissão para esta ocorrência.');
+            if (!$podeGerenciar) {
+                throw new Exception('Seu perfil não tem permissão para alterar status.');
+            }
+            if (!chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
+                throw new Exception('Esta ocorrência não pertence ao seu condomínio ou não possui vínculo ativo.');
             }
             if ($status !== 'analise') {
                 $prioridadeAtual = $conexao->prepare(
@@ -102,8 +105,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($acao === 'cancelar') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id <= 0) throw new Exception('Ocorrência inválida.');
-            if (!$podeGerenciar || !chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
-                throw new Exception('Sem permissão para esta ocorrência.');
+            if (!$podeGerenciar) {
+                throw new Exception('Seu perfil não tem permissão para cancelar ocorrências.');
+            }
+            if (!chamadoDoCondominio($conexao, $id, $filtroCondominio)) {
+                throw new Exception('Esta ocorrência não pertence ao seu condomínio ou não possui vínculo ativo.');
             }
             $stmt = $conexao->prepare("UPDATE chamados SET status = 'cancelada' WHERE idChamados = :id");
             $stmt->execute(['id' => $id]);

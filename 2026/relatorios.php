@@ -19,19 +19,19 @@ for ($i = 5; $i >= 0; $i--) {
         'short' => $meses_short[(int) date('n', $ts)],
         'total' => 0,
         'resolvidas' => 0,
+        'tempo_medio' => null,
     ];
 }
 
 try {
     $stmt = $conexao->prepare(
         "SELECT DATE_FORMAT(c.dataPedida, '%Y-%m') AS ym, COUNT(*) AS total,
-                SUM(c.status = 'resolvida') AS resolvidas
+            SUM(c.status = 'resolvida') AS resolvidas,
+            AVG(IF(c.status = 'resolvida' AND c.dataRealizada IS NOT NULL,
+                   TIMESTAMPDIFF(DAY, c.dataPedida, c.dataRealizada), NULL)) AS tempo_medio
          FROM chamados c
-         JOIN morador m0 ON m0.idMorador = c.morador_idMorador
-         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
-         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
          WHERE c.dataPedida >= DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL 5 MONTH)
-           AND u0.Condominio_idCondominio = :cond
+           AND c.Condominio_idCondominio = :cond
          GROUP BY ym"
     );
     $stmt->execute(['cond' => $filtroCondominio]);
@@ -39,6 +39,9 @@ try {
         if (isset($meses[$row['ym']])) {
             $meses[$row['ym']]['total'] = (int) $row['total'];
             $meses[$row['ym']]['resolvidas'] = (int) $row['resolvidas'];
+            $meses[$row['ym']]['tempo_medio'] = $row['tempo_medio'] !== null
+                ? round((float) $row['tempo_medio'], 1)
+                : null;
         }
     }
 } catch (PDOException $e) {
@@ -48,25 +51,7 @@ try {
 $ym_atual = array_key_last($meses);
 $m = $meses[$ym_atual];
 $taxa = $m['total'] > 0 ? round(($m['resolvidas'] / $m['total']) * 100) : 0;
-
-// Tempo médio de resposta (dias) no mês atual
-$tempo_medio = null;
-try {
-    $stmt = $conexao->prepare(
-        "SELECT AVG(TIMESTAMPDIFF(DAY, c.dataPedida, c.dataRealizada))
-         FROM chamados c
-         JOIN morador m0 ON m0.idMorador = c.morador_idMorador
-         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
-         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
-         WHERE c.status = 'resolvida' AND c.dataRealizada IS NOT NULL
-           AND DATE_FORMAT(c.dataPedida, '%Y-%m') = :ym
-           AND u0.Condominio_idCondominio = :cond"
-    );
-    $stmt->execute(['ym' => $ym_atual, 'cond' => $filtroCondominio]);
-    $tempo_medio = $stmt->fetchColumn();
-} catch (PDOException $e) {
-    $tempo_medio = null;
-}
+$tempo_medio = $m['tempo_medio'];
 
 // Moradores ativos
 $moradores_ativos = 0;
@@ -94,10 +79,7 @@ try {
          FROM chamados c
          JOIN categoria cat ON cat.idCategoria = c.categoria_idCategoria
          JOIN prioridade p ON p.idPrioridade = c.prioridade_idPrioridade
-         JOIN morador m0 ON m0.idMorador = c.morador_idMorador
-         JOIN moradorunidade mu0 ON mu0.Morador_idMorador = m0.idMorador AND mu0.dataFim IS NULL
-         JOIN unidade u0 ON u0.idUnidade = mu0.Unidade_idUnidade
-         WHERE u0.Condominio_idCondominio = :cond
+         WHERE c.Condominio_idCondominio = :cond
          ORDER BY c.idChamados DESC"
     );
     $stmt->execute(['cond' => $filtroCondominio]);
@@ -135,33 +117,11 @@ try {
                         <h1>Relatórios</h1>
                         <p>Análise e exportação de dados condominiais</p>
                     </section>
-
-                    <section class="card generator-card">
-                        <h2>Gerar Relatório</h2>
-                        <div class="generator-fields">
-                            <div class="field">
-                                <label>Tipo</label>
-                                <select id="reportType">
-                                    <option value="ocorrencias">Ocorrências por Período</option>
-                                    <option value="moradores">Relatório de Moradores</option>
-                                    <option value="infraestrutura">Relatório de Infraestrutura</option>
-                                    <option value="financeiro">Relatório Financeiro</option>
-                                </select>
-                            </div>
-                            <div class="field">
-                                <label>Período</label>
-                                <select id="reportPeriod">
-                                    <?php foreach (array_reverse($meses, true) as $ym => $info): ?>
-                                    <option value="<?= $ym ?>"><?= htmlspecialchars($info['rotulo']) ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <button class="generate-btn" type="button" onclick="fdGerarRelatorio()">
-                                <i data-lucide="chart-no-axes-column"></i>
-                                Gerar
-                            </button>
-                        </div>
-                    </section>
+                    <?php if (!$idCondominio): ?>
+                    <p style="width:100%;padding:12px;border:1px solid #e7c77b;background:#fff8e6;color:#684d12;margin:0 0 16px">
+                        Sua conta não está associada a um condomínio. Os gráficos e indicadores aparecerão após <a href="./configurar-condominio.php">configurar o condomínio</a>.
+                    </p>
+                    <?php endif; ?>
 
                     <section class="card chart-card">
                         <div class="chart-header">

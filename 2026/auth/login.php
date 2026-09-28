@@ -3,6 +3,7 @@ session_start();
 require_once "../config/conexao.php";
 
 $msg = '';
+$convitePendente = !empty($_SESSION['convite_token']);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST["usuario"]);
@@ -71,6 +72,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <p class="msg msg-error"><?= htmlspecialchars($msg) ?></p>
       <?php elseif (isset($_GET["cadastro"]) && $_GET["cadastro"] === "ok"): ?>
         <p class="msg msg-success">Cadastro realizado com sucesso! Faça login para continuar.</p>
+      <?php elseif ($convitePendente): ?>
+        <p class="msg msg-success">Convite recebido. Entre na sua conta ou crie uma conta de morador para continuar.</p>
       <?php endif; ?>
 
       <section class="content">
@@ -125,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
 
       <p class="register">
-        <span>Não tem uma conta? <a href="../cadastro/comum/escolher-tipo.php">Crie agora</a></span>
+        <span>Não tem uma conta? <a href="<?= $convitePendente ? '../cadastro/morador/passo-1.php?convite=1' : '../cadastro/comum/escolher-tipo.php' ?>"><?= $convitePendente ? 'Criar conta de morador' : 'Crie agora' ?></a></span>
       </p>
 
     </form>

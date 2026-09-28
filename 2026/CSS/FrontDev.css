@@ -147,22 +147,6 @@
 .fd-apartamentos .search input::placeholder {
     color: #b2bbb6;
 }
-.fd-apartamentos .filter-btn {
-    width: 49px;
-    height: 41px;
-
-    border: 0;
-    border-radius: 11px;
-
-    background: #294633;
-    color: white;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    cursor: pointer;
-}
 .fd-apartamentos .table-wrapper {
     width: 100%;
 
@@ -2014,25 +1998,6 @@
 .fd-moradores .search input::placeholder {
     color: #b2bbb6;
 }
-.fd-moradores .filter-btn {
-    width: 49px;
-    height: 41px;
-
-    border: 0;
-    border-radius: 11px;
-
-    background: #294633;
-    color: white;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    cursor: pointer;
-}
-.fd-moradores .filter-btn:hover {
-    background: #203a2a;
-}
 .fd-moradores .table-wrapper {
     width: 100%;
 
@@ -2399,61 +2364,6 @@
     font-size: 14px;
     line-height: 1.55;
 }
-.fd-ocorrencias .urgent-box {
-    width: 520px;
-    max-width: 100%;
-    height: 68px;
-
-    border: 1px solid #e24c41;
-    border-radius: 12px;
-
-    background: white;
-
-    display: flex;
-    align-items: center;
-
-    padding: 0 22px;
-
-    color: #c42e26;
-}
-.fd-ocorrencias .urgent-box > svg,
-.fd-ocorrencias .urgent-box > img {
-    width: 32px;
-    height: 32px;
-
-    fill: #d9473d;
-    color: #d9473d;
-
-    margin-right: 12px;
-}
-.fd-ocorrencias .urgent-box strong {
-    font-size: 15px;
-    white-space: nowrap;
-}
-.fd-ocorrencias .urgent-divider {
-    width: 2px;
-    height: 44px;
-
-    background: #d9483e;
-
-    margin-left: auto;
-    margin-right: 22px;
-}
-.fd-ocorrencias .urgent-box button {
-    min-width: 140px;
-    height: 38px;
-
-    border: 0;
-    border-radius: 9px;
-
-    background: #d14339;
-    color: white;
-
-    font-size: 14px;
-    font-weight: 700;
-
-    cursor: pointer;
-}
 .fd-ocorrencias .occurrence-card {
     background: white;
 
@@ -2518,17 +2428,89 @@
 .fd-ocorrencias .search-box input::placeholder {
     color: #b1bbb5;
 }
-.fd-ocorrencias .filter-button {
-    width: 50px;
-    height: 41px;
-
+.filter-trigger {
+    display: inline-flex;
+    flex: 0 0 42px;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
     border: 0;
-    border-radius: 11px;
-
+    border-radius: 10px;
     background: #294633;
-    color: white;
-
+    color: #fff;
     cursor: pointer;
+    transition: background-color .15s ease;
+}
+.filter-trigger:hover,
+.filter-trigger[aria-expanded="true"] {
+    background: #203a2a;
+}
+.filter-trigger:focus-visible {
+    outline: 2px solid #d98524;
+    outline-offset: 2px;
+}
+.filter-trigger svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+}
+.filter-control {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 auto;
+}
+.filter-panel[hidden] {
+    display: none;
+}
+.filter-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 120;
+    display: grid;
+    gap: 12px;
+    width: min(320px, calc(100vw - 32px));
+    padding: 14px;
+    border: 1px solid #d7e0da;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(35, 55, 43, .16);
+}
+.filter-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #294633;
+    font-size: 14px;
+}
+.filter-panel .filter-reset {
+    padding: 4px 0;
+    border: 0;
+    background: transparent;
+    color: #567462;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.filter-panel label {
+    display: grid;
+    gap: 5px;
+    color: #4d5b52;
+    font-size: 12px;
+    font-weight: 600;
+}
+.filter-panel select {
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    padding: 0 9px;
+    border: 1px solid #ced8d2;
+    border-radius: 6px;
+    background: #fff;
+    color: #294633;
+    font-size: 13px;
 }
 .fd-ocorrencias .new-occurrence-button {
     height: 41px;
@@ -2547,6 +2529,13 @@
 
     font-weight: 600;
     cursor: pointer;
+}
+.fd-ocorrencias .intro .new-occurrence-button {
+    min-width: 170px;
+    height: 48px;
+    justify-content: center;
+    border-radius: 10px;
+    white-space: nowrap;
 }
 .fd-ocorrencias .new-occurrence-button svg {
     width: 25px;
@@ -2821,6 +2810,35 @@
 
     line-height: 1.55;
 }
+.fd-ocorrencias .occurrence-attachments {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(116px, 1fr));
+    gap: 10px;
+}
+.fd-ocorrencias .occurrence-attachments figure {
+    min-width: 0;
+    margin: 0;
+}
+.fd-ocorrencias .occurrence-attachments a {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #f8f6f3;
+}
+.fd-ocorrencias .occurrence-attachments img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.fd-ocorrencias .occurrence-attachments figcaption,
+.fd-ocorrencias .attachments-empty {
+    margin: 6px 0 0;
+    overflow-wrap: anywhere;
+    color: #809087;
+    font-size: 12px;
+}
 .fd-ocorrencias .update-title {
     margin: 26px 7px 9px;
 
@@ -2875,21 +2893,25 @@
 
     cursor: pointer;
 }
-@media (max-width: 1100px) {
-  .fd-ocorrencias .urgent-box {
-        width: 400px;
-    }
-}
 @media (max-width: 850px) {
   .fd-ocorrencias .intro {
         flex-direction: column;
         gap: 25px;
     }
-  .fd-ocorrencias .urgent-box {
-        width: 100%;
-    }
 }
 @media (max-width: 650px) {
+    .fd-moradores .actions,
+    .fd-apartamentos .actions,
+    .fd-documentacao .card-actions,
+    .fd-ocorrencias .card-actions {
+                flex-wrap: wrap;
+        }
+    .fd-moradores .actions .search,
+    .fd-apartamentos .actions .search,
+    .fd-documentacao .card-actions .search-box,
+    .fd-ocorrencias .card-actions .search-box {
+                flex: 1 1 100%;
+        }
   .fd-ocorrencias .card-header {
         flex-direction: column;
         align-items: flex-start;
@@ -3040,18 +3062,6 @@
 }
 .fd-documentacao .search-box input::placeholder {
     color: #b1bbb5;
-}
-.fd-documentacao .filter-button {
-    width: 50px;
-    height: 41px;
-
-    border: 0;
-    border-radius: 11px;
-
-    background: #294633;
-    color: white;
-
-    cursor: pointer;
 }
 .fd-documentacao .table-container {
     overflow-x: auto;

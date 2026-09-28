@@ -2,18 +2,11 @@
 include './Elements/auth.php';
 include './Elements/ui.php';
 
-// Condomínio de referência (último criado)
-$idCondominio = null;
-try {
-    $idCondominio = $conexao->query("SELECT idCondominio FROM condominio ORDER BY idCondominio DESC LIMIT 1")->fetchColumn();
-} catch (PDOException $e) {
-    $idCondominio = null;
-}
-
 $msg = '';
+$erro = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acao = $_POST['acao'] ?? '';
-    if ($acao === 'novo' && $idCondominio) {
+    if ($acao === 'novo' && $idCondominio && $podeGerenciar) {
         $num = trim($_POST['num'] ?? '');
         $bloco = trim($_POST['bloco'] ?? '');
         $andar = (int) ($_POST['andar'] ?? 0);
@@ -32,13 +25,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             $msg = 'Apartamento registrado com sucesso.';
         }
+    } elseif ($acao === 'novo') {
+        $erro = 'Sua conta precisa estar associada a um condomínio como síndico ou funcionário.';
     } elseif ($acao === 'status') {
         $id = (int) ($_POST['id'] ?? 0);
         $ativo = (int) ($_POST['ativo'] ?? 0) === 1 ? 1 : 0;
-        if ($id > 0) {
-            $stmt = $conexao->prepare("UPDATE unidade SET ativo = :a WHERE idUnidade = :id");
-            $stmt->execute(['a' => $ativo, 'id' => $id]);
+        if ($id > 0 && $podeGerenciar && pertenceAoCondominio($conexao, 'unidade', $id, $filtroCondominio)) {
+            $stmt = $conexao->prepare("UPDATE unidade SET ativo = :a WHERE idUnidade = :id AND Condominio_idCondominio = :condominio");
+            $stmt->execute(['a' => $ativo, 'id' => $id, 'condominio' => $filtroCondominio]);
             $msg = $ativo ? 'Apartamento reativado com sucesso.' : 'Apartamento desativado com sucesso.';
+        } else {
+            $erro = 'Você não tem permissão para alterar este apartamento.';
         }
     }
 }
@@ -59,9 +56,14 @@ try {
                    AND mu.dataFim IS NULL AND m.tipoMorador = 'proprietario'
                  ORDER BY mu.dataInicio DESC LIMIT 1) AS proprietario
             FROM unidade u
+                WHERE u.Condominio_idCondominio = :condominio
             ORDER BY u.idUnidade DESC";
-    $apartamentos = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    $blocos = $conexao->query("SELECT DISTINCT bloco FROM unidade WHERE bloco IS NOT NULL AND bloco <> '' ORDER BY bloco")->fetchAll(PDO::FETCH_COLUMN);
+            $stmt = $conexao->prepare($sql);
+            $stmt->execute(['condominio' => $filtroCondominio]);
+            $apartamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $conexao->prepare("SELECT DISTINCT bloco FROM unidade WHERE Condominio_idCondominio = :condominio AND bloco IS NOT NULL AND bloco <> '' ORDER BY bloco");
+            $stmt->execute(['condominio' => $filtroCondominio]);
+            $blocos = $stmt->fetchAll(PDO::FETCH_COLUMN);
 } catch (PDOException $e) {
     $apartamentos = [];
     $blocos = [];
@@ -95,7 +97,12 @@ try {
                         </div>
                     </section>
 
-<?php banner($msg); ?>
+<?php banner($msg, $erro); ?>
+                    <?php if (!$idCondominio): ?>
+                    <p style="width:100%;padding:12px;border:1px solid #e7c77b;background:#fff8e6;color:#684d12;margin:0 0 16px">
+                        Sua conta ainda não está associada a um condomínio. <a href="./configurar-condominio.php">Configurar condomínio</a> para visualizar e gerenciar apartamentos.
+                    </p>
+                    <?php endif; ?>
 
                     <section class="apartments-card">
                         <div class="card-header">
@@ -111,7 +118,27 @@ try {
                                     <i data-lucide="search"></i>
                                     <input class="input-field-default-m" type="text" id="aptSearchInput" placeholder="Pesquisar apartamento..." oninput="fdPesquisarApartamento()">
                                 </div>
-                                <button class="filter-btn" type="button" onclick="fdFiltrarApartamentos(this)" title="Mostrar somente inativos"><i data-lucide="list-filter"></i></button>
+                                <div class="filter-control">
+                                    <button class="filter-trigger" type="button" aria-label="Abrir filtros de apartamentos" aria-expanded="false" aria-controls="apartmentFilterPanel" onclick="alternarPainelFiltro(this)"><i data-lucide="list-filter"></i></button>
+                                    <div class="filter-panel" id="apartmentFilterPanel" hidden>
+                                        <div class="filter-panel-header"><strong>Filtros</strong><button type="button" class="filter-reset" onclick="limparFiltrosPainel(this)">Limpar filtros</button></div>
+                                        <label><span>Situação</span>
+                                            <select id="apartmentStatusFilter" onchange="aplicarFiltrosApartamentos()">
+                                                <option value="">Todos os status</option>
+                                                <option value="Ativo">Ativos</option>
+                                                <option value="Inativo">Inativos</option>
+                                            </select>
+                                        </label>
+                                        <label><span>Bloco</span>
+                                            <select id="apartmentBlockFilter" onchange="aplicarFiltrosApartamentos()">
+                                                <option value="">Todos os blocos</option>
+                                                <?php foreach ($blocos as $bloco): ?>
+                                                <option value="<?= htmlspecialchars($bloco) ?>"><?= htmlspecialchars($bloco) ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -134,7 +161,7 @@ try {
                                     <?php else: ?>
                                         <?php foreach ($apartamentos as $a): ?>
                                         <?php $ativo = ((int) $a['ativo']) === 1; ?>
-                                        <tr data-status="<?= $ativo ? 'Ativo' : 'Inativo' ?>">
+                                        <tr data-status="<?= $ativo ? 'Ativo' : 'Inativo' ?>" data-bloco="<?= htmlspecialchars($a['bloco']) ?>">
                                             <td>#<?= (int) $a['idUnidade'] ?></td>
                                             <td><?= htmlspecialchars($a['numResid']) ?></td>
                                             <td><?= htmlspecialchars($a['bloco']) ?></td>
@@ -261,5 +288,13 @@ try {
     </div>
 
     <script src="<?= assetUrl('./js/app.js') ?>"></script>
+    <script>
+        function aplicarFiltrosApartamentos() {
+            atualizarFiltroLinhas('apartmentTable', {
+                status: document.getElementById('apartmentStatusFilter').value,
+                bloco: document.getElementById('apartmentBlockFilter').value
+            });
+        }
+    </script>
 </body>
 </html>

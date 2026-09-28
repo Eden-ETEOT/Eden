@@ -54,6 +54,14 @@ CREATE TABLE IF NOT EXISTS areacomum (
 );
 
 
+CREATE TABLE IF NOT EXISTS tipoDocumento (
+    codigo VARCHAR(50) NOT NULL,
+    nome   VARCHAR(100) NOT NULL,
+    ativo  TINYINT(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (codigo)
+);
+
+
 CREATE TABLE IF NOT EXISTS documentos (
     idDocumento             INT          NOT NULL AUTO_INCREMENT,
     nome                    VARCHAR(100) NOT NULL,
@@ -64,9 +72,14 @@ CREATE TABLE IF NOT EXISTS documentos (
     Condominio_idCondominio INT          NOT NULL,
     PRIMARY KEY (idDocumento),
     INDEX Condominio_idCondominio (Condominio_idCondominio ASC),
+    INDEX tipo (tipo ASC),
     CONSTRAINT documento_ibfk_1
         FOREIGN KEY (Condominio_idCondominio)
-        REFERENCES condominio (idCondominio)
+        REFERENCES condominio (idCondominio),
+    CONSTRAINT documentos_tipo_ibfk
+        FOREIGN KEY (tipo)
+        REFERENCES tipoDocumento (codigo)
+        ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 
@@ -239,12 +252,14 @@ CREATE TABLE IF NOT EXISTS chamados (
     prioridade_idPrioridade  INT         NOT NULL,
     funcionario_idFuncionario INT        NULL DEFAULT NULL,
     categoria_idCategoria    INT         NOT NULL,
-    morador_idMorador        INT         NOT NULL,
+    morador_idMorador        INT         NULL DEFAULT NULL,
+    Condominio_idCondominio  INT         NULL DEFAULT NULL,
     PRIMARY KEY (idChamados),
     INDEX fk_chamados_prioridade1_idx (prioridade_idPrioridade ASC),
     INDEX fk_chamados_funcionario1_idx (funcionario_idFuncionario ASC),
     INDEX fk_chamados_categoria1_idx (categoria_idCategoria ASC),
     INDEX fk_chamados_morador1_idx (morador_idMorador ASC),
+    INDEX fk_chamados_condominio_idx (Condominio_idCondominio ASC),
     CONSTRAINT fk_chamados_prioridade1
         FOREIGN KEY (prioridade_idPrioridade)
         REFERENCES prioridade (idPrioridade)
@@ -260,7 +275,11 @@ CREATE TABLE IF NOT EXISTS chamados (
     CONSTRAINT fk_chamados_morador1
         FOREIGN KEY (morador_idMorador)
         REFERENCES morador (idMorador)
-        ON DELETE NO ACTION ON UPDATE NO ACTION
+        ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT fk_chamados_condominio
+        FOREIGN KEY (Condominio_idCondominio)
+        REFERENCES condominio (idCondominio)
+        ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 

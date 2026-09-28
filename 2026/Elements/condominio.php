@@ -103,16 +103,24 @@ function pertenceAoCondominio(PDO $pdo, string $tabela, int $id, int $idCondomin
     return (bool) $stmt->fetchColumn();
 }
 
-/** Ocorrência (chamados) pertence ao condomínio? Via vínculo ativo do autor. */
+/** Ocorrência pertence ao condomínio diretamente ou pelo vínculo residencial ativo do autor? */
 function chamadoDoCondominio(PDO $pdo, int $idChamado, int $idCondominio): bool {
     $stmt = $pdo->prepare(
         "SELECT 1 FROM chamados c
-         JOIN morador m ON m.idMorador = c.morador_idMorador
-         JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
-         JOIN unidade u ON u.idUnidade = mu.Unidade_idUnidade
-         WHERE c.idChamados = :id AND u.Condominio_idCondominio = :c LIMIT 1"
+         WHERE c.idChamados = :id
+           AND (c.Condominio_idCondominio = :condominio_direto OR EXISTS (
+               SELECT 1 FROM morador m
+               JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
+               JOIN unidade u ON u.idUnidade = mu.Unidade_idUnidade
+               WHERE m.idMorador = c.morador_idMorador
+                 AND u.Condominio_idCondominio = :condominio_vinculo
+           )) LIMIT 1"
     );
-    $stmt->execute(['id' => $idChamado, 'c' => $idCondominio]);
+    $stmt->execute([
+        'id' => $idChamado,
+        'condominio_direto' => $idCondominio,
+        'condominio_vinculo' => $idCondominio,
+    ]);
     return (bool) $stmt->fetchColumn();
 }
 

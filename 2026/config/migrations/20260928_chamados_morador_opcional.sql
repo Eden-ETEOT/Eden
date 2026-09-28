@@ -1,0 +1,2 @@
+ALTER TABLE chamados
+    MODIFY COLUMN morador_idMorador INT NULL DEFAULT NULL;

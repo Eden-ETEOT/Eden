@@ -35,21 +35,18 @@ function classe_status_nome($status) {
     ][$status] ?? 'badge-status-analise';
 }
 
-// Verificar se é síndico (admin)
-$stmt = $conexao->prepare("SELECT COUNT(*) FROM sindico WHERE idUsuario = :id");
-$stmt->execute(['id' => $idUsuario]);
-$isAdmin = $stmt->fetchColumn() > 0;
-
-// Foto do condomínio (vinculado pelo último condomínio criado)
-// TODO futuro: substituir por FK sindico -> condominio quando o schema for atualizado
+// Foto e nome do condomínio da sessão
 $cond_name = 'Condomínio';
 $cond_foto = null;
 try {
-    $stmt = $conexao->query("SELECT nome, foto FROM condominio ORDER BY idCondominio DESC LIMIT 1");
-    $cond = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($cond) {
-        $cond_name = $cond['nome'];
-        $cond_foto = !empty($cond['foto']) ? $cond['foto'] : null;
+    if ($idCondominio) {
+        $stmt = $conexao->prepare("SELECT nome, foto FROM condominio WHERE idCondominio = :id LIMIT 1");
+        $stmt->execute(['id' => $idCondominio]);
+        $cond = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($cond) {
+            $cond_name = $cond['nome'];
+            $cond_foto = !empty($cond['foto']) ? $cond['foto'] : null;
+        }
     }
 } catch (PDOException $e) {
     // sem condomínio cadastrado ainda
@@ -57,29 +54,34 @@ try {
 
 // Estatísticas do banco
 $stats = [];
-
-$stmt = $conexao->query("SELECT COUNT(*) FROM chamados");
-$stats['total_occurrences'] = $stmt->fetchColumn();
-
-$stmt = $conexao->query("SELECT COUNT(*) FROM chamados WHERE status = 'resolvida'");
-$stats['resolved'] = $stmt->fetchColumn();
-
-$stmt = $conexao->query("SELECT COUNT(*) FROM chamados WHERE status = 'analise'");
-$stats['pending'] = $stmt->fetchColumn();
-
-$stmt = $conexao->query("SELECT COUNT(*) FROM chamados WHERE status = 'andamento'");
-$stats['analyzing'] = $stmt->fetchColumn();
+$contarChamados = static function (?string $status = null) use ($conexao, $filtroCondominio) {
+    $sql = "SELECT COUNT(*) FROM chamados WHERE Condominio_idCondominio = :condominio";
+    $params = ['condominio' => $filtroCondominio];
+    if ($status !== null) {
+        $sql .= " AND status = :status";
+        $params['status'] = $status;
+    }
+    $stmt = $conexao->prepare($sql);
+    $stmt->execute($params);
+    return (int) $stmt->fetchColumn();
+};
+$stats['total_occurrences'] = $contarChamados();
+$stats['resolved'] = $contarChamados('resolvida');
+$stats['pending'] = $contarChamados('analise');
+$stats['analyzing'] = $contarChamados('andamento');
 
 // Distribuição de ocorrências pendentes por categoria (para o card de breakdown)
-$stmt = $conexao->query(
+$stmt = $conexao->prepare(
     "SELECT cat.nome, COUNT(*) AS total
      FROM chamados c
      JOIN categoria cat ON c.categoria_idCategoria = cat.idCategoria
-     WHERE c.status IN ('analise', 'andamento')
+    WHERE c.Condominio_idCondominio = :condominio
+      AND c.status IN ('analise', 'andamento')
      GROUP BY cat.idCategoria, cat.nome
      ORDER BY total DESC
      LIMIT 4"
 );
+$stmt->execute(['condominio' => $filtroCondominio]);
 $categorias_pendentes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $max_categoria = 0;
 foreach ($categorias_pendentes as $cat) {
@@ -87,12 +89,14 @@ foreach ($categorias_pendentes as $cat) {
 }
 
 // Tempo médio de resolução (horas) e total de resolvidas no período
-$stmt = $conexao->query(
+$stmt = $conexao->prepare(
     "SELECT AVG(TIMESTAMPDIFF(HOUR, c.dataPedida, c.dataRealizada)) AS media_horas,
             COUNT(*) AS total_resolvidas
      FROM chamados c
-     WHERE c.status = 'resolvida' AND c.dataRealizada IS NOT NULL"
+    WHERE c.Condominio_idCondominio = :condominio
+      AND c.status = 'resolvida' AND c.dataRealizada IS NOT NULL"
 );
+$stmt->execute(['condominio' => $filtroCondominio]);
 $tempo_resolucao = $stmt->fetch(PDO::FETCH_ASSOC);
 $media_resolucao_horas = $tempo_resolucao && $tempo_resolucao['media_horas'] !== null
     ? round((float) $tempo_resolucao['media_horas'], 1)
@@ -117,17 +121,19 @@ $sql = "SELECT
         FROM chamados c
         JOIN prioridade p ON c.prioridade_idPrioridade = p.idPrioridade
         JOIN categoria cat ON c.categoria_idCategoria = cat.idCategoria
-        JOIN morador m ON c.morador_idMorador = m.idMorador
-        JOIN usuario us ON m.idUsuario = us.idUsuario
-        JOIN moradorunidade mu ON m.idMorador = mu.Morador_idMorador AND mu.dataFim IS NULL
-        JOIN unidade u ON mu.Unidade_idUnidade = u.idUnidade
-        JOIN condominio cond ON u.Condominio_idCondominio = cond.idCondominio
+        LEFT JOIN morador m ON c.morador_idMorador = m.idMorador
+        LEFT JOIN usuario us ON m.idUsuario = us.idUsuario
+        LEFT JOIN moradorunidade mu ON m.idMorador = mu.Morador_idMorador AND mu.dataFim IS NULL
+        LEFT JOIN unidade u ON mu.Unidade_idUnidade = u.idUnidade
+        LEFT JOIN condominio cond ON c.Condominio_idCondominio = cond.idCondominio
+        WHERE c.Condominio_idCondominio = :condominio
         ORDER BY c.dataPedida DESC
         LIMIT 10";
 
 $pending_issues = [];
 try {
-    $stmt = $conexao->query($sql);
+    $stmt = $conexao->prepare($sql);
+    $stmt->execute(['condominio' => $filtroCondominio]);
     $pending_issues = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     // Tabelas relacionadas podem não ter dados ainda
@@ -273,8 +279,8 @@ try {
                                 ][$issue['status']] ?? $issue['status'];
                                 ?>
                                 <tr>
-                                    <td><?= htmlspecialchars($issue['bloco']) ?></td>
-                                    <td><?= htmlspecialchars($issue['numResid']) ?></td>
+                                    <td><?= htmlspecialchars($issue['bloco'] ?? '—') ?></td>
+                                    <td><?= htmlspecialchars($issue['numResid'] ?? '—') ?></td>
                                     <td><?= htmlspecialchars($issue['categoria_nome']) ?></td>
                                     <td><?= date('d/m/Y', strtotime($issue['dataPedida'])) ?></td>
                                     <td>

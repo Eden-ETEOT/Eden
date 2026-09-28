@@ -34,7 +34,7 @@ $navAtivo = function (string $k) use ($menuAtivo): string {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title><?= htmlspecialchars($tituloPagina) ?> | Éden Systems</title>
-<link rel="stylesheet" href="../CSS/MoradorFront.css">
+<link rel="stylesheet" href="../CSS/MoradorFront.css?v=<?= filemtime(__DIR__ . '/../CSS/MoradorFront.css') ?>">
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>

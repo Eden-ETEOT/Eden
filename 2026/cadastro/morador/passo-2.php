@@ -107,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if ($tokenPendente !== '') {
                 header("Location: ../../convite/aceitar.php?token=" . urlencode($tokenPendente));
             } else {
-                header("Location: ../../dashboard.php");
+                header("Location: ../../telas-mor-front-eden/dashboard/index.html");
             }
             exit;
         }

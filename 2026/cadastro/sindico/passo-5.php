@@ -113,14 +113,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 unset($_SESSION["cadastro"]);
                 unset($_SESSION["condominio"]);
 
-                // Login automático: cria a sessão do usuário logado
+                // Login automático com as chaves que Elements/auth.php espera
+                include "../../Elements/condominio.php";
                 session_regenerate_id(true);
-                $_SESSION["id_usuario"] = $usuario_id;
-                $_SESSION["usuario_nome"] = $nome;
-                $_SESSION["usuario_email"] = $email;
-                $_SESSION["logado"] = true;
+                $_SESSION["id_usuario"] = (int) $usuario_id;
+                $_SESSION["nome"] = $nome;
+                $_SESSION["id_condominio"] = $condominio_id;
 
-                header("Location: ../../dashboard.php?tipo=success&msg=" . urlencode("Cadastro realizado com sucesso!"));
+                header("Location: ../../eden_planos/index.html");
                 exit;
 
             } catch (Throwable $e) {

@@ -52,6 +52,18 @@ INSERT INTO areacomum (nome, descricao, capacidade, ativo, Condominio_idCondomin
 -- ==============================================================
 -- DOCUMENTOS (10)
 -- ==============================================================
+INSERT INTO tipoDocumento (codigo, nome) VALUES
+('ata', 'Ata'),
+('convencao', CONVERT(0x436F6E76656EC3A7C3A36F USING utf8mb4)),
+('contrato', 'Contrato'),
+('emergencia', CONVERT(0x456D657267C3AA6E636961 USING utf8mb4)),
+('financeiro', 'Financeiro'),
+('laudo', 'Laudo'),
+('manual', 'Manual'),
+('outro', 'Outro'),
+('regimento', 'Regimento'),
+('seguro', 'Seguro');
+
 INSERT INTO documentos (nome, tipo, caminho, publico, Condominio_idCondominio) VALUES
 ('Regimento Interno',           'regimento',   NULL, 1, 1),
 ('Ata de Assembleia 2026',      'ata',         NULL, 1, 2),

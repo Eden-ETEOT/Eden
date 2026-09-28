@@ -35,8 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             [$okC, $retC] = gerarConvite($conexao, $idUsuario, $idUnidade, $tipo,
                 $emailEsp !== '' ? $emailEsp : null, $dias > 0 ? $dias : CONVITE_VALIDADE_DIAS);
             if (!$okC) throw new Exception($retC);
-            $linkConvite = './convite/aceitar.php?token=' . $retC;
-            $msg = 'Convite gerado. Link: ' . $linkConvite;
+            $msg = 'Convite gerado com sucesso. Ele está na lista de convites pendentes, onde você pode abrir na mesma aba ou copiar o link.';
 
         } catch (Exception $e) {
             $erro = $e->getMessage();
@@ -53,7 +52,7 @@ $menuAtivo = 'moradores';
 // Lista de moradores com unidade atual
 $moradores = [];
 try {
-    $sql = "SELECT m.idMorador, u.nome, u.email, u.telefone, u.ativo,
+    $sql = "SELECT m.idMorador, m.tipoMorador, u.nome, u.email, u.telefone, u.ativo,
                    DATE_FORMAT(u.dataCriacao, '%d/%m/%Y') AS entrada,
                    un.bloco, un.numResid
             FROM morador m
@@ -128,7 +127,27 @@ try {
                             </div>
                             <div class="actions">
                                 <label class="search"><i data-lucide="search"></i><input id="searchInput" oninput="pesquisar()" placeholder="Pesquisar morador..."></label>
-                                <button class="filter-btn" onclick="filtrar(this)" title="Mostrar somente inativos"><i data-lucide="list-filter"></i></button>
+                                <div class="filter-control">
+                                    <button class="filter-trigger" type="button" aria-label="Abrir filtros de moradores" aria-expanded="false" aria-controls="residentFilterPanel" onclick="alternarPainelFiltro(this)"><i data-lucide="list-filter"></i></button>
+                                    <div class="filter-panel" id="residentFilterPanel" hidden>
+                                        <div class="filter-panel-header"><strong>Filtros</strong><button type="button" class="filter-reset" onclick="limparFiltrosPainel(this)">Limpar filtros</button></div>
+                                        <label><span>Situação</span>
+                                            <select id="residentStatusFilter" onchange="aplicarFiltrosMoradores()">
+                                                <option value="">Todos os status</option>
+                                                <option value="Ativo">Ativos</option>
+                                                <option value="Inativo">Inativos</option>
+                                            </select>
+                                        </label>
+                                        <label><span>Tipo</span>
+                                            <select id="residentTypeFilter" onchange="aplicarFiltrosMoradores()">
+                                                <option value="">Todos os tipos</option>
+                                                <option value="proprietario">Proprietários</option>
+                                                <option value="inquilino">Inquilinos</option>
+                                                <option value="dependente">Dependentes</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="table-wrapper table-scroll">
@@ -150,7 +169,7 @@ try {
                                     <?php else: ?>
                                         <?php foreach ($moradores as $m): ?>
                                         <?php $ativo = ((int) $m['ativo']) === 1; ?>
-                                        <tr data-status="<?= $ativo ? 'Ativo' : 'Inativo' ?>">
+                                        <tr data-status="<?= $ativo ? 'Ativo' : 'Inativo' ?>" data-tipo-morador="<?= htmlspecialchars($m['tipoMorador']) ?>">
                                             <td class="resident-id">#<?= (int) $m['idMorador'] ?></td>
                                             <td><?= htmlspecialchars($m['nome']) ?></td>
                                             <td><?= htmlspecialchars($m['bloco'] ?? '—') ?></td>
@@ -203,7 +222,10 @@ try {
                                             <td><?= htmlspecialchars($cv['emailEsperado'] ?? 'link aberto') ?></td>
                                             <td><?= date('d/m/Y H:i', strtotime($cv['dataExpiracao'])) ?></td>
                                             <td>
-                                                <button type="button" class="tbl-action" title="Copiar link do convite" onclick="copiarConvite(this, './convite/aceitar.php?token=<?= htmlspecialchars($cv['token']) ?>')"><i data-lucide="link"></i></button>
+                                                <div class="tbl-actions">
+                                                    <a class="tbl-action" href="./convite/aceitar.php?token=<?= rawurlencode($cv['token']) ?>" title="Abrir convite nesta aba" aria-label="Abrir convite nesta aba"><i data-lucide="external-link"></i></a>
+                                                    <button type="button" class="tbl-action" title="Copiar link do convite" onclick="copiarConvite(this, './convite/aceitar.php?token=<?= htmlspecialchars($cv['token']) ?>')"><i data-lucide="link"></i></button>
+                                                </div>
                                             </td>
                                             <td>
                                                 <div class="tbl-actions">
@@ -327,12 +349,11 @@ try {
         function pesquisar() {
             filtrarLinhas('residentTable', document.getElementById('searchInput').value);
         }
-        let soInativos = false;
-        function filtrar(btn) {
-            soInativos = !soInativos;
-            document.getElementById('searchInput').value = '';
-            filtrarLinhas('residentTable', '', soInativos ? 'Inativo' : '');
-            retornoFiltro('residentTable', btn, soInativos);
+        function aplicarFiltrosMoradores() {
+            atualizarFiltroLinhas('residentTable', {
+                status: document.getElementById('residentStatusFilter').value,
+                tipoMorador: document.getElementById('residentTypeFilter').value
+            });
         }
         function visualizar(m) {
             document.getElementById('detailId').textContent = 'Morador#' + m.idMorador;

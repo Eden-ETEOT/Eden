@@ -16,9 +16,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($acao === 'criar') {
             $nome = trim($_POST['nome'] ?? '');
             $tipo = trim($_POST['tipo'] ?? '');
-            $condominio = (int) ($_POST['condominio'] ?? 0);
-            if ($nome === '' || $tipo === '' || $condominio <= 0) {
+            $condominio = (int) $idCondominio;
+            if ($nome === '' || $tipo === '' || $condominio <= 0 || !$podeGerenciar) {
                 throw new Exception('Preencha todos os campos obrigatórios.');
+            }
+            $tipoStmt = $conexao->prepare("SELECT 1 FROM tipoDocumento WHERE codigo = :tipo AND ativo = 1");
+            $tipoStmt->execute(['tipo' => $tipo]);
+            if (!$tipoStmt->fetchColumn()) {
+                throw new Exception('Selecione uma categoria válida.');
             }
             if (!isset($_FILES['arquivo']) || $_FILES['arquivo']['error'] === UPLOAD_ERR_NO_FILE) {
                 throw new Exception('Anexe o arquivo do documento.');
@@ -41,12 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($acao === 'excluir') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id <= 0) throw new Exception('Documento inválido.');
-            $stmt = $conexao->prepare("SELECT caminho FROM documentos WHERE idDocumento = :id");
-            $stmt->execute(['id' => $id]);
+            $stmt = $conexao->prepare("SELECT caminho FROM documentos WHERE idDocumento = :id AND Condominio_idCondominio = :condominio");
+            $stmt->execute(['id' => $id, 'condominio' => $filtroCondominio]);
             $doc = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($doc) {
-                $stmt = $conexao->prepare("DELETE FROM documentos WHERE idDocumento = :id");
-                $stmt->execute(['id' => $id]);
+                $stmt = $conexao->prepare("DELETE FROM documentos WHERE idDocumento = :id AND Condominio_idCondominio = :condominio");
+                $stmt->execute(['id' => $id, 'condominio' => $filtroCondominio]);
                 if (!empty($doc['caminho']) && file_exists(__DIR__ . '/' . $doc['caminho'])) {
                     unlink(__DIR__ . '/' . $doc['caminho']);
                 }
@@ -71,8 +76,11 @@ try {
                    c.nome AS condominio
             FROM documentos d
             JOIN condominio c ON c.idCondominio = d.Condominio_idCondominio
+                WHERE d.Condominio_idCondominio = :condominio
             ORDER BY d.dataUpload DESC, d.idDocumento DESC";
-    $documentos = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $conexao->prepare($sql);
+            $stmt->execute(['condominio' => $filtroCondominio]);
+            $documentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $documentos = [];
 }
@@ -82,8 +90,7 @@ foreach ($documentos as &$d) {
     $d['temArquivo'] = $fs !== null;
 }
 unset($d);
-$tipos = $conexao->query("SELECT DISTINCT tipo FROM documentos ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
-$condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
+$tipos = $conexao->query("SELECT codigo, nome FROM tipoDocumento WHERE ativo = 1 ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -111,7 +118,27 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
                                     <i data-lucide="search"></i>
                                     <input id="searchInput" class="input-field-default-m" type="text" placeholder="Pesquisar documento..." oninput="pesquisarDocumentos()">
                                 </div>
-                                <button class="filter-button" type="button" onclick="filtrarComArquivo(this)" title="Mostrar somente documentos com arquivo"><i data-lucide="list-filter"></i></button>
+                                <div class="filter-control">
+                                    <button class="filter-trigger" type="button" aria-label="Abrir filtros de documentos" aria-expanded="false" aria-controls="documentFilterPanel" onclick="alternarPainelFiltro(this)"><i data-lucide="list-filter"></i></button>
+                                    <div class="filter-panel" id="documentFilterPanel" hidden>
+                                        <div class="filter-panel-header"><strong>Filtros</strong><button type="button" class="filter-reset" onclick="limparFiltrosPainel(this)">Limpar filtros</button></div>
+                                        <label><span>Categoria</span>
+                                            <select id="documentTypeFilter" onchange="aplicarFiltrosDocumentos()">
+                                                <option value="">Todas as categorias</option>
+                                                <?php foreach ($tipos as $tipo): ?>
+                                                <option value="<?= htmlspecialchars($tipo['codigo']) ?>"><?= htmlspecialchars($tipo['nome']) ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </label>
+                                        <label><span>Arquivo</span>
+                                            <select id="documentFileFilter" onchange="aplicarFiltrosDocumentos()">
+                                                <option value="">Todos os arquivos</option>
+                                                <option value="1">Com arquivo</option>
+                                                <option value="0">Sem arquivo</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="table-container table-scroll">
@@ -132,7 +159,7 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
                                         <tr><td colspan="7"><div class="empty-state">Nenhum documento cadastrado.</div></td></tr>
                                     <?php else: ?>
                                         <?php foreach ($documentos as $d): ?>
-                                        <tr data-arquivo="<?= $d['temArquivo'] ? '1' : '0' ?>">
+                                        <tr data-arquivo="<?= $d['temArquivo'] ? '1' : '0' ?>" data-tipo="<?= htmlspecialchars($d['tipo']) ?>">
                                             <td class="resident-id">#<?= (int) $d['idDocumento'] ?></td>
                                             <td><?= htmlspecialchars($d['nome']) ?></td>
                                             <td><?= htmlspecialchars($d['tipo']) ?></td>
@@ -142,7 +169,7 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
                                             <td>
                                                 <div class="tbl-actions">
                                                     <?php if ($d['temArquivo']): ?>
-                                                    <a class="tbl-action" href="./<?= htmlspecialchars($d['caminho']) ?>" download title="Baixar"><i data-lucide="download"></i></a>
+                                                    <a class="tbl-action" href="./download.php?id=<?= (int) $d['idDocumento'] ?>" title="Baixar"><i data-lucide="download"></i></a>
                                                     <?php endif; ?>
                                                     <button type="button" class="tbl-action danger" onclick="excluirDocumento(<?= (int) $d['idDocumento'] ?>)" title="Excluir"><i data-lucide="trash-2"></i></button>
                                                 </div>
@@ -176,18 +203,10 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
                 <div class="form-row">
                     <div class="form-group">
                         <label>Categoria</label>
-                        <input class="input-field-default-m" type="text" name="tipo" list="tiposExistentes" placeholder="Ex.: Atas" required>
-                        <datalist id="tiposExistentes">
+                        <select name="tipo" class="select-medium-iconR" required>
+                            <option value="">Selecione uma categoria</option>
                             <?php foreach ($tipos as $t): ?>
-                            <option value="<?= htmlspecialchars($t) ?>"></option>
-                            <?php endforeach; ?>
-                        </datalist>
-                    </div>
-                    <div class="form-group">
-                        <label>Condomínio</label>
-                        <select name="condominio" class="select-medium-iconR" required>
-                            <?php foreach ($condominios as $cc): ?>
-                            <option value="<?= (int) $cc['idCondominio'] ?>"><?= htmlspecialchars($cc['nome']) ?></option>
+                            <option value="<?= htmlspecialchars($t['codigo']) ?>"><?= htmlspecialchars($t['nome']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -217,16 +236,11 @@ $condominios = $conexao->query("SELECT idCondominio, nome FROM condominio ORDER 
         function pesquisarDocumentos() {
             filtrarLinhas('documentTable', document.getElementById('searchInput').value);
         }
-        let soComArquivo = false;
-        function filtrarComArquivo(btn) {
-            soComArquivo = !soComArquivo;
-            document.getElementById('searchInput').value = '';
-            document.querySelectorAll('#documentTable tr').forEach(tr => {
-                const ok = !soComArquivo || tr.dataset.arquivo === '1';
-                tr.classList.toggle('f-hide', !ok);
+        function aplicarFiltrosDocumentos() {
+            atualizarFiltroLinhas('documentTable', {
+                tipo: document.getElementById('documentTypeFilter').value,
+                arquivo: document.getElementById('documentFileFilter').value
             });
-            if (pagEstado['documentTable']) { pagEstado['documentTable'].pagina = 1; desenharPaginacao('documentTable'); }
-            retornoFiltro('documentTable', btn, soComArquivo);
         }
         function excluirDocumento(id) {
             document.getElementById('deleteId').value = id;

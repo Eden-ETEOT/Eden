@@ -15,26 +15,65 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModal(
 document.addEventListener('click', e => {
   if (e.target.classList && e.target.classList.contains('modal-overlay')) fecharModal(e.target.id);
 });
-/* Filtro textual (+ status opcional). Usa classe f-hide; a paginacao usa style.display. */
-function filtrarLinhas(tbodyId, texto, status) {
-  texto = (texto || '').toLowerCase();
-  document.querySelectorAll('#' + tbodyId + ' tr').forEach(tr => {
-    const okTexto = !texto || tr.innerText.toLowerCase().includes(texto);
-    const okStatus = !status || (tr.dataset.status || '') === status;
-    tr.classList.toggle('f-hide', !(okTexto && okStatus));
-  });
-  if (pagEstado[tbodyId]) { pagEstado[tbodyId].pagina = 1; desenharPaginacao(tbodyId); }
+/* Busca e critérios data-* permanecem combinados por tabela. */
+const filtrosPorTabela = {};
+function atualizarFiltroLinhas(tbodyId, alteracoes = {}) {
+    const estado = filtrosPorTabela[tbodyId] || { texto: '', criterios: {} };
+    const criterios = { ...alteracoes };
+    if (Object.prototype.hasOwnProperty.call(criterios, 'texto')) {
+        estado.texto = String(criterios.texto || '').trim().toLowerCase();
+        delete criterios.texto;
+    }
+    Object.assign(estado.criterios, criterios);
+    filtrosPorTabela[tbodyId] = estado;
+
+    document.querySelectorAll('#' + tbodyId + ' tr').forEach(tr => {
+        const correspondeTexto = !estado.texto || tr.innerText.toLowerCase().includes(estado.texto);
+        const correspondeCriterios = Object.entries(estado.criterios).every(([campo, valor]) =>
+            valor === '' || (tr.dataset[campo] || '') === String(valor)
+        );
+        const corresponde = correspondeTexto && correspondeCriterios;
+        tr.classList.toggle('f-hide', !corresponde);
+    });
+
+    if (pagEstado[tbodyId]) {
+        pagEstado[tbodyId].pagina = 1;
+        desenharPaginacao(tbodyId);
+    }
 }
-/* Feedback pós-filtro: marca botão ativo e avisa quando nada corresponde. */
-function retornoFiltro(tbodyId, btn, ativo, porDisplay) {
-  if (btn) btn.classList.toggle('active', !!ativo);
-  let vis = 0;
-  document.querySelectorAll('#' + tbodyId + ' tr').forEach(tr => {
-    if (porDisplay) { if (tr.style.display !== 'none') vis++; }
-    else if (!tr.classList.contains('f-hide')) vis++;
-  });
-  if (vis === 0) toast('Nenhum registro corresponde ao filtro.', 'warning');
+function filtrarLinhas(tbodyId, texto) {
+    atualizarFiltroLinhas(tbodyId, { texto: texto || '' });
 }
+function fecharPainelFiltros() {
+    document.querySelectorAll('.filter-panel:not([hidden])').forEach(panel => {
+        panel.hidden = true;
+        const button = document.querySelector('[aria-controls="' + panel.id + '"]');
+        if (button) button.setAttribute('aria-expanded', 'false');
+    });
+}
+function alternarPainelFiltro(button) {
+    const panel = document.getElementById(button.getAttribute('aria-controls'));
+    if (!panel) return;
+    const abrir = panel.hidden;
+    fecharPainelFiltros();
+    panel.hidden = !abrir;
+    button.setAttribute('aria-expanded', String(abrir));
+    if (abrir) panel.querySelector('select')?.focus();
+}
+function limparFiltrosPainel(button) {
+    const panel = button.closest('.filter-panel');
+    if (!panel) return;
+    panel.querySelectorAll('select').forEach(select => {
+        select.value = '';
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+}
+document.addEventListener('click', event => {
+    if (!event.target.closest('.filter-control')) fecharPainelFiltros();
+});
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') fecharPainelFiltros();
+});
 let pagEstado = {};
 function paginar(tbodyId, pagerId, porPagina) {
   if (!document.getElementById(tbodyId) || !document.getElementById(pagerId)) return;
@@ -111,24 +150,12 @@ function fdFecharClicandoFora(event, id) {
 }
 
 
-/* ===== Apartamentos: pesquisa e filtro ===== */
+/* ===== Apartamentos: pesquisa ===== */
 function fdPesquisarApartamento() {
     const q = (document.getElementById('aptSearchInput').value || '').toLowerCase().trim();
     document.querySelectorAll('#apartmentTable tr').forEach((row) => {
         row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
     });
-}
-let fdAptFiltroInativos = false;
-function fdFiltrarApartamentos(btn) {
-    fdAptFiltroInativos = !fdAptFiltroInativos;
-    document.querySelectorAll('#apartmentTable tr').forEach((row) => {
-        if (!fdAptFiltroInativos) {
-            row.style.display = '';
-            return;
-        }
-        row.style.display = (row.getAttribute('data-status') === 'Inativo') ? '' : 'none';
-    });
-    retornoFiltro('apartmentTable', btn, fdAptFiltroInativos, true);
 }
 
 /* ===== Apartamentos: detalhes e status ===== */
@@ -219,32 +246,6 @@ function fdToast(msg) {
         options: { responsive: true, maintainAspectRatio: false }
     });
 })();
-
-function fdGerarRelatorio() {
-    const tipo = document.getElementById('reportType').value;
-    const periodo = document.getElementById('reportPeriod').value;
-    if (tipo !== 'ocorrencias') {
-        fdToast('Relatório "' + tipo + '" com geração guiada em breve. Use a exportação abaixo.');
-        return;
-    }
-    const dados = (typeof FD_MESES !== 'undefined' ? FD_MESES : []).find((m) => m.ym === periodo);
-    if (!dados) return;
-    if (window.__fdChart) {
-        const idx = FD_MESES.findIndex((m) => m.ym === periodo);
-        const labels = FD_MESES.slice(0, idx + 1).map((m) => m.short);
-        window.__fdChart.data.labels = labels;
-        window.__fdChart.data.datasets[0].data = FD_MESES.slice(0, idx + 1).map((m) => m.total);
-        window.__fdChart.data.datasets[1].data = FD_MESES.slice(0, idx + 1).map((m) => m.resolvidas);
-        window.__fdChart.update();
-    }
-    document.getElementById('chartPeriod').textContent = FD_MESES[0].rotulo + ' — ' + dados.rotulo;
-    document.getElementById('totalOccurrences').textContent = dados.total;
-    const taxa = dados.total > 0 ? Math.round((dados.resolvidas / dados.total) * 100) : 0;
-    document.getElementById('resolutionRate').textContent = taxa + '%';
-    document.querySelectorAll('.stats-grid .stat-card small')[0].textContent = dados.rotulo;
-    document.querySelectorAll('.stats-grid .stat-card small')[1].textContent = dados.rotulo;
-    fdToast('Relatório de ' + dados.rotulo + ' gerado.');
-}
 
 function fdBaixarRelatorio(tipo) {
     const nomes = {

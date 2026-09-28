@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Painel de Controle | Éden Systems</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <img class="logo" src="../assets/logo-negativo.png" alt="Éden Systems">
+        <div class="line"></div>
+        <nav><a class="active" href="../dashboard/index.html"><i data-lucide="layout-dashboard"></i>Dashboard</a><a class="" href="../ocorrencias/index.html"><i data-lucide="badge-alert"></i>Ocorrências</a><a class="" href="../apartamentos/index.html"><i data-lucide="building-2"></i>Apartamentos</a></nav>
+        <div class="tools">
+            <div class="line"></div><b>FERRAMENTAS</b><a class="" href="../configuracoes/index.html"><i data-lucide="settings"></i>Configurações</a><a class="" href="../suporte/index.html"><i data-lucide="message-square-text"></i>Suporte</a></div>
+        <div class="logout">
+            <div class="line"></div><a href="#"><i data-lucide="log-out"></i>Log out</a></div>
+    </aside>
+    <div class="app">
+        <header class="header">
+            <div class="header-page">Painel de Controle</div>
+            <div class="profile" id="profileButton">
+                <div class="avatar"><i data-lucide="user-round"></i></div>
+                <div class="profile-info"><strong>Ana da Silva</strong><small>Morador(a)</small></div><i data-lucide="chevron-down"></i>
+                <div class="profile-menu" id="profileMenu">
+                    <div class="head"><strong>Ana da Silva</strong><small>Morador(a)</small></div><a href="../perfil/index.html"><i data-lucide="user"></i>Meu Perfil</a><a href="../configuracoes/index.html"><i data-lucide="settings"></i>Configurações</a><a class="exit"
+                        href="#"><i data-lucide="log-out"></i>Sair</a></div>
+            </div>
+        </header>
+        <main>
+            <section class="page-title">
+                <h1>Painel de Controle</h1>
+                <p>Visão rápida das suas ocorrências e informações vinculadas ao seu apartamento.</p>
+            </section>
+            <section class="cards">
+                <article class="stat hot">
+                    <div class="ico orange"><i data-lucide="clipboard-list"></i></div><strong>4</strong>
+                    <h3>Total de Ocorrências</h3>
+                    <p>Registradas por você</p>
+                </article>
+                <article class="stat">
+                    <div class="ico blue"><i data-lucide="clock-3"></i></div><strong>1</strong>
+                    <h3>Em andamento</h3>
+                    <p>Aguardando ou em análise</p>
+                </article>
+                <article class="stat">
+                    <div class="ico green"><i data-lucide="circle-check-big"></i></div><strong>3</strong>
+                    <h3>Finalizadas</h3>
+                    <p>Ocorrências concluídas</p>
+                </article>
+            </section>
+            <section class="grid">
+                <div class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <h2 class="panel-title">Ocorrências recentes</h2>
+                            <p class="sub">Acompanhe suas solicitações mais recentes</p>
+                        </div><a class="btn" href="../ocorrencias/index.html"><i data-lucide="plus"></i>Ocorrência</a></div>
+                    <div class="occ"><i></i>
+                        <div class="occ-body">
+                            <div class="occ-top">
+                                <div>
+                                    <h3>Barulho excessivo após 22h</h3><small>OC001 • Registrada em 28/08/2026</small></div><em class="pill analysis">Em análise</em></div>
+                            <p>Morador relata barulho constante vindo do apartamento acima após as 22h.</p>
+                        </div>
+                    </div>
+                    <div class="occ done"><i></i>
+                        <div class="occ-body">
+                            <div class="occ-top">
+                                <div>
+                                    <h3>Iluminação da área comum</h3><small>OC002 • Registrada em 12/08/2026</small></div><em class="pill done">Finalizada</em></div>
+                            <p>Solicitação referente à iluminação próxima ao bloco do morador.</p>
+                        </div>
+                    </div><a class="more" href="../ocorrencias/index.html">Ver todas as ocorrências →</a></div>
+                <div class="side">
+                    <div class="panel">
+                        <h2 class="panel-title">Meu apartamento</h2>
+                        <p class="sub">Dados vinculados à sua conta</p>
+                        <div class="apt">
+                            <div><small>Apartamento</small><strong>204</strong></div>
+                            <div><small>Bloco</small><strong>2</strong></div>
+                        </div><a class="more" href="../apartamentos/index.html">Ver informações →</a></div>
+                    <div class="panel quick">
+                        <h2 class="panel-title" style="margin-bottom:10px">Acesso rápido</h2><a href="../ocorrencias/index.html">Registrar ocorrência <b>›</b></a><a href="../suporte/index.html">Preciso de ajuda <b>›</b></a></div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+
+</html>

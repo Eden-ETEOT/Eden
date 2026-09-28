@@ -1,0 +1,1 @@
+document.querySelectorAll('.option').forEach(x => x.onclick = () => { document.querySelectorAll('.option').forEach(y => y.classList.remove('selected')); x.classList.add('selected') }); function nextPay() { let x = document.querySelector('.option.selected'); if (!x) return alert('Selecione Pix ou Cartão.'); location.href = x.dataset.href }

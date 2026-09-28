@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Pagamento efetuado</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="split">
+        <main class="left"><a class="back" href="javascript:history.back()">Voltar</a>
+            <div class="panel">
+                <div class="logo">SUA LOGO<br>ÉDEN SYSTEMS</div>
+                <h1>Pagamento por cartão</h1>
+                <p class="lead">Insira os dados abaixo para realizar<br>o pagamento.</p>
+                <div class="field"><label>Titular do cartão</label><input placeholder="Nome impresso no cartão"></div>
+                <div class="field"><label>Número do cartão</label><input placeholder="0000 0000 0000 0000"></div>
+                <div class="field"><label>Modo de pagamento</label><select>
+                        <option>Forma de pagamento com o cartão</option>
+                        <option>Crédito</option>
+                        <option>Débito</option>
+                    </select></div>
+                <div class="field"><label>Data de validade</label><input placeholder="MM/AA"></div>
+                <div class="field"><label>Código de segurança</label><input placeholder="CVV"></div><a class="btn"
+                    style="margin-top:18px" href="pagamento-sucesso.html">Continuar</a>
+            </div>
+        </main>
+        <aside class="image-side">
+        </aside>
+    </div>
+    <div class="overlay">
+        <div class="modal">
+            <h1>Pagamento efetuado!</h1>
+            <div class="status success">✓</div>
+            <p>Seu pagamento foi confirmado e seu plano já está ativo.</p><a class="btn" style="background:#41910e"
+                href="dashboard-sindico.php">Continuar</a>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

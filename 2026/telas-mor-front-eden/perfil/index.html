@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Meu Perfil | Éden Systems</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <img class="logo" src="../assets/logo-negativo.png" alt="Éden Systems">
+        <div class="line"></div>
+        <nav><a class="" href="../dashboard/index.html"><i data-lucide="layout-dashboard"></i>Dashboard</a><a class="" href="../ocorrencias/index.html"><i data-lucide="badge-alert"></i>Ocorrências</a><a class="" href="../apartamentos/index.html"><i data-lucide="building-2"></i>Apartamentos</a></nav>
+        <div class="tools">
+            <div class="line"></div><b>FERRAMENTAS</b><a class="" href="../configuracoes/index.html"><i data-lucide="settings"></i>Configurações</a><a class="" href="../suporte/index.html"><i data-lucide="message-square-text"></i>Suporte</a></div>
+        <div class="logout">
+            <div class="line"></div><a href="#"><i data-lucide="log-out"></i>Log out</a></div>
+    </aside>
+    <div class="app">
+        <header class="header">
+            <div class="header-page">Meu Perfil</div>
+            <div class="profile" id="profileButton">
+                <div class="avatar"><i data-lucide="user-round"></i></div>
+                <div class="profile-info"><strong>Ana da Silva</strong><small>Morador(a)</small></div><i data-lucide="chevron-down"></i>
+                <div class="profile-menu" id="profileMenu">
+                    <div class="head"><strong>Ana da Silva</strong><small>Morador(a)</small></div><a href="../perfil/index.html"><i data-lucide="user"></i>Meu Perfil</a><a href="../configuracoes/index.html"><i data-lucide="settings"></i>Configurações</a><a class="exit"
+                        href="#"><i data-lucide="log-out"></i>Sair</a></div>
+            </div>
+        </header>
+        <main>
+            <section class="page-title">
+                <h1>Meu Perfil</h1>
+                <p>Consulte e atualize suas informações pessoais.</p>
+            </section>
+            <div class="panel profile-card">
+                <div class="profile-top">
+                    <div class="big-avatar"><i data-lucide="user-round"></i></div>
+                    <div>
+                        <h2>Ana da Silva</h2>
+                        <p class="sub">Morador(a) • Apartamento 204 • Bloco 2</p>
+                    </div>
+                </div>
+                <div class="two">
+                    <div class="field"><label>Nome completo</label><input class="input" value="Ana da Silva"></div>
+                    <div class="field"><label>Telefone</label><input class="input" value="(21) 98015-9921"></div>
+                </div>
+                <div class="field"><label>E-mail</label><input class="input" value="ana.silva@email.com"></div>
+                <div class="two">
+                    <div class="field"><label>Apartamento</label><input class="input" value="204" disabled></div>
+                    <div class="field"><label>Bloco</label><input class="input" value="2" disabled></div>
+                </div>
+                <div class="form-actions"><button class="btn outline">Cancelar</button><button class="btn green">Salvar Alterações</button></div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+
+</html>

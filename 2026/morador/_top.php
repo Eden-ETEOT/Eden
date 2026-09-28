@@ -12,7 +12,10 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 $idUsuario = (int) $_SESSION['id_usuario'];
 $moradia = moradorAtivo($conexao, $idUsuario);
-if ($moradia === null) {
+$condMor = $moradia === null ? null : (int) $moradia['condominio'];
+if ($moradia === null
+    || eSindico($conexao, $idUsuario, (int) $condMor)
+    || funcaoNoCondominio($conexao, $idUsuario, (int) $condMor) !== null) {
     header('Location: ../dashboard.php');
     exit;
 }

@@ -317,6 +317,7 @@ CREATE TABLE IF NOT EXISTS chamadoAnexo (
         ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
+
 CREATE TABLE IF NOT EXISTS resetSenha (
     idResetSenha   INT          NOT NULL AUTO_INCREMENT,
     idUsuario      INT          NOT NULL,

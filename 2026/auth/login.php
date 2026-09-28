@@ -19,9 +19,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["id_usuario"] = $usuario["idUsuario"];
                 $_SESSION["nome"] = $usuario["nome"];
                 require_once "../Elements/condominio.php";
-                $_SESSION["id_condominio"] = resolverCondominio($conexao, (int) $usuario["idUsuario"]);
+                $idLogado = (int) $usuario["idUsuario"];
+                $condLogado = resolverCondominio($conexao, $idLogado);
+                $_SESSION["id_condominio"] = $condLogado;
+                $ehMoradorPuro = moradorAtivo($conexao, $idLogado) !== null
+                    && !eSindico($conexao, $idLogado, (int) $condLogado)
+                    && funcaoNoCondominio($conexao, $idLogado, (int) $condLogado) === null;
                 if (!empty($_SESSION["convite_token"])) {
                     header("Location: ../convite/aceitar.php?token=" . urlencode($_SESSION["convite_token"]));
+                } elseif ($ehMoradorPuro) {
+                    header("Location: ../morador/dashboard.php");
                 } else {
                     header("Location: ../dashboard.php");
                 }

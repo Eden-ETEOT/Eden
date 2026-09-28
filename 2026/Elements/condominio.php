@@ -70,6 +70,22 @@ function podeGerenciar(PDO $pdo, int $idUsuario, ?int $idCondominio): bool {
     return funcaoNoCondominio($pdo, $idUsuario, $idCondominio) !== null;
 }
 
+/** Morador ativo do usuário (vínculo atual). Retorna dados da moradia ou null. */
+function moradorAtivo(PDO $pdo, int $idUsuario): ?array {
+    $stmt = $pdo->prepare(
+        "SELECT m.idMorador, m.tipoMorador, u.idUnidade, u.numResid, u.bloco, u.andar,
+                u.metragem, u.Condominio_idCondominio AS condominio, c.nome AS condominioNome
+         FROM morador m
+         JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
+         JOIN unidade u ON u.idUnidade = mu.Unidade_idUnidade
+         JOIN condominio c ON c.idCondominio = u.Condominio_idCondominio
+         WHERE m.idUsuario = :u LIMIT 1"
+    );
+    $stmt->execute(['u' => $idUsuario]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row ?: null;
+}
+
 /** Condomínio da sessão (null = sem vínculo: telas mostram vazio). */
 function condominioDaSessao(): ?int {
     $c = $_SESSION['id_condominio'] ?? null;

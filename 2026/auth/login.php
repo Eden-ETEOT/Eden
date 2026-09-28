@@ -127,6 +127,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <p class="register">
         <span>Não tem uma conta? <a href="../cadastro/comum/escolher-tipo.php">Crie agora</a></span>
       </p>
+      <p class="register">
+        <span>Conheça os <a href="../eden_planos/index.html">planos Eden</a></span>
+      </p>
 
     </form>
 

@@ -1,18 +1,6 @@
 <?php
-// Header Component
-// Este arquivo é importado nas páginas principais do dashboard
-$planoHeader = null;
-try {
-    $stmtPlanoHeader = $conexao->prepare(
-        "SELECT p.nome FROM condominio c
-         JOIN plano p ON p.idPlano = c.Plano_idPlano
-         WHERE c.idCondominio = :c"
-    );
-    $stmtPlanoHeader->execute(['c' => $filtroCondominio]);
-    $planoHeader = $stmtPlanoHeader->fetchColumn() ?: null;
-} catch (PDOException $e) {
-    $planoHeader = null;
-}
+// Header da área do morador (mesmo design system do header do síndico).
+// Usa $pageTitle, $user_name, $user_type, $user_avatar, $user_foto.
 ?>
 
 <header class="dashboard-header">
@@ -37,9 +25,8 @@ try {
         </button>
         <nav class="profile-menu" id="profileMenu" role="menu" aria-label="Menu do usuário">
             <a href="./perfil.php" role="menuitem"><i data-lucide="user"></i>Meu perfil</a>
-            <a href="./planos/index.php" role="menuitem" class="plan-item"><i data-lucide="credit-card"></i><span class="plan-text">Meu plano<?php if ($planoHeader): ?><span class="plan-tag"><?= htmlspecialchars($planoHeader) ?></span><?php endif; ?></span></a>
-            <a href="./suporte.php" role="menuitem"><i data-lucide="life-buoy"></i>Suporte</a>
-            <a href="./logout.php" role="menuitem" class="danger"><i data-lucide="log-out"></i>Sair</a>
+            <a href="./configuracoes.php" role="menuitem"><i data-lucide="settings"></i>Configurações</a>
+            <a href="../logout.php" role="menuitem" class="danger"><i data-lucide="log-out"></i>Sair</a>
         </nav>
     </div>
 </header>

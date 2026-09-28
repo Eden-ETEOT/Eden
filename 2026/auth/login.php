@@ -23,7 +23,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (!empty($_SESSION["convite_token"])) {
                     header("Location: ../convite/aceitar.php?token=" . urlencode($_SESSION["convite_token"]));
                 } else {
-                    header("Location: ../dashboard.php");
+                    // Direciona por perfil: síndico/funcionário -> dashboard; morador com vínculo -> área do morador.
+                    $idLogado = (int) $usuario["idUsuario"];
+                    $stmtPapel = $conexao->prepare("SELECT 1 FROM sindico WHERE idUsuario = :u LIMIT 1");
+                    $stmtPapel->execute(['u' => $idLogado]);
+                    $eSindico = (bool) $stmtPapel->fetchColumn();
+                    $eFunc = false;
+                    if (!$eSindico) {
+                        $stmtPapel = $conexao->prepare("SELECT 1 FROM funcionario f JOIN usuario u ON u.idUsuario = f.idUsuario WHERE f.idUsuario = :u AND u.ativo = 1 LIMIT 1");
+                        $stmtPapel->execute(['u' => $idLogado]);
+                        $eFunc = (bool) $stmtPapel->fetchColumn();
+                    }
+                    $destino = '../dashboard.php';
+                    if (!$eSindico && !$eFunc) {
+                        $stmtPapel = $conexao->prepare("SELECT 1 FROM morador m JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL WHERE m.idUsuario = :u LIMIT 1");
+                        $stmtPapel->execute(['u' => $idLogado]);
+                        if ($stmtPapel->fetchColumn()) {
+                            $destino = '../morador/dashboard.php';
+                        }
+                    }
+                    header("Location: " . $destino);
                 }
                 
                 exit();

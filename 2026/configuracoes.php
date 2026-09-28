@@ -63,8 +63,12 @@ $menuAtivo = 'configuracoes';
 $total_unidades = 0;
 $total_blocos = 0;
 try {
-    $total_unidades = (int) $conexao->query("SELECT COUNT(*) FROM unidade")->fetchColumn();
-    $total_blocos = (int) $conexao->query("SELECT COUNT(DISTINCT bloco) FROM unidade WHERE bloco IS NOT NULL AND bloco <> ''")->fetchColumn();
+    $stmt = $conexao->prepare("SELECT COUNT(*) FROM unidade WHERE Condominio_idCondominio = :cond");
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $total_unidades = (int) $stmt->fetchColumn();
+    $stmt = $conexao->prepare("SELECT COUNT(DISTINCT bloco) FROM unidade WHERE Condominio_idCondominio = :cond AND bloco IS NOT NULL AND bloco <> ''");
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $total_blocos = (int) $stmt->fetchColumn();
 } catch (PDOException $e) {
     // mantém zero
 }
@@ -162,6 +166,35 @@ $endereco = $cond
                                     <div class="notification-description"><strong>Relatório Mensal Automático</strong><span>Gerar e enviar relatório todo dia 1º</span></div>
                                     <label class="switch"><input type="checkbox" id="relatorioMensal" checked><span class="slider"></span></label>
                                 </div>
+                            </div>
+                        </section>
+
+                        <section class="settings-card">
+                            <div class="card-title">Plano atual</div>
+                            <div class="card-content">
+                                <?php
+                                $planoCond = null;
+                                try {
+                                    $stmtPlano = $conexao->prepare(
+                                        "SELECT p.nome, p.valor FROM condominio c
+                                         JOIN plano p ON p.idPlano = c.Plano_idPlano
+                                         WHERE c.idCondominio = :c"
+                                    );
+                                    $stmtPlano->execute(['c' => $filtroCondominio]);
+                                    $planoCond = $stmtPlano->fetch(PDO::FETCH_ASSOC);
+                                } catch (PDOException $e) {
+                                    $planoCond = null;
+                                }
+                                ?>
+                                <p style="font-size:14px;color:#4c5a50;margin-bottom:12px">
+                                    <?php if ($planoCond): ?>
+                                    <strong><?= htmlspecialchars($planoCond['nome']) ?></strong>
+                                    — R$ <?= number_format((float) $planoCond['valor'], 2, ',', '.') ?>/mês
+                                    <?php else: ?>
+                                    Nenhum plano vinculado.
+                                    <?php endif; ?>
+                                </p>
+                                <a class="btn btn-orange btn-sm" href="./planos/index.php">Trocar de plano</a>
                             </div>
                         </section>
 

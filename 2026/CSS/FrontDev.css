@@ -163,6 +163,48 @@
 
     cursor: pointer;
 }
+.fd-apartamentos .filter-wrap {
+    position: relative;
+}
+.fd-apartamentos .filter-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+
+    min-width: 240px;
+
+    background: white;
+
+    border: 1px solid #dce3df;
+    border-radius: 12px;
+
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
+
+    padding: 16px;
+
+    display: none;
+
+    z-index: 200;
+}
+.fd-apartamentos .filter-menu.open {
+    display: block;
+}
+.fd-apartamentos .filter-field {
+    margin-bottom: 12px;
+}
+.fd-apartamentos .filter-field label {
+    display: block;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #294633;
+
+    margin-bottom: 6px;
+}
+.fd-apartamentos .filter-field .dash-filter {
+    width: 100%;
+}
 .fd-apartamentos .table-wrapper {
     width: 100%;
 
@@ -2030,6 +2072,48 @@
 
     cursor: pointer;
 }
+.fd-moradores .filter-wrap {
+    position: relative;
+}
+.fd-moradores .filter-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+
+    min-width: 240px;
+
+    background: white;
+
+    border: 1px solid #dce3df;
+    border-radius: 12px;
+
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
+
+    padding: 16px;
+
+    display: none;
+
+    z-index: 200;
+}
+.fd-moradores .filter-menu.open {
+    display: block;
+}
+.fd-moradores .filter-field {
+    margin-bottom: 12px;
+}
+.fd-moradores .filter-field label {
+    display: block;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #294633;
+
+    margin-bottom: 6px;
+}
+.fd-moradores .filter-field .dash-filter {
+    width: 100%;
+}
 .fd-moradores .filter-btn:hover {
     background: #203a2a;
 }
@@ -2530,8 +2614,52 @@
 
     cursor: pointer;
 }
+.fd-ocorrencias .filter-wrap {
+    position: relative;
+}
+.fd-ocorrencias .filter-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+
+    min-width: 240px;
+
+    background: white;
+
+    border: 1px solid #dce3df;
+    border-radius: 12px;
+
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
+
+    padding: 16px;
+
+    display: none;
+
+    z-index: 200;
+}
+.fd-ocorrencias .filter-menu.open {
+    display: block;
+}
+.fd-ocorrencias .filter-field {
+    margin-bottom: 12px;
+}
+.fd-ocorrencias .filter-field label {
+    display: block;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #294633;
+
+    margin-bottom: 6px;
+}
+.fd-ocorrencias .filter-field .dash-filter {
+    width: 100%;
+}
 .fd-ocorrencias .new-occurrence-button {
     height: 41px;
+
+    margin-top: 25px;
 
     border: 0;
     border-radius: 11px;
@@ -2750,9 +2878,16 @@
 }
 .fd-ocorrencias .details-modal {
     width: 552px;
+
+    max-height: 90vh;
+
+    display: flex;
+    flex-direction: column;
 }
 .fd-ocorrencias .details-content {
     padding: 21px 29px 33px;
+
+    overflow-y: auto;
 }
 .fd-ocorrencias .details-top {
     display: flex;
@@ -2820,6 +2955,23 @@
     font-weight: 600;
 
     line-height: 1.55;
+}
+.fd-ocorrencias .anexo-box {
+    background: #f8f6f3;
+
+    border-radius: 13px;
+
+    padding: 13px 8px;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.fd-ocorrencias .anexo-box img {
+    max-width: 100%;
+    max-height: 300px;
+
+    border-radius: 9px;
 }
 .fd-ocorrencias .update-title {
     margin: 26px 7px 9px;
@@ -3052,6 +3204,48 @@
     color: white;
 
     cursor: pointer;
+}
+.fd-documentacao .filter-wrap {
+    position: relative;
+}
+.fd-documentacao .filter-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+
+    min-width: 240px;
+
+    background: white;
+
+    border: 1px solid #dce3df;
+    border-radius: 12px;
+
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
+
+    padding: 16px;
+
+    display: none;
+
+    z-index: 200;
+}
+.fd-documentacao .filter-menu.open {
+    display: block;
+}
+.fd-documentacao .filter-field {
+    margin-bottom: 12px;
+}
+.fd-documentacao .filter-field label {
+    display: block;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #294633;
+
+    margin-bottom: 6px;
+}
+.fd-documentacao .filter-field .dash-filter {
+    width: 100%;
 }
 .fd-documentacao .table-container {
     overflow-x: auto;

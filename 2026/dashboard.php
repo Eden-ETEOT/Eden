@@ -55,31 +55,49 @@ try {
     // sem condomínio cadastrado ainda
 }
 
-// Estatísticas do banco
+// Estatísticas do banco (somente condomínio da sessão, via vínculo ativo do autor)
 $stats = [];
-
-$stmt = $conexao->query("SELECT COUNT(*) FROM chamados");
+function dashContaChamados(PDO $conexao, string $status, int $cond): int {
+    $stmt = $conexao->prepare(
+        "SELECT COUNT(*) FROM chamados c
+         JOIN morador m ON m.idMorador = c.morador_idMorador
+         JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
+         JOIN unidade u ON u.idUnidade = mu.Unidade_idUnidade
+         WHERE c.status = :st AND u.Condominio_idCondominio = :cond"
+    );
+    $stmt->execute(['st' => $status, 'cond' => $cond]);
+    return (int) $stmt->fetchColumn();
+}
+$stmt = $conexao->prepare(
+    "SELECT COUNT(*) FROM chamados c
+     JOIN morador m ON m.idMorador = c.morador_idMorador
+     JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
+     JOIN unidade u ON u.idUnidade = mu.Unidade_idUnidade
+     WHERE u.Condominio_idCondominio = :cond"
+);
+$stmt->execute(['cond' => $filtroCondominio]);
 $stats['total_occurrences'] = $stmt->fetchColumn();
 
-$stmt = $conexao->query("SELECT COUNT(*) FROM chamados WHERE status = 'resolvida'");
-$stats['resolved'] = $stmt->fetchColumn();
+$stats['resolved'] = dashContaChamados($conexao, 'resolvida', $filtroCondominio);
 
-$stmt = $conexao->query("SELECT COUNT(*) FROM chamados WHERE status = 'analise'");
-$stats['pending'] = $stmt->fetchColumn();
+$stats['pending'] = dashContaChamados($conexao, 'andamento', $filtroCondominio);
 
-$stmt = $conexao->query("SELECT COUNT(*) FROM chamados WHERE status = 'andamento'");
-$stats['analyzing'] = $stmt->fetchColumn();
+$stats['analyzing'] = dashContaChamados($conexao, 'andamento', $filtroCondominio);
 
 // Distribuição de ocorrências pendentes por categoria (para o card de breakdown)
-$stmt = $conexao->query(
+$stmt = $conexao->prepare(
     "SELECT cat.nome, COUNT(*) AS total
      FROM chamados c
      JOIN categoria cat ON c.categoria_idCategoria = cat.idCategoria
-     WHERE c.status IN ('analise', 'andamento')
+     JOIN morador m ON m.idMorador = c.morador_idMorador
+     JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
+     JOIN unidade u ON u.idUnidade = mu.Unidade_idUnidade
+     WHERE c.status = 'andamento' AND u.Condominio_idCondominio = :cond
      GROUP BY cat.idCategoria, cat.nome
      ORDER BY total DESC
      LIMIT 4"
 );
+$stmt->execute(['cond' => $filtroCondominio]);
 $categorias_pendentes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $max_categoria = 0;
 foreach ($categorias_pendentes as $cat) {
@@ -87,12 +105,17 @@ foreach ($categorias_pendentes as $cat) {
 }
 
 // Tempo médio de resolução (horas) e total de resolvidas no período
-$stmt = $conexao->query(
+$stmt = $conexao->prepare(
     "SELECT AVG(TIMESTAMPDIFF(HOUR, c.dataPedida, c.dataRealizada)) AS media_horas,
             COUNT(*) AS total_resolvidas
      FROM chamados c
-     WHERE c.status = 'resolvida' AND c.dataRealizada IS NOT NULL"
+     JOIN morador m ON m.idMorador = c.morador_idMorador
+     JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
+     JOIN unidade u ON u.idUnidade = mu.Unidade_idUnidade
+     WHERE c.status = 'resolvida' AND c.dataRealizada IS NOT NULL
+       AND u.Condominio_idCondominio = :cond"
 );
+$stmt->execute(['cond' => $filtroCondominio]);
 $tempo_resolucao = $stmt->fetch(PDO::FETCH_ASSOC);
 $media_resolucao_horas = $tempo_resolucao && $tempo_resolucao['media_horas'] !== null
     ? round((float) $tempo_resolucao['media_horas'], 1)
@@ -122,12 +145,17 @@ $sql = "SELECT
         JOIN moradorunidade mu ON m.idMorador = mu.Morador_idMorador AND mu.dataFim IS NULL
         JOIN unidade u ON mu.Unidade_idUnidade = u.idUnidade
         JOIN condominio cond ON u.Condominio_idCondominio = cond.idCondominio
+        WHERE c.status = 'andamento' AND u.Condominio_idCondominio = :cond
         ORDER BY c.dataPedida DESC
         LIMIT 10";
 
+$filtroPrioridades = $conexao->query("SELECT nome FROM prioridade ORDER BY ordem, nome")->fetchAll(PDO::FETCH_ASSOC);
+$filtroCategorias = $conexao->query("SELECT nome FROM categoria ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
+
 $pending_issues = [];
 try {
-    $stmt = $conexao->query($sql);
+    $stmt = $conexao->prepare($sql);
+    $stmt->execute(['cond' => $filtroCondominio]);
     $pending_issues = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     // Tabelas relacionadas podem não ter dados ainda
@@ -166,8 +194,8 @@ try {
                         <div class="stat-icon orange"><img src="./assets/icones/relogio.svg" alt="Pendentes"></div>
                         <div class="stat-value"><?php echo number_format($stats['pending']); ?></div>
                         <div class="stat-label">Pendentes</div>
-                        <div class="stat-description">Ocorrências esperando análise</div>
-                        <a href="./ocorrencias.php?status=analise" class="stat-link">Ver mais</a>
+                        <div class="stat-description">Ocorrências em andamento</div>
+                        <a href="./ocorrencias.php?status=andamento" class="stat-link">Ver mais</a>
                     </div>
 
                     <!-- Em Análise -->
@@ -236,7 +264,32 @@ try {
 <?php banner($msg); ?>
                 <div>
                             <h2 class="pending-title">Ocorrências pendentes</h2>
-                            <p style="font-size: 12px; color: #999; margin-top: 4px;"><?php echo count($pending_issues); ?> ocorrências encontradas</p>
+                            <p style="font-size: 12px; color: #999; margin-top: 4px;"><span id="dashCount"><?php echo count($pending_issues); ?></span> ocorrências encontradas</p>
+                        </div>
+                        <div class="pending-header-actions">
+                            <div class="table-search-container">
+                                <i data-lucide="search" class="search-icon"></i>
+                                <input id="dashSearch" class="table-search-input" type="text" placeholder="Pesquisar..." oninput="filtrarDashTabela()">
+                            </div>
+                            <select id="dashFStatus" class="dash-filter" onchange="filtrarDashTabela()" title="Filtrar por status">
+                                <option value="">Status: todos</option>
+                                <option value="analise">Em análise</option>
+                                <option value="andamento" selected>Em andamento</option>
+                                <option value="resolvida">Resolvida</option>
+                                <option value="cancelada">Cancelada</option>
+                            </select>
+                            <select id="dashFPrioridade" class="dash-filter" onchange="filtrarDashTabela()" title="Filtrar por prioridade">
+                                <option value="">Prioridade: todas</option>
+                                <?php foreach ($filtroPrioridades as $fp): ?>
+                                <option value="<?= htmlspecialchars($fp['nome']) ?>"><?= htmlspecialchars($fp['nome']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <select id="dashFTipo" class="dash-filter" onchange="filtrarDashTabela()" title="Filtrar por tipo">
+                                <option value="">Tipo: todos</option>
+                                <?php foreach ($filtroCategorias as $fc): ?>
+                                <option value="<?= htmlspecialchars($fc['nome']) ?>"><?= htmlspecialchars($fc['nome']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                     </div>
 
@@ -253,7 +306,7 @@ try {
                                     <th>Ações</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="dashTable">
                                 <?php if (empty($pending_issues)): ?>
                                 <tr>
                                     <td colspan="7" style="text-align: center; padding: 24px; color: #999;">
@@ -272,7 +325,7 @@ try {
                                     'resolvida' => 'Resolvida'
                                 ][$issue['status']] ?? $issue['status'];
                                 ?>
-                                <tr>
+                                <tr data-status="<?= $issue['status'] ?>" data-prioridade="<?= htmlspecialchars($issue['prioridade_nome']) ?>" data-categoria="<?= htmlspecialchars($issue['categoria_nome']) ?>">
                                     <td><?= htmlspecialchars($issue['bloco']) ?></td>
                                     <td><?= htmlspecialchars($issue['numResid']) ?></td>
                                     <td><?= htmlspecialchars($issue['categoria_nome']) ?></td>
@@ -337,6 +390,22 @@ try {
     <script>
         if (window.lucide) lucide.createIcons();
         const DV_STATUS = { analise: 'Em análise', andamento: 'Em andamento', resolvida: 'Resolvida', cancelada: 'Cancelada' };
+        function filtrarDashTabela() {
+            const q = (document.getElementById('dashSearch').value || '').toLowerCase();
+            const st = document.getElementById('dashFStatus').value;
+            const pr = document.getElementById('dashFPrioridade').value;
+            const tp = document.getElementById('dashFTipo').value;
+            let vis = 0;
+            document.querySelectorAll('#dashTable tr').forEach(tr => {
+                const ok = (!q || tr.innerText.toLowerCase().includes(q))
+                    && (!st || tr.dataset.status === st)
+                    && (!pr || tr.dataset.prioridade === pr)
+                    && (!tp || tr.dataset.categoria === tp);
+                tr.style.display = ok ? '' : 'none';
+                if (ok) vis++;
+            });
+            document.getElementById('dashCount').textContent = vis;
+        }
         function visualizarDash(o) {
             document.getElementById('dvTitle').textContent = o.titulo;
             document.getElementById('dvId').textContent = '#' + String(o.idChamados).padStart(3, '0');

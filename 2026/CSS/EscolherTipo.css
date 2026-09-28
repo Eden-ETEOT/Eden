@@ -101,6 +101,7 @@ body {
   display: flex;
   gap: var(--spacing400);
   max-width: 100%;
+  justify-content: center;
 }
 
 
@@ -136,15 +137,22 @@ button {
     width:min(308px, 100%);
     height:min(448px, calc(100vh - 280px));
     min-height:300px;
-    border-radius: 15px;
-    border: solid 1px #EAEAEA;
-    gap: var(--spacing400);
+    border-radius: 18px;
+    border: solid 1px #DFE7E0;
+    background: #ffffff;
+    box-shadow: 0 18px 45px rgba(40, 62, 46, 0.10);
+    gap: var(--spacing500);
     align-items: center;
-    justify-content: flex-end;
-    padding-bottom: 50px;
+    justify-content: center;
+    padding: 48px 40px;
     font-family: var(--fonteTextos);
     font-weight: var(--normal);
       color:var(--green3-800);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.card-1:hover{
+    box-shadow: 0 24px 60px rgba(40, 62, 46, 0.16);
+    transform: translateY(-3px);
 }
 .icon-arrow{
    width:45px;

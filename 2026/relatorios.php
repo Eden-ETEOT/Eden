@@ -156,10 +156,6 @@ try {
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <button class="generate-btn" type="button" onclick="fdGerarRelatorio()">
-                                <i data-lucide="chart-no-axes-column"></i>
-                                Gerar
-                            </button>
                         </div>
                     </section>
 

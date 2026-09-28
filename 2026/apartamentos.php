@@ -2,18 +2,17 @@
 include './Elements/auth.php';
 include './Elements/ui.php';
 
-// Condomínio de referência (último criado)
-$idCondominio = null;
-try {
-    $idCondominio = $conexao->query("SELECT idCondominio FROM condominio ORDER BY idCondominio DESC LIMIT 1")->fetchColumn();
-} catch (PDOException $e) {
-    $idCondominio = null;
-}
+// Condomínio da sessão (isolation: novos apartamentos entram no condomínio do usuário)
+$idCondominio = $filtroCondominio > 0 ? $filtroCondominio : null;
 
 $msg = '';
+$erro = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acao = $_POST['acao'] ?? '';
-    if ($acao === 'novo' && $idCondominio) {
+    if ($acao === 'novo') {
+        if (!$idCondominio) {
+            $erro = 'Usuário sem condomínio vinculado.';
+        } else {
         $num = trim($_POST['num'] ?? '');
         $bloco = trim($_POST['bloco'] ?? '');
         $andar = (int) ($_POST['andar'] ?? 0);
@@ -32,13 +31,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             $msg = 'Apartamento registrado com sucesso.';
         }
+        }
     } elseif ($acao === 'status') {
         $id = (int) ($_POST['id'] ?? 0);
         $ativo = (int) ($_POST['ativo'] ?? 0) === 1 ? 1 : 0;
         if ($id > 0) {
-            $stmt = $conexao->prepare("UPDATE unidade SET ativo = :a WHERE idUnidade = :id");
-            $stmt->execute(['a' => $ativo, 'id' => $id]);
-            $msg = $ativo ? 'Apartamento reativado com sucesso.' : 'Apartamento desativado com sucesso.';
+            if (!pertenceAoCondominio($conexao, 'unidade', $id, $filtroCondominio)) {
+                $erro = 'Apartamento fora do seu condomínio.';
+            } else {
+                $stmt = $conexao->prepare("UPDATE unidade SET ativo = :a WHERE idUnidade = :id");
+                $stmt->execute(['a' => $ativo, 'id' => $id]);
+                $msg = $ativo ? 'Apartamento reativado com sucesso.' : 'Apartamento desativado com sucesso.';
+            }
         }
     }
 }
@@ -59,9 +63,14 @@ try {
                    AND mu.dataFim IS NULL AND m.tipoMorador = 'proprietario'
                  ORDER BY mu.dataInicio DESC LIMIT 1) AS proprietario
             FROM unidade u
+            WHERE u.Condominio_idCondominio = :cond
             ORDER BY u.idUnidade DESC";
-    $apartamentos = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    $blocos = $conexao->query("SELECT DISTINCT bloco FROM unidade WHERE bloco IS NOT NULL AND bloco <> '' ORDER BY bloco")->fetchAll(PDO::FETCH_COLUMN);
+    $stmt = $conexao->prepare($sql);
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $apartamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conexao->prepare("SELECT DISTINCT bloco FROM unidade WHERE Condominio_idCondominio = :cond AND bloco IS NOT NULL AND bloco <> '' ORDER BY bloco");
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $blocos = $stmt->fetchAll(PDO::FETCH_COLUMN);
 } catch (PDOException $e) {
     $apartamentos = [];
     $blocos = [];
@@ -95,7 +104,7 @@ try {
                         </div>
                     </section>
 
-<?php banner($msg); ?>
+<?php banner($msg, $erro); ?>
 
                     <section class="apartments-card">
                         <div class="card-header">
@@ -111,7 +120,29 @@ try {
                                     <i data-lucide="search"></i>
                                     <input class="input-field-default-m" type="text" id="aptSearchInput" placeholder="Pesquisar apartamento..." oninput="fdPesquisarApartamento()">
                                 </div>
-                                <button class="filter-btn" type="button" onclick="fdFiltrarApartamentos(this)" title="Mostrar somente inativos"><i data-lucide="list-filter"></i></button>
+                                <div class="filter-wrap">
+                                    <button class="filter-btn" type="button" id="filterBtn" title="Filtrar tabela" onclick="toggleFiltroMenu(event)"><i data-lucide="list-filter"></i></button>
+                                    <div class="filter-menu" id="filterMenu">
+                                        <div class="filter-field">
+                                            <label for="fltStatus">Status</label>
+                                            <select id="fltStatus" class="dash-filter" onchange="aplicarFiltrosApto()">
+                                                <option value="">Todos</option>
+                                                <option value="Ativo">Ativo</option>
+                                                <option value="Inativo">Inativo</option>
+                                            </select>
+                                        </div>
+                                        <div class="filter-field">
+                                            <label for="fltBloco">Bloco</label>
+                                            <select id="fltBloco" class="dash-filter" onchange="aplicarFiltrosApto()">
+                                                <option value="">Todos</option>
+                                                <?php foreach ($blocos as $b): ?>
+                                                <option value="<?= htmlspecialchars($b) ?>"><?= htmlspecialchars($b) ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <button type="button" class="btn btn-green-ghost btn-sm btn-block" onclick="limparFiltrosApto()">Limpar filtros</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -134,7 +165,7 @@ try {
                                     <?php else: ?>
                                         <?php foreach ($apartamentos as $a): ?>
                                         <?php $ativo = ((int) $a['ativo']) === 1; ?>
-                                        <tr data-status="<?= $ativo ? 'Ativo' : 'Inativo' ?>">
+                                        <tr data-status="<?= $ativo ? 'Ativo' : 'Inativo' ?>" data-bloco="<?= htmlspecialchars($a['bloco']) ?>">
                                             <td>#<?= (int) $a['idUnidade'] ?></td>
                                             <td><?= htmlspecialchars($a['numResid']) ?></td>
                                             <td><?= htmlspecialchars($a['bloco']) ?></td>
@@ -261,5 +292,42 @@ try {
     </div>
 
     <script src="<?= assetUrl('./js/app.js') ?>"></script>
+    <script>
+        lucide.createIcons();
+        function toggleFiltroMenu(e) {
+            e.stopPropagation();
+            document.getElementById('filterMenu').classList.toggle('open');
+        }
+        document.addEventListener('click', function (e) {
+            const m = document.getElementById('filterMenu');
+            if (m && !m.contains(e.target)) m.classList.remove('open');
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                const m = document.getElementById('filterMenu');
+                if (m) m.classList.remove('open');
+            }
+        });
+        function aplicarFiltrosApto(fecharMenu = true) {
+            const q = (document.getElementById('aptSearchInput').value || '').toLowerCase();
+            const st = document.getElementById('fltStatus').value;
+            const bl = document.getElementById('fltBloco').value;
+            let vis = 0;
+            document.querySelectorAll('#apartmentTable tr').forEach(tr => {
+                const ok = (!q || tr.innerText.toLowerCase().includes(q))
+                    && (!st || tr.dataset.status === st)
+                    && (!bl || tr.dataset.bloco === bl);
+                tr.style.display = ok ? '' : 'none';
+                if (ok) vis++;
+            });
+            document.getElementById('apartmentCount').textContent = vis;
+            if (fecharMenu) document.getElementById('filterMenu').classList.remove('open');
+        }
+        function limparFiltrosApto() {
+            document.getElementById('fltStatus').value = '';
+            document.getElementById('fltBloco').value = '';
+            aplicarFiltrosApto();
+        }
+    </script>
 </body>
 </html>

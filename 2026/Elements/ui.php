@@ -18,12 +18,12 @@ function assetUrl($rel) {
     return $rel;
 }
 
-function pageHead($titulo, $cssExtras = [], $jsExtras = []) {
+function pageHead($titulo, $cssExtras = [], $jsExtras = [], $base = '.') {
     echo "<head>\n";
     echo "    <meta charset=\"UTF-8\">\n";
     echo "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n";
     echo '    <title>' . htmlspecialchars($titulo) . "</title>\n";
-    $css = array_merge(['./CSS/dashboard.css', './CSS/botoes.css'], $cssExtras);
+    $css = array_merge([$base . '/CSS/dashboard.css', $base . '/CSS/botoes.css'], $cssExtras);
     foreach ($css as $c) {
         echo '    <link rel="stylesheet" href="' . htmlspecialchars(assetUrl($c)) . "\">\n";
     }
@@ -40,7 +40,7 @@ function pageHead($titulo, $cssExtras = [], $jsExtras = []) {
  */
 function layoutOpen() {
     // sidebar.php/header.php usam estas variáveis da página
-    global $menuAtivo, $pageTitle, $user_name, $user_type, $user_avatar, $user_foto;
+    global $menuAtivo, $pageTitle, $user_name, $user_type, $user_avatar, $user_foto, $conexao, $filtroCondominio;
     echo '<div class="dashboard-wrapper">' . "\n";
     include __DIR__ . '/sidebar.php';
     echo '<div class="main-content">' . "\n";

@@ -1,0 +1,568 @@
+/* planos.css — fluxo de escolha de plano e pagamento (mock).
+   Páginas públicas da área logada do síndico em 2026/planos/.
+   Layout dividido (form + imagem) no padrão das telas de cadastro. */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.pl-planos-body {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-family: 'Inter', sans-serif;
+    background: white;
+}
+
+.pl-main {
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.pl-back {
+    color: #294633;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+}
+
+.pl-back:hover {
+    text-decoration: underline;
+}
+
+.pl-panel {
+    max-width: 560px;
+    width: 100%;
+    margin: auto;
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.pl-logo {
+    width: 120px;
+    margin-bottom: 28px;
+}
+
+.pl-panel h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #294633;
+}
+
+.pl-panel h1 span {
+    color: #ff8b00;
+}
+
+.pl-lead {
+    font-size: 15px;
+    color: #4c5a50;
+    margin: 10px 0 20px;
+    line-height: 1.55;
+}
+
+.pl-benefits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    justify-content: center;
+    font-size: 13px;
+    color: #4c5a50;
+    margin-bottom: 24px;
+}
+
+.pl-image-side {
+    background-image: url(../assets/imageLogin.png);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+
+/* ===== cartões de plano ===== */
+.pl-plans {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    width: 100%;
+    max-width: 980px;
+}
+
+.pl-plan {
+    border: 1px solid #dfe7e0;
+    border-radius: 16px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    text-align: left;
+}
+
+.pl-plan.featured {
+    border: 2px solid #ff8b00;
+    box-shadow: 0 14px 36px rgba(255, 139, 0, 0.14);
+}
+
+.pl-plan h2 {
+    font-size: 19px;
+    color: #294633;
+}
+
+.pl-price {
+    font-size: 15px;
+    color: #4c5a50;
+    margin: 8px 0 4px;
+}
+
+.pl-price strong {
+    font-size: 24px;
+    color: #294633;
+}
+
+.pl-plan > small {
+    font-size: 12px;
+    color: #6e7772;
+}
+
+.pl-plan hr {
+    border: 0;
+    border-top: 1px solid #e6ece7;
+    margin: 14px 0;
+}
+
+.pl-plan ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+    color: #4c5a50;
+    margin-bottom: 18px;
+    flex: 1;
+}
+
+.pl-plan ul li::before {
+    content: '✓ ';
+    color: #4D8F14;
+    font-weight: 700;
+}
+
+.pl-current {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #31563e;
+    background: #e5f2e8;
+    border-radius: 999px;
+    padding: 4px 12px;
+    margin-bottom: 10px;
+}
+
+/* ===== opções pix/cartão ===== */
+.pl-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+    max-width: 420px;
+    margin: 6px 0 24px;
+}
+
+.pl-option {
+    border: 1.5px solid #d5ddd8;
+    border-radius: 14px;
+    padding: 26px 12px 20px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #8a958d;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.pl-option svg {
+    width: 44px;
+    height: 44px;
+}
+
+.pl-option.selected {
+    border-color: #4D8F14;
+    color: #4D8F14;
+}
+
+/* ===== formulário ===== */
+.pl-form {
+    width: 100%;
+    max-width: 420px;
+    text-align: left;
+}
+
+.pl-field {
+    margin-bottom: 16px;
+}
+
+.pl-field label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #294633;
+    margin-bottom: 8px;
+}
+
+.pl-field input,
+.pl-field select {
+    width: 100%;
+    height: 46px;
+    border: 1px solid #d5ddd8;
+    border-radius: 10px;
+    padding: 0 14px;
+    font-size: 14px;
+    color: #294633;
+    outline: none;
+    background: white;
+    font-family: 'Inter', sans-serif;
+}
+
+.pl-field input:focus,
+.pl-field select:focus {
+    border-color: #52705d;
+}
+
+.pl-field input::placeholder {
+    color: #a8b4ae;
+}
+
+.pl-btn {
+    width: 100%;
+    max-width: 420px;
+    height: 48px;
+    border: 0;
+    border-radius: 12px;
+    background: #ff8b00;
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pl-btn:hover {
+    background: #e67b00;
+}
+
+.pl-error {
+    width: 100%;
+    max-width: 420px;
+    background: #fdecea;
+    color: #8f1d1d;
+    border: 1px solid #f5c6c2;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+/* ===== resumo do plano ===== */
+.pl-summary {
+    width: 100%;
+    max-width: 420px;
+    background: #f4f8f4;
+    border: 1px solid #dfe7e0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: #294633;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.pl-summary strong {
+    font-size: 17px;
+}
+
+/* ===== pix ===== */
+.pl-qr {
+    width: 220px;
+    height: 220px;
+    margin: 6px 0 14px;
+}
+
+.pl-chave-label {
+    font-size: 14px;
+    color: #6e7772;
+}
+
+.pl-chave {
+    font-size: 19px;
+    font-weight: 700;
+    color: #ff8b00;
+    margin: 6px 0 22px;
+    word-break: break-all;
+}
+
+/* ===== resultado ===== */
+.pl-result-icon {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.pl-result-icon svg {
+    width: 42px;
+    height: 42px;
+}
+
+.pl-result-icon.ok {
+    background: #e5f2e8;
+    color: #2e7d32;
+}
+
+.pl-result-icon.err {
+    background: #fdecea;
+    color: #c62828;
+}
+
+@media (max-width: 1100px) {
+    .pl-plans {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 850px) {
+    .pl-planos-body {
+        grid-template-columns: 1fr;
+    }
+    .pl-image-side {
+        display: none;
+    }
+}
+
+/* ===== página de planos (vitrine) ===== */
+.pl-topbar {
+    background: #283E2E;
+    color: white;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 18px 32px;
+    font-family: 'Inter', sans-serif;
+}
+
+.pl-topback {
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    justify-self: start;
+}
+
+.pl-topback:hover {
+    text-decoration: underline;
+}
+
+.pl-toplogo {
+    height: 44px;
+    justify-self: center;
+}
+
+.pl-landing {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 32px 72px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    background: white;
+}
+
+.pl-landing,
+.pl-landing button,
+.pl-landing input,
+.pl-landing select {
+    font-family: 'Inter', sans-serif;
+}
+
+.pl-landing h1 {
+    font-size: 38px;
+    font-weight: 800;
+    color: #111;
+}
+
+.pl-landing h1 span {
+    color: #4D8F14;
+}
+
+.pl-subtitle {
+    font-size: 17px;
+    color: #9aa3a7;
+    margin: 14px 0 26px;
+}
+
+.pl-perks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 44px;
+}
+
+.pl-perks span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #cfd8d2;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #111;
+    background: white;
+}
+
+.pl-perks svg {
+    width: 22px;
+    height: 22px;
+    color: #4D8F14;
+}
+
+.pl-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    align-items: stretch;
+    text-align: center;
+}
+
+.pl-card {
+    border: 1px solid #e6ece7;
+    border-radius: 18px;
+    padding: 34px 30px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 6px 20px rgba(40, 62, 46, 0.06);
+}
+
+.pl-card.current {
+    border-color: #9dc3a5;
+    box-shadow: 0 10px 28px rgba(77, 143, 20, 0.12);
+}
+
+.pl-current {
+    align-self: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #31563e;
+    background: #e5f2e8;
+    border-radius: 999px;
+    padding: 4px 14px;
+    margin-bottom: 12px;
+}
+
+.pl-card.featured {
+    padding-top: 48px;
+    padding-bottom: 48px;
+    box-shadow: 0 18px 48px rgba(40, 62, 46, 0.10);
+}
+
+.pl-card h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #1c2b21;
+}
+
+.pl-card-head {
+    min-height: 172px;
+}
+
+.pl-card-price {
+    font-size: 22px;
+    color: #1c2b21;
+    margin: 10px 0 6px;
+    white-space: nowrap;
+}
+
+.pl-card-price strong {
+    font-size: 38px;
+    font-weight: 800;
+    color: #2e7d32;
+}
+
+.pl-card-price small {
+    font-size: 16px;
+    color: #9aa3a7;
+}
+
+.pl-card-desc {
+    font-size: 14px;
+    color: #9aa3a7;
+}
+
+.pl-card hr {
+    border: 0;
+    border-top: 1px solid #e3e9e4;
+    margin: 20px 0;
+}
+
+.pl-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-size: 15px;
+    color: #111;
+    text-align: left;
+    margin-bottom: 26px;
+    flex: 1;
+}
+
+.pl-card ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.pl-card ul li::before {
+    content: '✓';
+    color: #2e7d32;
+    font-weight: 800;
+    font-size: 17px;
+    line-height: 1.3;
+}
+
+.pl-card .pl-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+@media (max-width: 900px) {
+    .pl-cards {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin: 0 auto;
+    }
+    .pl-landing h1 {
+        font-size: 28px;
+    }
+}

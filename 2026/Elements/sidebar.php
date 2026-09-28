@@ -8,7 +8,9 @@ function menuAtivoCls($chave, $menuAtivo) {
 ?>
 <aside class="sidebar">
     <div class="sidebar-header">
-        <img src="./assets/PNG/logobranca-laranja.png" alt="éden Systems" class="sidebar-brand">
+        <a href="./dashboard.php" title="Ir para o painel">
+            <img src="./assets/PNG/logobranca-laranja.png" alt="éden Systems" class="sidebar-brand">
+        </a>
     </div>
 
     <nav class="sidebar-nav">

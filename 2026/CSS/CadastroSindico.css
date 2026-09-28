@@ -157,11 +157,14 @@ select{
   width: 100%;
   padding: var(--spacing200) var(--spacing300);
   border: 1px solid var(--corNeutra2); /* vai virar gray 200 no mockup*/
-  color: var(--gray200);
+  color: #000;
   font-size: 1rem;
   outline: none;
   border-radius: 8px;
   height: 2rem;
+}
+select option {
+  color: #000;
 }
   /* Linha checkbox + esqueceu */
 .row {

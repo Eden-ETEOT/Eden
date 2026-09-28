@@ -41,6 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($titulo === '' || $descricao === '' || $categoria <= 0 || $prioridade <= 0 || $morador <= 0) {
                 throw new Exception('Preencha todos os campos obrigatórios.');
             }
+            if (!moradorDoCondominio($conexao, $morador, $filtroCondominio)) {
+                throw new Exception('Morador fora do seu condomínio.');
+            }
             $stmt = $conexao->prepare(
                 "INSERT INTO chamados (titulo, descricao, dataPedida, status, prioridade_idPrioridade, categoria_idCategoria, morador_idMorador)
                  VALUES (:titulo, :descricao, NOW(), 'analise', :prioridade, :categoria, :morador)"
@@ -136,7 +139,8 @@ try {
             $sql = "SELECT c.idChamados, c.titulo, c.descricao, c.status, c.prioridade_idPrioridade, c.dataPedida,
                    DATE_FORMAT(c.dataPedida, '%d/%m/%Y') AS dataFmt,
                    cat.nome AS categoria, p.nome AS prioridade,
-                   u.nome AS morador_nome, un.numResid
+                   u.nome AS morador_nome, un.numResid,
+                   GROUP_CONCAT(ca.caminho ORDER BY ca.idChamadoAnexo SEPARATOR '|') AS anexos
             FROM chamados c
             JOIN categoria cat ON cat.idCategoria = c.categoria_idCategoria
             JOIN prioridade p ON p.idPrioridade = c.prioridade_idPrioridade
@@ -144,16 +148,15 @@ try {
             JOIN usuario u ON u.idUsuario = m.idUsuario
             LEFT JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
             LEFT JOIN unidade un ON un.idUnidade = mu.Unidade_idUnidade
+            LEFT JOIN chamadoAnexo ca ON ca.chamados_idChamados = c.idChamados
+            WHERE un.Condominio_idCondominio = :cond
+            GROUP BY c.idChamados
             ORDER BY c.dataPedida DESC";
-    $ocorrencias = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conexao->prepare($sql);
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $ocorrencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $ocorrencias = [];
-}
-$nUrgentes = 0;
-foreach ($ocorrencias as $o) {
-    if (in_array($o['status'], ['analise', 'andamento'], true) && mapaPrioridade($o['prioridade'])[0] === 'urgent') {
-        $nUrgentes++;
-    }
 }
 $categorias = $conexao->query("SELECT idCategoria, nome FROM categoria ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
 $semPrioridade = $conexao->query("SELECT idPrioridade FROM prioridade WHERE nome = 'Sem prioridade' LIMIT 1")->fetchColumn();
@@ -163,7 +166,20 @@ if (!$semPrioridade) {
 }
 $prioridades = $conexao->query("SELECT idPrioridade, nome FROM prioridade ORDER BY idPrioridade")->fetchAll(PDO::FETCH_ASSOC);
 $prioridadesPermitidas = ['Sem prioridade', 'Baixa', 'Média', 'Alta', 'Urgente'];
-$moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN usuario u ON u.idUsuario = m.idUsuario WHERE u.ativo = 1 ORDER BY u.nome")->fetchAll(PDO::FETCH_ASSOC);
+$moradoresSel = [];
+try {
+    $stmt = $conexao->prepare(
+        "SELECT m.idMorador, u.nome FROM morador m
+         JOIN usuario u ON u.idUsuario = m.idUsuario
+         JOIN moradorunidade mu ON mu.Morador_idMorador = m.idMorador AND mu.dataFim IS NULL
+         JOIN unidade un ON un.idUnidade = mu.Unidade_idUnidade
+         WHERE u.ativo = 1 AND un.Condominio_idCondominio = :cond ORDER BY u.nome"
+    );
+    $stmt->execute(['cond' => $filtroCondominio]);
+    $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $moradoresSel = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -176,12 +192,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                             <h1>Tela de Ocorrências Condominiais</h1>
                             <p>Permite consultar, visualizar e excluir as ocorrências, além de registrar novas ocorrências.</p>
                         </div>
-                        <div class="urgent-box">
-                            <img src="./assets/icones/alerta-vermelho.svg" alt="Urgência">
-                            <strong><span id="urgentCount"><?= $nUrgentes ?></span> ocorrências com Urgência</strong>
-                            <div class="urgent-divider"></div>
-                            <button type="button" onclick="mostrarUrgentes()">Ver todas</button>
-                        </div>
+                        <button class="new-occurrence-button" type="button" onclick="abrirModal('newModal')"><i data-lucide="plus"></i>Ocorrência</button>
                     </section>
 <?php banner($msg, $erro); ?>
                     <section class="occurrence-card">
@@ -196,8 +207,40 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                                     <i data-lucide="search"></i>
                                     <input id="searchInput" class="input-field-default-m" type="text" placeholder="Pesquisar ocorrência..." oninput="pesquisarOcorrencias()">
                                 </div>
-                                <button class="filter-button" type="button" onclick="filtrarUrgentes(this)" title="Mostrar somente urgentes"><i data-lucide="list-filter"></i></button>
-                                <button class="new-occurrence-button" type="button" onclick="abrirModal('newModal')"><i data-lucide="plus"></i>Ocorrência</button>
+                                <div class="filter-wrap">
+                                    <button class="filter-button" type="button" id="filterBtn" title="Filtrar tabela" onclick="toggleFiltroMenu(event)"><i data-lucide="list-filter"></i></button>
+                                    <div class="filter-menu" id="filterMenu">
+                                        <div class="filter-field">
+                                            <label for="fltStatus">Status</label>
+                                            <select id="fltStatus" class="dash-filter" onchange="aplicarFiltrosOcc()">
+                                                <option value="">Todos</option>
+                                                <option value="analise">Em análise</option>
+                                                <option value="andamento">Em andamento</option>
+                                                <option value="resolvida">Resolvida</option>
+                                                <option value="cancelada">Cancelada</option>
+                                            </select>
+                                        </div>
+                                        <div class="filter-field">
+                                            <label for="fltPrioridade">Prioridade</label>
+                                            <select id="fltPrioridade" class="dash-filter" onchange="aplicarFiltrosOcc()">
+                                                <option value="">Todas</option>
+                                                <?php foreach ($prioridades as $pp): ?>
+                                                <option value="<?= htmlspecialchars($pp['nome']) ?>"><?= htmlspecialchars($pp['nome']) ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="filter-field">
+                                            <label for="fltCategoria">Categoria</label>
+                                            <select id="fltCategoria" class="dash-filter" onchange="aplicarFiltrosOcc()">
+                                                <option value="">Todas</option>
+                                                <?php foreach ($categorias as $cat): ?>
+                                                <option value="<?= htmlspecialchars($cat['nome']) ?>"><?= htmlspecialchars($cat['nome']) ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <button type="button" class="btn btn-green-ghost btn-sm btn-block" onclick="limparFiltrosOcc()">Limpar filtros</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="table-container table-scroll">
@@ -220,7 +263,7 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                                     <?php else: ?>
                                         <?php foreach ($ocorrencias as $o): ?>
                                         <?php [$pc, $pl, $pcBadge] = mapaPrioridade($o['prioridade']); [$sc, $sl] = mapaStatus($o['status']); ?>
-                                        <tr data-prioridade="<?= $pc ?>" data-status-valor="<?= $o['status'] ?>" data-status="<?= $o['status'] ?>">
+                                        <tr data-prioridade="<?= $pc ?>" data-status-valor="<?= $o['status'] ?>" data-status="<?= $o['status'] ?>" data-prioridade-nome="<?= htmlspecialchars($o['prioridade']) ?>" data-categoria="<?= htmlspecialchars($o['categoria']) ?>">
                                             <td class="resident-id">#<?= str_pad((int) $o['idChamados'], 3, '0', STR_PAD_LEFT) ?></td>
                                             <td><?= htmlspecialchars($o['titulo']) ?></td>
                                             <td><?= htmlspecialchars($o['categoria']) ?></td>
@@ -269,6 +312,8 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
                 </div>
                 <div class="description-title">Descrição</div>
                 <div class="description-box" id="viewDescription"></div>
+                <div class="description-title" id="viewAnexoTitle" hidden>Anexo</div>
+                <div class="anexo-box" id="viewAnexoBox" hidden></div>
                 <?php if ($podeGerenciar): ?><div class="update-title">Atualizar prioridade</div>
                 <form method="post" class="priority-form">
                     <input type="hidden" name="acao" value="definir_prioridade">
@@ -363,21 +408,42 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
             const visiveis = document.querySelectorAll('#occurrenceTable tr:not(.f-hide)').length;
             document.getElementById('totalCount').textContent = visiveis;
         }
-        let urgentes = false;
-        function filtrarUrgentes(btn) {
-            urgentes = !urgentes;
-            document.getElementById('searchInput').value = '';
-            filtrarLinhas('occurrenceTable', '', window.__statusFiltro || '');
-            if (urgentes) {
-                document.querySelectorAll('#occurrenceTable tr').forEach(tr => {
-                    if (tr.dataset.prioridade !== 'urgent') tr.classList.add('f-hide');
-                });
+        function toggleFiltroMenu(e) {
+            e.stopPropagation();
+            document.getElementById('filterMenu').classList.toggle('open');
+        }
+        document.addEventListener('click', function (e) {
+            const m = document.getElementById('filterMenu');
+            if (m && !m.contains(e.target)) m.classList.remove('open');
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                const m = document.getElementById('filterMenu');
+                if (m) m.classList.remove('open');
             }
+        });
+        function aplicarFiltrosOcc(fecharMenu = true) {
+            const q = (document.getElementById('searchInput').value || '').toLowerCase();
+            const st = document.getElementById('fltStatus').value;
+            const pr = document.getElementById('fltPrioridade').value;
+            const ct = document.getElementById('fltCategoria').value;
+            document.querySelectorAll('#occurrenceTable tr').forEach(tr => {
+                const ok = (!q || tr.innerText.toLowerCase().includes(q))
+                    && (!st || tr.dataset.statusValor === st)
+                    && (!pr || tr.dataset.prioridadeNome === pr)
+                    && (!ct || tr.dataset.categoria === ct);
+                tr.classList.toggle('f-hide', !ok);
+            });
             if (pagEstado['occurrenceTable']) { pagEstado['occurrenceTable'].pagina = 1; desenharPaginacao('occurrenceTable'); }
             atualizarContagemOcc();
-            retornoFiltro('occurrenceTable', btn, urgentes);
+            if (fecharMenu) document.getElementById('filterMenu').classList.remove('open');
         }
-        function mostrarUrgentes() { if (!urgentes) filtrarUrgentes(); }
+        function limparFiltrosOcc() {
+            document.getElementById('fltStatus').value = '';
+            document.getElementById('fltPrioridade').value = '';
+            document.getElementById('fltCategoria').value = '';
+            aplicarFiltrosOcc();
+        }
         let atualId = null;
         function visualizar(o) {
             atualId = o.idChamados;
@@ -393,6 +459,11 @@ $moradoresSel = $conexao->query("SELECT m.idMorador, u.nome FROM morador m JOIN 
             document.getElementById('viewCategory').textContent = o.categoria;
             document.getElementById('viewDate').textContent = o.dataFmt;
             document.getElementById('viewDescription').textContent = o.descricao;
+            const anexos = (o.anexos || '').split('|').filter(Boolean);
+            const anexoBox = document.getElementById('viewAnexoBox');
+            anexoBox.innerHTML = anexos.map(a => '<img src="' + a + '" alt="Anexo da ocorrência">').join('');
+            document.getElementById('viewAnexoTitle').hidden = anexos.length === 0;
+            anexoBox.hidden = anexos.length === 0;
             document.getElementById('cancelId').value = o.idChamados;
             document.querySelectorAll('#statusButtons button').forEach(b => {
                 b.classList.toggle('selected', b.dataset.status === o.status);

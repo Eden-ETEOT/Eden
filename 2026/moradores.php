@@ -124,11 +124,33 @@ try {
                         <div class="card-header">
                             <div>
                                 <h2>Moradores Cadastrados</h2>
-                                <div class="count"><?= count($moradores) ?> morador(es) cadastrado(s)</div>
+                                <div class="count"><span id="morCount"><?= count($moradores) ?></span> morador(es) cadastrado(s)</div>
                             </div>
                             <div class="actions">
                                 <label class="search"><i data-lucide="search"></i><input id="searchInput" oninput="pesquisar()" placeholder="Pesquisar morador..."></label>
-                                <button class="filter-btn" onclick="filtrar(this)" title="Mostrar somente inativos"><i data-lucide="list-filter"></i></button>
+                                <div class="filter-wrap">
+                                    <button class="filter-btn" type="button" id="filterBtn" title="Filtrar tabela" onclick="toggleFiltroMenu(event)"><i data-lucide="list-filter"></i></button>
+                                    <div class="filter-menu" id="filterMenu">
+                                        <div class="filter-field">
+                                            <label for="fltStatus">Status</label>
+                                            <select id="fltStatus" class="dash-filter" onchange="aplicarFiltrosMor()">
+                                                <option value="">Todos</option>
+                                                <option value="Ativo">Ativo</option>
+                                                <option value="Inativo">Inativo</option>
+                                            </select>
+                                        </div>
+                                        <div class="filter-field">
+                                            <label for="fltBloco">Bloco</label>
+                                            <select id="fltBloco" class="dash-filter" onchange="aplicarFiltrosMor()">
+                                                <option value="">Todos</option>
+                                                <?php foreach ($blocos as $b): ?>
+                                                <option value="<?= htmlspecialchars($b) ?>"><?= htmlspecialchars($b) ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <button type="button" class="btn btn-green-ghost btn-sm btn-block" onclick="limparFiltrosMor()">Limpar filtros</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="table-wrapper table-scroll">
@@ -150,7 +172,7 @@ try {
                                     <?php else: ?>
                                         <?php foreach ($moradores as $m): ?>
                                         <?php $ativo = ((int) $m['ativo']) === 1; ?>
-                                        <tr data-status="<?= $ativo ? 'Ativo' : 'Inativo' ?>">
+                                        <tr data-status="<?= $ativo ? 'Ativo' : 'Inativo' ?>" data-bloco="<?= htmlspecialchars($m['bloco'] ?? '') ?>">
                                             <td class="resident-id">#<?= (int) $m['idMorador'] ?></td>
                                             <td><?= htmlspecialchars($m['nome']) ?></td>
                                             <td><?= htmlspecialchars($m['bloco'] ?? '—') ?></td>
@@ -327,12 +349,41 @@ try {
         function pesquisar() {
             filtrarLinhas('residentTable', document.getElementById('searchInput').value);
         }
-        let soInativos = false;
-        function filtrar(btn) {
-            soInativos = !soInativos;
-            document.getElementById('searchInput').value = '';
-            filtrarLinhas('residentTable', '', soInativos ? 'Inativo' : '');
-            retornoFiltro('residentTable', btn, soInativos);
+        function toggleFiltroMenu(e) {
+            e.stopPropagation();
+            document.getElementById('filterMenu').classList.toggle('open');
+        }
+        document.addEventListener('click', function (e) {
+            const m = document.getElementById('filterMenu');
+            if (m && !m.contains(e.target)) m.classList.remove('open');
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                const m = document.getElementById('filterMenu');
+                if (m) m.classList.remove('open');
+            }
+        });
+        function aplicarFiltrosMor(fecharMenu = true) {
+            const q = (document.getElementById('searchInput').value || '').toLowerCase();
+            const st = document.getElementById('fltStatus').value;
+            const bl = document.getElementById('fltBloco').value;
+            let vis = 0;
+            document.querySelectorAll('#residentTable tr').forEach(tr => {
+                if (tr.classList.contains('f-hide-none')) return;
+                const ok = (!q || tr.innerText.toLowerCase().includes(q))
+                    && (!st || tr.dataset.status === st)
+                    && (!bl || tr.dataset.bloco === bl);
+                tr.classList.toggle('f-hide', !ok);
+                if (ok) vis++;
+            });
+            if (pagEstado['residentTable']) { pagEstado['residentTable'].pagina = 1; desenharPaginacao('residentTable'); }
+            document.getElementById('morCount').textContent = vis;
+            if (fecharMenu) document.getElementById('filterMenu').classList.remove('open');
+        }
+        function limparFiltrosMor() {
+            document.getElementById('fltStatus').value = '';
+            document.getElementById('fltBloco').value = '';
+            aplicarFiltrosMor();
         }
         function visualizar(m) {
             document.getElementById('detailId').textContent = 'Morador#' + m.idMorador;

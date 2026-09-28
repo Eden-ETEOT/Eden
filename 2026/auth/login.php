@@ -135,6 +135,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <p class="register">
         <span>Conheça os <a href="../eden_planos/index.html">planos Eden</a></span>
       </p>
+      <p class="register">
+        <span>Ver <a href="../telas-mor-front-eden/dashboard/index.html">demonstração do portal do morador</a> (sem login)</span>
+      </p>
 
     </form>
 

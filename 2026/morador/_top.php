@@ -40,7 +40,7 @@ $navAtivo = function (string $k) use ($menuAtivo): string {
 <body>
 <div class="fm">
 <aside class="sidebar">
-    <img class="logo" src="../assets/Logo.png" alt="Éden Systems">
+    <img class="logo" src="../telas-mor-front-eden/assets/logo-negativo.png" alt="Éden Systems">
     <div class="line"></div>
     <nav><a <?= $navAtivo('dashboard') ?> href="./dashboard.php"><i data-lucide="layout-dashboard"></i>Dashboard</a><a <?= $navAtivo('ocorrencias') ?> href="./ocorrencias.php"><i data-lucide="badge-alert"></i>Ocorrências</a><a <?= $navAtivo('apartamentos') ?> href="./apartamentos.php"><i data-lucide="building-2"></i>Apartamentos</a></nav>
     <div class="tools">

@@ -413,18 +413,21 @@ INSERT INTO documentos (nome, tipo, caminho, publico, Condominio_idCondominio) V
 -- ==============================================================
 -- USUARIO (10) -- admin (id 1) com senha "1234"; demais também "1234"
 -- ==============================================================
-INSERT INTO usuario (email, senha, CPF, telefone, nome, foto, ativo) VALUES
-('Sindico@eden.tcc', '$2y$12$LTbqMIsF5Y91xyxIz82UxuSlT/KznYnKS7W8vtk17QN3Rko0U/gGO', '999.888.777-66', NULL, 'Síndico', NULL, 1),
-('gui.ferreira365@gmail.com', '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '000.000.000-00', NULL, 'adm', NULL, 1),
-('maria.souza@teste.com',      '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '111.222.333-44', '(11) 98888-0001', 'Maria Souza', NULL, 1),
-('joao.pereira@teste.com',     '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '222.333.444-55', '(11) 98888-0002', 'João Pereira', NULL, 1),
-('ana.oliveira@teste.com',     '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '333.444.555-66', '(11) 98888-0003', 'Ana Oliveira', NULL, 1),
-('carlos.santos@teste.com',    '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '444.555.666-77', '(11) 98888-0004', 'Carlos Santos', NULL, 1),
-('julia.lima@teste.com',       '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '555.666.777-88', '(11) 98888-0005', 'Julia Lima', NULL, 1),
-('pedro.almeida@teste.com',    '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '666.777.888-99', '(11) 98888-0006', 'Pedro Almeida', NULL, 1),
-('fernanda.costa@teste.com',   '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '777.888.999-00', '(11) 98888-0007', 'Fernanda Costa', NULL, 1),
-('lucas.martins@teste.com',    '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '888.999.000-11', '(11) 98888-0008', 'Lucas Martins', NULL, 1),
-('beatriz.rocha@teste.com',    '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '999.000.111-22', '(11) 98888-0009', 'Beatriz Rocha', NULL, 1);
+INSERT INTO usuario (idUsuario, email, senha, CPF, telefone, nome, foto, ativo) VALUES
+(1, 'Sindico@eden.tcc', '$2y$12$LTbqMIsF5Y91xyxIz82UxuSlT/KznYnKS7W8vtk17QN3Rko0U/gGO', '999.888.777-66', NULL, 'Síndico', NULL, 1),
+(2, 'gui.ferreira365@gmail.com', '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '000.000.000-00', NULL, 'adm', NULL, 1),
+(3, 'maria.souza@teste.com',      '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '111.222.333-44', '(11) 98888-0001', 'Maria Souza', NULL, 1),
+(4, 'joao.pereira@teste.com',     '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '222.333.444-55', '(11) 98888-0002', 'João Pereira', NULL, 1),
+(5, 'ana.oliveira@teste.com',     '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '333.444.555-66', '(11) 98888-0003', 'Ana Oliveira', NULL, 1),
+(6, 'carlos.santos@teste.com',    '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '444.555.666-77', '(11) 98888-0004', 'Carlos Santos', NULL, 1),
+(7, 'julia.lima@teste.com',       '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '555.666.777-88', '(11) 98888-0005', 'Julia Lima', NULL, 1),
+(8, 'pedro.almeida@teste.com',    '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '666.777.888-99', '(11) 98888-0006', 'Pedro Almeida', NULL, 1),
+(9, 'fernanda.costa@teste.com',   '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '777.888.999-00', '(11) 98888-0007', 'Fernanda Costa', NULL, 1),
+(10, 'lucas.martins@teste.com',    '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '888.999.000-11', '(11) 98888-0008', 'Lucas Martins', NULL, 1),
+(11, 'beatriz.rocha@teste.com',    '$2y$10$NdpuEjcVhiuKMxIfG/Zm8uilPCrTCjCwaK.gN.TXh7ICOFdio0i5y', '999.000.111-22', '(11) 98888-0009', 'Beatriz Rocha', NULL, 1),
+(101, 'usuario@usuario.usuario', '$2y$12$KPAZuSTcGOWcW8DGFzHom.MISJ5LJecsulzfBGRUxbe7Za028/ABq', '100.100.100-10', NULL, 'Usuario Comum', NULL, 1),
+(102, 'sindico@sindico.sindico', '$2y$12$rbRQ1hlfFvikTgcT3r9pjuIXDFx.j/ZDH25.emIpAaSfooR13Xx8S', '200.200.200-20', NULL, 'Sindico Teste', NULL, 1),
+(103, 'funcionario@funcionario.funcionario', '$2y$12$IJIwvkLgzyVOmrfwIV6VQecIWmG5dPsz4ykQidGhXdHCKLpFlr9Jq', '300.300.300-30', NULL, 'Funcionario Teste', NULL, 1);
 
 -- ==============================================================
 -- FUNCIONARIO (10)
@@ -439,7 +442,8 @@ INSERT INTO funcionario (idUsuario, funcao, tipoVinculo) VALUES
 (7,  'Segurança',              'terceirizado'),
 (8,  'Recepcionista',          'CLT'),
 (9,  'Auxiliar de Limpeza',    'CLT'),
-(10, 'Eletricista',            'terceirizado');
+(10, 'Eletricista',            'terceirizado'),
+(103, 'Zelador',                  'CLT');
 
 -- ==============================================================
 -- FUNCIONARIOCONDOMINIO (10)
@@ -454,7 +458,8 @@ INSERT INTO funcionariocondominio (Funcionario_idFuncionario, Condominio_idCondo
 (7, 7, '2024-07-01', NULL, '22:00:00', '06:00:00'),
 (8, 8, '2024-08-01', NULL, '08:00:00', '17:00:00'),
 (9, 9, '2024-09-01', '2025-09-01', '07:00:00', '16:00:00'),
-(10, 10, '2025-01-01', NULL, '08:00:00', '17:00:00');
+(10, 10, '2025-01-01', NULL, '08:00:00', '17:00:00'),
+(11, 1, '2026-01-01', NULL, '08:00:00', '18:00:00');
 
 -- ==============================================================
 -- MORADOR (10)
@@ -514,7 +519,8 @@ INSERT INTO sindico (idUsuario, Condominio_idCondominio) VALUES
 (8,  7),
 (9,  8),
 (10, 9),
-(1, 10);
+(1, 10),
+(102, 1);
 
 -- ==============================================================
 -- PRIORIDADE (10)

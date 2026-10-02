@@ -18,9 +18,20 @@ if (!$eSindico) {
     $stmt->execute(['u' => $idUsuario]);
     $funcionario = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
 }
-if (!$eSindico && !$funcionario) {
+$moradia = (!$eSindico && !$funcionario) ? moradorAtivo($conexao, $idUsuario) : null;
+if (!$eSindico && !$funcionario && $moradia === null) {
     header('Location: ./configuracoes.php');
     exit;
+}
+$eMorador = $moradia !== null;
+$minhasOcorrencias = 0;
+if ($eMorador) {
+    $stmt = $conexao->prepare(
+        "SELECT COUNT(*) FROM chamados c JOIN morador m ON m.idMorador = c.morador_idMorador
+         WHERE m.idUsuario = :u AND c.status IN ('analise', 'andamento')"
+    );
+    $stmt->execute(['u' => $idUsuario]);
+    $minhasOcorrencias = (int) $stmt->fetchColumn();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'salvar') {
@@ -77,8 +88,8 @@ $stmt = $conexao->prepare("SELECT nome, CPF, email, telefone, foto FROM usuario 
 $stmt->execute(['u' => $idUsuario]);
 $eu = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$rotuloPapel = $eSindico ? 'Síndico' : ($funcionario['funcao'] ?? 'Funcionário');
-$pageTitle = $eSindico ? 'Perfil do Síndico' : 'Perfil do Funcionário';
+$rotuloPapel = $eSindico ? 'Síndico' : ($eMorador ? ucfirst($moradia['tipoMorador']) : ($funcionario['funcao'] ?? 'Funcionário'));
+$pageTitle = $eSindico ? 'Perfil do Síndico' : ($eMorador ? 'Perfil do Morador' : 'Perfil do Funcionário');
 
 $condominiosGeridos = [];
 $desdeGestao = null;
@@ -169,6 +180,14 @@ $fotoUrl = !empty($eu['foto'])
                                 <button type="button" class="btn btn-green" onclick="abrirModal('pfEditModal')"><i data-lucide="pencil"></i>Editar perfil</button>
                             </div>
                         </section>
+                        <?php if ($eMorador): ?>
+                        <section class="pf-card">
+                            <h3 class="pf-card-title">Minha Unidade</h3>
+                            <div class="pf-row"><span>Condomínio</span><strong><?= htmlspecialchars($moradia['condominioNome']) ?></strong></div>
+                            <div class="pf-row"><span>Apartamento</span><strong><?= htmlspecialchars($moradia['numResid']) ?> · Bloco <?= htmlspecialchars($moradia['bloco']) ?></strong></div>
+                            <div class="pf-row"><span>Ocorrências em aberto</span><strong><?= (int) $minhasOcorrencias ?></strong></div>
+                        </section>
+                        <?php endif; ?>
                         <?php if ($eSindico): ?>
                         <section class="pf-card">
                             <h3 class="pf-card-title">Condomínios sob minha gestão</h3>

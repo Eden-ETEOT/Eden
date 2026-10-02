@@ -24,7 +24,7 @@
             </svg>
         </button>
         <nav class="profile-menu" id="profileMenu" role="menu" aria-label="Menu do usuário">
-            <a href="./configuracoes.php" role="menuitem"><i data-lucide="user"></i>Meu perfil</a>
+            <a href="./perfil.php" role="menuitem"><i data-lucide="user"></i>Meu perfil</a>
             <a href="./suporte.php" role="menuitem"><i data-lucide="life-buoy"></i>Suporte</a>
             <a href="./logout.php" role="menuitem" class="danger"><i data-lucide="log-out"></i>Sair</a>
         </nav>

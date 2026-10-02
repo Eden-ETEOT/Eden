@@ -333,6 +333,30 @@ CREATE TABLE IF NOT EXISTS resetSenha (
         ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS pagamento_pix (
+    idPagamento            INT           NOT NULL AUTO_INCREMENT,
+    token                  CHAR(64)      NOT NULL,
+    Condominio_idCondominio INT           NOT NULL,
+    Plano_idPlano          INT           NOT NULL,
+    valor                  DECIMAL(10,2) NOT NULL,
+    status                 ENUM('pendente','pago','expirado') NOT NULL DEFAULT 'pendente',
+    dataCriacao            DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    dataExpiracao          DATETIME      NOT NULL,
+    dataPagamento          DATETIME      NULL DEFAULT NULL,
+    PRIMARY KEY (idPagamento),
+    UNIQUE INDEX token_UNIQUE (token ASC),
+    INDEX fk_pix_cond_idx (Condominio_idCondominio ASC),
+    INDEX fk_pix_plano_idx (Plano_idPlano ASC),
+    CONSTRAINT fk_pix_cond
+        FOREIGN KEY (Condominio_idCondominio)
+        REFERENCES condominio (idCondominio)
+        ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT fk_pix_plano
+        FOREIGN KEY (Plano_idPlano)
+        REFERENCES plano (idPlano)
+        ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
 -- 10 registros por tabela, respeitando as FK do schema (BancoV1-2026.sql).
 -- ==============================================================
 -- PLANO (10)

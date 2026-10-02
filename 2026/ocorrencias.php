@@ -7,7 +7,7 @@ $erro = '';
 $reabrirModalOcorrencia = 0;
 
 function mapaPrioridade($nome) {
-    if (preg_match('/sem prioridade/i', $nome)) return ['none', 'Sem prioridade', 'badge-prioridade-sem'];
+    if (preg_match('/sem prioridade/i', $nome)) return ['none', 'Indefinida', 'badge-prioridade-sem'];
     if (preg_match('/urgente|cr[ií]tica/i', $nome)) return ['urgent', 'Urgente', 'badge-prioridade-urgente'];
     if (preg_match('/baixa/i', $nome)) return ['low', 'Baixa', 'badge-prioridade-baixa'];
     if (preg_match('/alta/i', $nome)) return ['high', 'Alta', 'badge-prioridade-alta'];
@@ -34,9 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $moradorInformado = trim((string) ($_POST['morador'] ?? ''));
             $morador = $moradorInformado === '' ? null : (int) $moradorInformado;
             if ($prioridade <= 0) {
-                $prioridade = (int) $conexao->query("SELECT idPrioridade FROM prioridade WHERE nome = 'Sem prioridade' LIMIT 1")->fetchColumn();
+                $prioridade = (int) $conexao->query("SELECT idPrioridade FROM prioridade WHERE nome = 'Indefinida' LIMIT 1")->fetchColumn();
                 if ($prioridade <= 0) {
-                    $stmtSemPrioridade = $conexao->prepare("INSERT INTO prioridade (ordem, nome, descricao) VALUES (0, 'Sem prioridade', 'Prioridade ainda não definida')");
+                    $stmtSemPrioridade = $conexao->prepare("INSERT INTO prioridade (ordem, nome, descricao) VALUES (0, 'Indefinida', 'Prioridade ainda não definida')");
                     $stmtSemPrioridade->execute();
                     $prioridade = (int) $conexao->lastInsertId();
                 }
@@ -203,13 +203,13 @@ foreach ($ocorrencias as &$ocorrencia) {
 }
 unset($ocorrencia);
 $categorias = $conexao->query("SELECT idCategoria, nome FROM categoria ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
-$semPrioridade = $conexao->query("SELECT idPrioridade FROM prioridade WHERE nome = 'Sem prioridade' LIMIT 1")->fetchColumn();
+$semPrioridade = $conexao->query("SELECT idPrioridade FROM prioridade WHERE nome = 'Indefinida' LIMIT 1")->fetchColumn();
 if (!$semPrioridade) {
-    $stmtSemPrioridade = $conexao->prepare("INSERT INTO prioridade (ordem, nome, descricao) VALUES (0, 'Sem prioridade', 'Prioridade ainda não definida')");
+    $stmtSemPrioridade = $conexao->prepare("INSERT INTO prioridade (ordem, nome, descricao) VALUES (0, 'Indefinida', 'Prioridade ainda não definida')");
     $stmtSemPrioridade->execute();
 }
 $prioridades = $conexao->query("SELECT idPrioridade, nome FROM prioridade ORDER BY idPrioridade")->fetchAll(PDO::FETCH_ASSOC);
-$prioridadesPermitidas = ['Sem prioridade', 'Baixa', 'Média', 'Alta', 'Urgente'];
+$prioridadesPermitidas = ['Indefinida', 'Baixa', 'Média', 'Alta', 'Urgente'];
 $stmt = $conexao->prepare(
     "SELECT DISTINCT m.idMorador, u.nome
      FROM morador m

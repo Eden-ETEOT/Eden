@@ -526,16 +526,11 @@ INSERT INTO sindico (idUsuario, Condominio_idCondominio) VALUES
 -- PRIORIDADE (10)
 -- ==============================================================
 INSERT INTO prioridade (ordem, nome, descricao) VALUES
-(1,  'Muito Baixa',  'Sem urgência'),
-(2,  'Baixa',        'Pode aguardar programação'),
-(3,  'Média',        'Resolver em breve'),
-(4,  'Normal',       'Rotina'),
-(5,  'Considerável', 'Atenção'),
-(6,  'Moderada',     'Prioridade moderada'),
-(7,  'Alta',         'Resolver rapidamente'),
-(8,  'Muito Alta',   'Urgente'),
-(9,  'Crítica',      'Risco imediato'),
-(10, 'Urgente',      'Agravar com urgência');
+(0,  'Indefinida', 'Prioridade ainda não definida'),
+(2,  'Baixa',      'Pode aguardar programação'),
+(3,  'Média',      'Resolver em breve'),
+(7,  'Alta',       'Resolver rapidamente'),
+(10, 'Urgente',    'Agravar com urgência');
 
 -- ==============================================================
 -- CATEGORIA (10)

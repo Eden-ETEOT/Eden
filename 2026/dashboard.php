@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cancela
 }
 
 function classe_prioridade_nome($nome) {
-    if ($nome === 'Sem prioridade') return 'badge-prioridade-sem';
+    if ($nome === 'Indefinida') return 'badge-prioridade-sem';
     if (in_array($nome, ['Muito Baixa', 'Baixa'], true)) return 'badge-prioridade-baixa';
     if (in_array($nome, ['Média', 'Normal', 'Considerável', 'Moderada'], true)) return 'badge-prioridade-media';
     if (in_array($nome, ['Alta', 'Muito Alta'], true)) return 'badge-prioridade-alta';

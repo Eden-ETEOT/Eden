@@ -20,7 +20,7 @@ try {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'salvar') {
     try {
-        foreach (['tel_cond' => 'Telefone do condomínio', 'tel_sind' => 'Telefone do síndico'] as $campo => $rotulo) {
+        foreach (['tel_cond' => 'Telefone do condomínio'] as $campo => $rotulo) {
             $dig = preg_replace('/\D/', '', $_POST[$campo] ?? '');
             if ($dig !== '' && (strlen($dig) < 10 || strlen($dig) > 11)) {
                 throw new Exception($rotulo . ' inválido! Use DDD + número.');
@@ -44,15 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'salvar'
             ]);
             $cond = $conexao->query("SELECT * FROM condominio WHERE idCondominio = " . (int) $cond['idCondominio'])->fetch(PDO::FETCH_ASSOC);
         }
-        $stmt = $conexao->prepare(
-            "UPDATE usuario SET nome = :nome, telefone = :tel, email = :email WHERE idUsuario = :id"
-        );
-        $stmt->execute([
-            'nome' => trim($_POST['nome_sind'] ?? ''),
-            'tel' => trim($_POST['tel_sind'] ?? ''),
-            'email' => trim($_POST['email_sind'] ?? ''),
-            'id' => $idUsuario,
-        ]);
         $msg = 'Alterações salvas com sucesso.';
     } catch (Exception $e) {
         $msg = $e instanceof PDOException
@@ -129,25 +120,7 @@ $endereco = $cond
                             </div>
                         </section>
 
-                        <section class="settings-card">
-                            <div class="card-title">Dados do Síndico</div>
-                            <div class="card-content">
-                                <div class="form-grid">
-                                    <div class="form-group">
-                                        <label for="nomeSindico">Nome</label>
-                                        <input type="text" id="nomeSindico" name="nome_sind" value="<?= htmlspecialchars($user['nome'] ?? '') ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="telefoneSindico">Telefone</label>
-                                        <input type="tel" id="telefoneSindico" name="tel_sind" placeholder="(00) 00000-0000" maxlength="15" value="<?= htmlspecialchars($user['telefone'] ?? '') ?>">
-                                    </div>
-                                    <div class="form-group full">
-                                        <label for="emailSindico">E-mail</label>
-                                        <input type="email" id="emailSindico" name="email_sind" value="<?= htmlspecialchars($user['email'] ?? '') ?>">
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
+                        
 
                         <section class="settings-card">
                             <div class="card-title">Notificações</div>

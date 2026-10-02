@@ -53,8 +53,8 @@ try {
                  JOIN morador m ON m.idMorador = mu.Morador_idMorador
                  JOIN usuario us ON us.idUsuario = m.idUsuario
                  WHERE mu.Unidade_idUnidade = u.idUnidade
-                   AND mu.dataFim IS NULL AND m.tipoMorador = 'proprietario'
-                 ORDER BY mu.dataInicio DESC LIMIT 1) AS proprietario
+                   AND mu.dataFim IS NULL
+                 ORDER BY (m.tipoMorador = 'proprietario') DESC, mu.dataInicio DESC LIMIT 1) AS proprietario
             FROM unidade u
                 WHERE u.Condominio_idCondominio = :condominio
             ORDER BY u.idUnidade DESC";

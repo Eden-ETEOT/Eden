@@ -7,7 +7,7 @@ $erro = '';
 $reabrirModalOcorrencia = 0;
 
 function mapaPrioridade($nome) {
-    if (preg_match('/sem prioridade/i', $nome)) return ['none', 'Indefinida', 'badge-prioridade-sem'];
+    if (preg_match('/sem prioridade|indefinida/i', $nome)) return ['none', 'Indefinida', 'badge-prioridade-sem'];
     if (preg_match('/urgente|cr[ií]tica/i', $nome)) return ['urgent', 'Urgente', 'badge-prioridade-urgente'];
     if (preg_match('/baixa/i', $nome)) return ['low', 'Baixa', 'badge-prioridade-baixa'];
     if (preg_match('/alta/i', $nome)) return ['high', 'Alta', 'badge-prioridade-alta'];
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "SELECT p.nome FROM chamados c JOIN prioridade p ON p.idPrioridade = c.prioridade_idPrioridade WHERE c.idChamados = :id"
                 );
                 $prioridadeAtual->execute(['id' => $id]);
-                if (stripos((string) $prioridadeAtual->fetchColumn(), 'sem prioridade') !== false) {
+                if (preg_match('/sem prioridade|indefinida/i', (string) $prioridadeAtual->fetchColumn())) {
                     throw new Exception('Defina uma prioridade antes de avançar o status.');
                 }
             }

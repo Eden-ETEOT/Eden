@@ -230,7 +230,8 @@ $fotoUrl = !empty($eu['foto'])
                             <?php
                             $pfFavAmb = 'stable';
                             $pfFavUri = $_SERVER['REQUEST_URI'] ?? '/';
-                            if (preg_match('#^/(beta|stable)(/|$)#', $pfFavUri, $pfM)) $pfFavAmb = $pfM[1];
+                            if (preg_match('#/(beta)(/|$)#', $pfFavUri, $pfM)) $pfFavAmb = 'beta';
+                            elseif (strpos(str_replace('\\', '/', __FILE__), '/beta/') !== false) $pfFavAmb = 'beta';
                             ?>
                             <img class="pf-quote-img" src="./assets/Favicon-<?= $pfFavAmb ?>.png" alt="Éden">
                             <p>Trabalhando para um condomínio mais seguro, organizado e valorizado</p>

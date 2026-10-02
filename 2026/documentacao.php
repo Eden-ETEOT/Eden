@@ -145,7 +145,6 @@ $tipos = $conexao->query("SELECT codigo, nome FROM tipoDocumento WHERE ativo = 1
                             <table class="issues-table">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>Nome</th>
                                         <th>Categoria</th>
                                         <th>Condomínio</th>
@@ -156,11 +155,10 @@ $tipos = $conexao->query("SELECT codigo, nome FROM tipoDocumento WHERE ativo = 1
                                 </thead>
                                 <tbody id="documentTable">
                                     <?php if (empty($documentos)): ?>
-                                        <tr><td colspan="7"><div class="empty-state">Nenhum documento cadastrado.</div></td></tr>
+                                        <tr><td colspan="6"><div class="empty-state">Nenhum documento cadastrado.</div></td></tr>
                                     <?php else: ?>
                                         <?php foreach ($documentos as $d): ?>
                                         <tr data-arquivo="<?= $d['temArquivo'] ? '1' : '0' ?>" data-tipo="<?= htmlspecialchars($d['tipo']) ?>">
-                                            <td class="resident-id">#<?= (int) $d['idDocumento'] ?></td>
                                             <td><?= htmlspecialchars($d['nome']) ?></td>
                                             <td><?= htmlspecialchars($d['tipo']) ?></td>
                                             <td><?= htmlspecialchars($d['condominio']) ?></td>

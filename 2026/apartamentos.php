@@ -146,7 +146,6 @@ try {
                             <table class="issues-table">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>Numeração</th>
                                         <th>Bloco</th>
                                         <th>Proprietário</th>
@@ -162,7 +161,6 @@ try {
                                         <?php foreach ($apartamentos as $a): ?>
                                         <?php $ativo = ((int) $a['ativo']) === 1; ?>
                                         <tr data-status="<?= $ativo ? 'Ativo' : 'Inativo' ?>" data-bloco="<?= htmlspecialchars($a['bloco']) ?>">
-                                            <td>#<?= (int) $a['idUnidade'] ?></td>
                                             <td><?= htmlspecialchars($a['numResid']) ?></td>
                                             <td><?= htmlspecialchars($a['bloco']) ?></td>
                                             <td><?= htmlspecialchars($a['proprietario'] ?? 'Sem morador') ?></td>

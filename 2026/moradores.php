@@ -154,7 +154,6 @@ try {
                             <table class="issues-table">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>Nome</th>
                                         <th>Bloco</th>
                                         <th>Apartamento</th>
@@ -165,12 +164,11 @@ try {
                                 </thead>
                                 <tbody id="residentTable">
                                     <?php if (empty($moradores)): ?>
-                                        <tr class="f-hide-none"><td colspan="7"><div class="empty-state">Nenhum morador cadastrado.</div></td></tr>
+                                        <tr class="f-hide-none"><td colspan="6"><div class="empty-state">Nenhum morador cadastrado.</div></td></tr>
                                     <?php else: ?>
                                         <?php foreach ($moradores as $m): ?>
                                         <?php $ativo = ((int) $m['ativo']) === 1; ?>
                                         <tr data-status="<?= $ativo ? 'Ativo' : 'Inativo' ?>" data-tipo-morador="<?= htmlspecialchars($m['tipoMorador']) ?>">
-                                            <td class="resident-id">#<?= (int) $m['idMorador'] ?></td>
                                             <td><?= htmlspecialchars($m['nome']) ?></td>
                                             <td><?= htmlspecialchars($m['bloco'] ?? '—') ?></td>
                                             <td><?= htmlspecialchars($m['numResid'] ?? '—') ?></td>

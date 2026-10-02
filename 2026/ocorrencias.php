@@ -290,7 +290,6 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <table class="issues-table">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>Título</th>
                                         <th>Categoria</th>
                                         <th>Apartamento</th>
@@ -302,12 +301,11 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </thead>
                                 <tbody id="occurrenceTable">
                                     <?php if (empty($ocorrencias)): ?>
-                                        <tr><td colspan="8"><div class="empty-state">Nenhuma ocorrência registrada.</div></td></tr>
+                                        <tr><td colspan="7"><div class="empty-state">Nenhuma ocorrência registrada.</div></td></tr>
                                     <?php else: ?>
                                         <?php foreach ($ocorrencias as $o): ?>
                                         <?php [$pc, $pl, $pcBadge] = mapaPrioridade($o['prioridade']); [$sc, $sl] = mapaStatus($o['status']); ?>
                                         <tr data-prioridade="<?= $pc ?>" data-prioridade-id="<?= (int) $o['prioridade_idPrioridade'] ?>" data-categoria-id="<?= (int) $o['categoria_idCategoria'] ?>" data-status-valor="<?= $o['status'] ?>" data-status="<?= $o['status'] ?>">
-                                            <td class="resident-id">#<?= str_pad((int) $o['idChamados'], 3, '0', STR_PAD_LEFT) ?></td>
                                             <td><?= htmlspecialchars($o['titulo']) ?></td>
                                             <td><?= htmlspecialchars($o['categoria']) ?></td>
                                             <td><?= htmlspecialchars($o['numResid'] ?? '—') ?></td>

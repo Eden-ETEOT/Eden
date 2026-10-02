@@ -20,6 +20,7 @@ if (!$eSindico) {
 }
 $moradia = (!$eSindico && !$funcionario) ? moradorAtivo($conexao, $idUsuario) : null;
 if (!$eSindico && !$funcionario && $moradia === null) {
+    $_SESSION['aviso_perfil'] = 'Sua conta ainda não tem vínculo (síndico, funcionário ou morador). Peça ao síndico para vincular você a uma unidade.';
     header('Location: ./configuracoes.php');
     exit;
 }

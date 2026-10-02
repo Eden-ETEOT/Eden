@@ -2,6 +2,10 @@
 include './Elements/auth.php';
 include './Elements/ui.php';
 $msg = '';
+if (!empty($_SESSION['aviso_perfil'])) {
+    $msg = $_SESSION['aviso_perfil'];
+    unset($_SESSION['aviso_perfil']);
+}
 
 // Condomínio da sessão
 $cond = null;

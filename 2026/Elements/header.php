@@ -1,6 +1,8 @@
 <?php
 // Header Component
 // Este arquivo é importado nas páginas principais do dashboard
+// (via layoutOpen(): declara globals pois roda em escopo de função)
+global $conexao, $filtroCondominio;
 $planoHeader = null;
 try {
     $stmtPlanoHeader = $conexao->prepare(

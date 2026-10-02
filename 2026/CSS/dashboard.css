@@ -350,6 +350,31 @@ body {
     color: var(--green1-400);
 }
 
+.profile-menu a.plan-item {
+    align-items: flex-start;
+}
+
+.profile-menu a.plan-item > svg {
+    margin-top: 2px;
+}
+
+.profile-menu .plan-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.profile-menu .plan-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: #31563e;
+    background: #e5f2e8;
+    border-radius: 999px;
+    padding: 3px 10px;
+    white-space: nowrap;
+}
+
 .profile-menu a.danger {
     color: var(--red-default);
 }

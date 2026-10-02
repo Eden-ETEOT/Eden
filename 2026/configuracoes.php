@@ -171,6 +171,35 @@ $endereco = $cond
                             </div>
                         </section>
 
+                        <section class="settings-card">
+                            <div class="card-title">Plano atual</div>
+                            <div class="card-content">
+                                <?php
+                                $planoCond = null;
+                                try {
+                                    $stmtPlano = $conexao->prepare(
+                                        "SELECT p.nome, p.valor FROM condominio c
+                                         JOIN plano p ON p.idPlano = c.Plano_idPlano
+                                         WHERE c.idCondominio = :c"
+                                    );
+                                    $stmtPlano->execute(['c' => $filtroCondominio]);
+                                    $planoCond = $stmtPlano->fetch(PDO::FETCH_ASSOC);
+                                } catch (PDOException $e) {
+                                    $planoCond = null;
+                                }
+                                ?>
+                                <p style="font-size:14px;color:#4c5a50;margin-bottom:12px">
+                                    <?php if ($planoCond): ?>
+                                    <strong><?= htmlspecialchars($planoCond['nome']) ?></strong>
+                                    — R$ <?= number_format((float) $planoCond['valor'], 2, ',', '.') ?>/mês
+                                    <?php else: ?>
+                                    Nenhum plano vinculado.
+                                    <?php endif; ?>
+                                </p>
+                                <a class="btn btn-orange btn-sm" href="./planos/index.php">Trocar de plano</a>
+                            </div>
+                        </section>
+
                         <div class="form-actions">
                             <button type="button" id="btnCancelar" class="btn-cancel" onclick="history.back()">Cancelar</button>
                             <button type="submit" class="btn-save">Salvar Alterações</button>

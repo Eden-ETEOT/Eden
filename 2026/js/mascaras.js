@@ -33,6 +33,21 @@
     return v;
   }
 
+  function mascaraCartao(v) {
+    v = soDigitos(v).slice(0, 16);
+    return v.replace(/(\d{4})(?=\d)/g, "$1 ");
+  }
+
+  function mascaraValidade(v) {
+    v = soDigitos(v).slice(0, 4);
+    if (v.length > 2) return v.replace(/(\d{2})(\d{1,2})/, "$1/$2");
+    return v;
+  }
+
+  function mascaraCVV(v) {
+    return soDigitos(v).slice(0, 4);
+  }
+
   function aplicar(id, fn) {
     var el = document.getElementById(id);
     if (!el) return;
@@ -55,5 +70,8 @@
     aplicar("telefoneSindico", mascaraTelefone);
     aplicar("CEP", mascaraCEP);
     aplicar("cep", mascaraCEP);
+    aplicar("numero", mascaraCartao);
+    aplicar("validade", mascaraValidade);
+    aplicar("cvv", mascaraCVV);
   });
 })();

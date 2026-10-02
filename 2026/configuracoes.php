@@ -2,8 +2,9 @@
 include './Elements/auth.php';
 include './Elements/ui.php';
 $msg = '';
+$aviso = '';
 if (!empty($_SESSION['aviso_perfil'])) {
-    $msg = $_SESSION['aviso_perfil'];
+    $aviso = $_SESSION['aviso_perfil'];
     unset($_SESSION['aviso_perfil']);
 }
 
@@ -87,6 +88,7 @@ $endereco = $cond
                         <h1>Configurações</h1>
                         <p>Dados e preferências do condomínio</p>
                     </div>
+                    <?php banner('', '', $aviso ?? ''); ?>
 
                     <form id="configForm" method="post">
                         <input type="hidden" name="acao" value="salvar">

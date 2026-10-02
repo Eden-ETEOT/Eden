@@ -198,7 +198,7 @@ $fotoUrl = !empty($eu['foto'])
                             <div class="pf-row"><span>#<?= (int) $cg['idCondominio'] ?></span><strong><?= htmlspecialchars($cg['nome']) ?></strong></div>
                             <?php endforeach; ?>
                         </section>
-                        <?php else: ?>
+                        <?php elseif ($funcionario): ?>
                         <section class="pf-card">
                             <h3 class="pf-card-title">Minhas Ocorrências</h3>
                             <div class="pf-stat-num"><?= (int) $ocorrenciasAtivas ?></div>

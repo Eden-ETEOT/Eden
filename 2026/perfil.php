@@ -89,6 +89,20 @@ $stmt = $conexao->prepare("SELECT nome, CPF, email, telefone, foto FROM usuario 
 $stmt->execute(['u' => $idUsuario]);
 $eu = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$planoPerfil = null;
+if ($eSindico && !empty($condominiosGeridos)) {
+    try {
+        $stmt = $conexao->prepare(
+            "SELECT p.nome, p.valor FROM condominio c
+             JOIN plano p ON p.idPlano = c.Plano_idPlano
+             WHERE c.idCondominio = :c LIMIT 1"
+        );
+        $stmt->execute(['c' => (int) $condominiosGeridos[0]['idCondominio']]);
+        $planoPerfil = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    } catch (PDOException $e) {
+        $planoPerfil = null;
+    }
+}
 $rotuloPapel = $eSindico ? 'Síndico' : ($eMorador ? ucfirst($moradia['tipoMorador']) : ($funcionario['funcao'] ?? 'Funcionário'));
 $pageTitle = $eSindico ? 'Perfil do Síndico' : ($eMorador ? 'Perfil do Morador' : 'Perfil do Funcionário');
 
@@ -217,6 +231,20 @@ $fotoUrl = !empty($eu['foto'])
                         <?php endif; ?>
                     </div>
 
+                        <?php if ($eSindico): ?>
+                        <section class="pf-card">
+                            <h3 class="pf-card-title">Meu plano</h3>
+                            <?php if ($planoPerfil): ?>
+                            <div class="pf-row"><span>Plano</span><strong><?= htmlspecialchars($planoPerfil['nome']) ?></strong></div>
+                            <div class="pf-row"><span>Valor</span><strong>R$ <?= number_format((float) $planoPerfil['valor'], 2, ',', '.') ?>/mês</strong></div>
+                            <?php else: ?>
+                            <div class="pf-stat-label">Nenhum plano vinculado.</div>
+                            <?php endif; ?>
+                            <div style="margin-top:18px">
+                                <a class="btn btn-green" href="./planos/index.php">Trocar de plano</a>
+                            </div>
+                        </section>
+                        <?php endif; ?>
                     <div class="pf-extra">
                         <section class="pf-card">
                             <h3 class="pf-card-title">Informações adicionais</h3>

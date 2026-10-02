@@ -49,13 +49,16 @@ function layoutOpen() {
 }
 
 /**
- * Banner de mensagem de sucesso/erro (mesmo padrão visual em todas as páginas).
+ * Banner de mensagem de sucesso/erro/aviso (mesmo padrão visual em todas as páginas).
  */
-function banner($msg, $erro = '') {
+function banner($msg, $erro = '', $aviso = '') {
     if ($msg !== '' && $msg !== null) {
         echo '<p style="width:100%;padding:8px 12px;border-radius:8px;background:#e9f7ee;color:#1e5c34;border:1px solid #bfe3cb;text-align:center;margin-bottom:16px">' . htmlspecialchars($msg) . "</p>\n";
     }
     if ($erro !== '' && $erro !== null) {
         echo '<p style="width:100%;padding:8px 12px;border-radius:8px;background:#fdecea;color:#8f1d1d;border:1px solid #f5c6c2;text-align:center;margin-bottom:16px">' . htmlspecialchars($erro) . "</p>\n";
+    }
+    if ($aviso !== '' && $aviso !== null) {
+        echo '<p style="width:100%;padding:12px;border-radius:8px;background:#fff8e6;color:#684d12;border:1px solid #e7c77b;text-align:center;margin-bottom:16px">' . htmlspecialchars($aviso) . "</p>\n";
     }
 }

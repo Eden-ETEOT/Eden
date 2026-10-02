@@ -554,10 +554,10 @@ INSERT INTO chamados (dataPedida, dataRealizada, titulo, descricao, privado, sta
 ('2026-09-01 09:10:00', NULL, 'Vazamento no banheiro',        'Água escorrendo do banheiro do 101', 0, 'analise',   7,  5,  1, 1),
 ('2026-09-01 10:00:00', NULL, 'Luz faltando no corredor',     'Lâmpada do corredor não acende',     0, 'andamento', 5,  10, 2, 2),
 ('2026-08-30 14:00:00', '2026-09-02 11:00:00', 'Limpeza da área comum', 'Necessário limpeza no hall',    0, 'resolvida', 2,  8,  3, 3),
-('2026-09-03 08:30:00', NULL, 'Suspeita de arrombamento',     'Porta do 401 com sinais de arrombamento', 1, 'analise',  9,  7,  4, 4),
+('2026-09-03 08:30:00', NULL, 'Suspeita de arrombamento',     'Porta do 401 com sinais de arrombamento', 1, 'analise', 10,  7,  4, 4),
 ('2026-09-04 18:00:00', NULL, 'Elevador preso',               'Elevador B preso no 3º andar',        1, 'andamento', 10, 5,  5, 5),
 ('2026-09-05 07:00:00', NULL, 'Cano vazando na cozinha',      'Cano da cozinha do 302',              0, 'cancelada', 7,  NULL, 6, 6),
-('2026-09-06 15:00:00', NULL, 'Trinca no muro',               'Trinca aparente no muro externo',     0, 'analise',   6,  5,  7, 7),
+('2026-09-06 15:00:00', NULL, 'Trinca no muro',               'Trinca aparente no muro externo',     0, 'analise',  3,  5,  7, 7),
 ('2026-09-07 09:00:00', '2026-09-07 16:30:00', 'Jardim precisa de poda', 'Podas periódicas do jardim',  1, 'resolvida', 1,  6,  8, 8),
 ('2026-09-07 22:00:00', NULL, 'Som alto no apartamento',      'Barulho excessivo no 402',            0, 'andamento', 4,  NULL, 9, 9),
 ('2026-09-08 06:00:00', '2026-09-08 10:00:00', 'Troca de lâmpada no hall', 'Lâmpada queimada no hall',  0, 'resolvida', 3,  10, 2, 10);

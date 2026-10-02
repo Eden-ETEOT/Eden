@@ -175,6 +175,13 @@
     background: #dde9d4;
     flex-shrink: 0;
 }
+.pf-quote-img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
 
 .pf-quote p {
     font-size: 14px;

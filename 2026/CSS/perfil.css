@@ -182,6 +182,21 @@
     object-fit: cover;
     flex-shrink: 0;
 }
+.pf-quote-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #283E2E;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.pf-quote-logo img {
+    width: 38px;
+    height: auto;
+    display: block;
+}
 
 .pf-quote p {
     font-size: 14px;

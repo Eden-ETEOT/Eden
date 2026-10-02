@@ -103,6 +103,19 @@ if ($eSindico) {
     );
     $stmt->execute(['f' => (int) $funcionario['idFuncionario']]);
     $ocorrenciasAtivas = (int) $stmt->fetchColumn();
+    $condominiosAtuacao = [];
+    try {
+        $stmt = $conexao->prepare(
+            "SELECT c.idCondominio, c.nome FROM funcionariocondominio fc
+             JOIN condominio c ON c.idCondominio = fc.Condominio_idCondominio
+             WHERE fc.Funcionario_idFuncionario = :f AND fc.dataDesligamento IS NULL
+             ORDER BY c.nome"
+        );
+        $stmt->execute(['f' => (int) $funcionario['idFuncionario']]);
+        $condominiosAtuacao = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        $condominiosAtuacao = [];
+    }
 }
 
 function tempoGestao($desde) {
@@ -170,6 +183,16 @@ $fotoUrl = !empty($eu['foto'])
                             <h3 class="pf-card-title">Minhas Ocorrências</h3>
                             <div class="pf-stat-num"><?= (int) $ocorrenciasAtivas ?></div>
                             <div class="pf-stat-label">Ocorrências ativas</div>
+                        </section>
+                        <section class="pf-card">
+                            <h3 class="pf-card-title">Onde atuo</h3>
+                            <?php if (empty($condominiosAtuacao)): ?>
+                            <div class="pf-stat-label">Sem vínculo ativo</div>
+                            <?php else: ?>
+                            <?php foreach ($condominiosAtuacao as $ca): ?>
+                            <div class="pf-row"><span>#<?= (int) $ca['idCondominio'] ?></span><strong><?= htmlspecialchars($ca['nome']) ?></strong></div>
+                            <?php endforeach; ?>
+                            <?php endif; ?>
                         </section>
                         <?php endif; ?>
                     </div>

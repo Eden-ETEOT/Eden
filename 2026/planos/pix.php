@@ -58,13 +58,14 @@ if ($token === null) {
 }
 $_SESSION['plano_pix_token'] = $token;
 $host = $_SERVER['HTTP_HOST'] ?? '';
-if ($host === 'eden.gabsprojects.uk') {
-    // Beta pública: link curto dedicado (Alias /pagamento-pix no Apache).
+$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$mount = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
+if ($host === 'eden.gabsprojects.uk' && $mount === '/beta') {
+    // Beta pública: link curto dedicado (Alias /pagamento-pix no Apache, mesmo banco).
     $pixUrl = 'https://eden.gabsprojects.uk/pagamento-pix?token=' . $token;
 } else {
-    // Previews e localhost: mesmo mount do desktop (/beta, /p-<slug>, ...).
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $mount = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
+    // Previews, localhost e stable: mesmo mount do desktop (mesmo banco isolado).
+    // Importante: nunca apontar para o Alias raiz, que lê o banco da beta.
     $pixUrl = $scheme . '://' . $host . $mount . '/pagamento-pix?token=' . $token;
 }
 ?>

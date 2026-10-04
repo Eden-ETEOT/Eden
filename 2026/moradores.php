@@ -104,7 +104,7 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<?php pageHead('Moradores - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['https://unpkg.com/lucide@latest']); ?>
+<?php pageHead('Moradores - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['./js/lucide.min.js']); ?>
 <body>
     <?php layoutOpen(); ?>
                 <div class="fd-moradores">

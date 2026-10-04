@@ -160,7 +160,7 @@ $menuAtivo = 'apartamentos';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<?php pageHead('Configurar condomínio - Eden Systems', ['./CSS/FrontDev.css', './CSS/variaveis.css'], ['https://unpkg.com/lucide@latest']); ?>
+<?php pageHead('Configurar condomínio - Eden Systems', ['./CSS/FrontDev.css', './CSS/variaveis.css'], ['./js/lucide.min.js']); ?>
 <body>
     <?php layoutOpen(); ?>
     <section class="fd-apartamentos">

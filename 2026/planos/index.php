@@ -58,6 +58,7 @@ $destaque = $n > 0 ? $planos[(int) floor($n / 2)]['idPlano'] : null;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planos - Eden Systems</title>
     <link rel="stylesheet" href="../CSS/planos.css?v=2">
+    <link rel="stylesheet" href="../CSS/fontes.css?v=1">
     <?php include '../Elements/favicon.php'; ?>
 </head>
 <body>

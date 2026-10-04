@@ -109,7 +109,7 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<?php pageHead('Relatórios - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['https://unpkg.com/lucide@latest', 'https://cdn.jsdelivr.net/npm/chart.js']); ?>
+<?php pageHead('Relatórios - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['./js/lucide.min.js', './js/chart.umd.min.js']); ?>
 <body>
     <?php layoutOpen(); ?>
                 <div class="fd-relatorios">

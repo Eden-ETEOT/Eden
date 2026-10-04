@@ -163,7 +163,7 @@ $fotoUrl = !empty($eu['foto'])
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<?php pageHead($pageTitle . ' - Eden Systems', ['./CSS/tabelas.css', './CSS/perfil.css'], ['https://unpkg.com/lucide@latest']); ?>
+<?php pageHead($pageTitle . ' - Eden Systems', ['./CSS/tabelas.css', './CSS/perfil.css'], ['./js/lucide.min.js']); ?>
 <body>
     <?php layoutOpen(); ?>
                 <div class="fd-perfil">

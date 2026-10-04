@@ -15,6 +15,7 @@ if (!$ok) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagamento efetuado - Eden Systems</title>
     <link rel="stylesheet" href="../CSS/planos.css?v=1">
+    <link rel="stylesheet" href="../CSS/fontes.css?v=1">
     <?php include '../Elements/favicon.php'; ?>
 </head>
 <body class="pl-planos-body">

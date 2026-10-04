@@ -58,6 +58,7 @@ $assetBase = (strpos($sn, '/pagamento-pix') === 0) ? '/beta' : rtrim(dirname(dir
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+    <link rel="stylesheet" href="<?= $assetBase ?>/CSS/fontes.css?v=1">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">

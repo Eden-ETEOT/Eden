@@ -224,7 +224,7 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<?php pageHead('Ocorrências - Eden Systems', ['', './CSS/FrontDev.css', './CSS/tabelas.css', './CSS/variaveis.css'], ['https://unpkg.com/lucide@latest']); ?>
+<?php pageHead('Ocorrências - Eden Systems', ['', './CSS/FrontDev.css', './CSS/tabelas.css', './CSS/variaveis.css'], ['./js/lucide.min.js']); ?>
 <body>
     <?php layoutOpen(); ?>
                 <div class="fd-ocorrencias">

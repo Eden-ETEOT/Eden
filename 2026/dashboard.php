@@ -142,7 +142,7 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<?php pageHead('Dashboard - Eden Systems', ['./CSS/tabelas.css'], ['https://unpkg.com/lucide@latest']); ?>
+<?php pageHead('Dashboard - Eden Systems', ['./CSS/tabelas.css'], ['./js/lucide.min.js']); ?>
 <body>
     <?php layoutOpen(); ?>
                 <h1 class="page-title">Visão geral</h1>

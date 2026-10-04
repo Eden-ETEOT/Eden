@@ -94,7 +94,7 @@ $tipos = $conexao->query("SELECT codigo, nome FROM tipoDocumento WHERE ativo = 1
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<?php pageHead('Documentação - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css', './CSS/variaveis.css'], ['https://unpkg.com/lucide@latest']); ?>
+<?php pageHead('Documentação - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css', './CSS/variaveis.css'], ['./js/lucide.min.js']); ?>
 <body>
     <?php layoutOpen(); ?>
                 <div class="fd-documentacao">

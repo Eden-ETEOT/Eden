@@ -15,7 +15,7 @@ $faqs = [
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<?php pageHead('Suporte - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['https://unpkg.com/lucide@latest']); ?>
+<?php pageHead('Suporte - Eden Systems', ['./CSS/FrontDev.css', './CSS/tabelas.css'], ['./js/lucide.min.js']); ?>
 <body>
     <?php layoutOpen(); ?>
                 <div class="fd-suporte">

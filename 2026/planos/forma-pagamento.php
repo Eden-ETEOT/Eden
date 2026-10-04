@@ -48,7 +48,7 @@ if (!$plano) {
             <form method="get" action="./forma-pagamento.php" id="formaForm"></form>
             <div class="pl-options">
                 <div class="pl-option selected" id="optPix" onclick="selecionarForma('pix')">
-                    <img class="pl-option-icon" src="../assets/pix-logo.svg" alt="Pix">
+                    <img class="pl-option-icon" src="../assets/pix-logo.png" alt="Pix">
                     Pix
                 </div>
                 <div class="pl-option" id="optCartao" onclick="selecionarForma('cartao')">

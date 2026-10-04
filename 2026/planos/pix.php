@@ -84,7 +84,7 @@ if ($host === 'eden.gabsprojects.uk' && $mount === '/beta') {
         <a class="pl-back" href="./forma-pagamento.php">Voltar</a>
         <div class="pl-panel">
             <img src="../assets/Logo.png" alt="Éden Systems" class="pl-logo">
-            <img src="../assets/pix-logo.svg" alt="Pix" class="pl-pix-logo">
+            <img src="../assets/pix-logo.png" alt="Pix" class="pl-pix-logo">
             <h1>Pagamento por Pix</h1>
             <p class="pl-lead">Escaneie o QR Code com o celular para pagar<br>
                 <strong><?= htmlspecialchars($plano['nome']) ?></strong> ·

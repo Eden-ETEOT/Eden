@@ -101,7 +101,7 @@
 
 .pix-brand { position: relative; }
 .pix-mark {
-    width: 30px;
-    height: 30px;
+    height: 28px;
+    width: auto;
     margin-left: auto;
 }

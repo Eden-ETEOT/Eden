@@ -71,7 +71,7 @@ $assetBase = (strpos($sn, '/pagamento-pix') === 0) ? '/beta' : rtrim(dirname(dir
         <div class="pix-brand">
             <img src="<?= $assetBase ?>/assets/Favicon-beta.png" alt="Eden Systems">
             <strong>Eden Systems<span>Pagamento via Pix</span></strong>
-            <img src="<?= $assetBase ?>/assets/pix-logo.svg" alt="Pix" class="pix-mark">
+            <img src="<?= $assetBase ?>/assets/pix-logo.png" alt="Pix" class="pix-mark">
         </div>
 
         <?php if ($estado === 'pendente'): ?>

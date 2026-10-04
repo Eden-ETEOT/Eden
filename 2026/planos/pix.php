@@ -57,7 +57,16 @@ if ($token === null) {
     $stmt->execute(['t' => $token, 'c' => $filtroCondominio, 'p' => $idPlano, 'v' => $plano['valor']]);
 }
 $_SESSION['plano_pix_token'] = $token;
-$pixUrl = 'https://eden.gabsprojects.uk/pagamento-pix?token=' . $token;
+$host = $_SERVER['HTTP_HOST'] ?? '';
+if ($host === 'eden.gabsprojects.uk') {
+    // Beta pública: link curto dedicado (Alias /pagamento-pix no Apache).
+    $pixUrl = 'https://eden.gabsprojects.uk/pagamento-pix?token=' . $token;
+} else {
+    // Previews e localhost: mesmo mount do desktop (/beta, /p-<slug>, ...).
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $mount = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
+    $pixUrl = $scheme . '://' . $host . $mount . '/pagamento-pix?token=' . $token;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

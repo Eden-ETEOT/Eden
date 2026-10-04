@@ -52,6 +52,9 @@ if (tokenValido($token)) {
 
 $valorFmt = $pag ? number_format((float) $pag['valor'], 2, ',', '.') : '0,00';
 $chaveMock = 'eden-pagamentos@eden.tcc';
+// Assets: no Alias raiz (/pagamento-pix) usa /beta; senão, o próprio mount.
+$sn = $_SERVER['SCRIPT_NAME'] ?? '';
+$assetBase = (strpos($sn, '/pagamento-pix') === 0) ? '/beta' : rtrim(dirname(dirname($sn)), '/');
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -59,13 +62,13 @@ $chaveMock = 'eden-pagamentos@eden.tcc';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Pagamento Pix - Eden Systems</title>
-    <link rel="stylesheet" href="/beta/CSS/pagamento-pix.css">
-    <link rel="icon" type="image/png" href="/beta/assets/Logo.png">
+    <link rel="stylesheet" href="<?= $assetBase ?>/CSS/pagamento-pix.css">
+    <link rel="icon" type="image/png" href="<?= $assetBase ?>/assets/Logo.png">
 </head>
 <body class="pix-body">
     <div class="pix-wrap">
         <div class="pix-brand">
-            <img src="/beta/assets/Logo.png" alt="Eden Systems">
+            <img src="<?= $assetBase ?>/assets/Logo.png" alt="Eden Systems">
             <strong>Eden Systems<span>Pagamento via Pix</span></strong>
         </div>
 

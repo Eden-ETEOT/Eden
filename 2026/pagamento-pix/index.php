@@ -63,12 +63,12 @@ $assetBase = (strpos($sn, '/pagamento-pix') === 0) ? '/beta' : rtrim(dirname(dir
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Pagamento Pix - Eden Systems</title>
     <link rel="stylesheet" href="<?= $assetBase ?>/CSS/pagamento-pix.css">
-    <link rel="icon" type="image/png" href="<?= $assetBase ?>/assets/Logo.png">
+    <link rel="icon" type="image/png" href="<?= $assetBase ?>/assets/Favicon-beta.png">
 </head>
 <body class="pix-body">
     <div class="pix-wrap">
         <div class="pix-brand">
-            <img src="<?= $assetBase ?>/assets/Logo.png" alt="Eden Systems">
+            <img src="<?= $assetBase ?>/assets/Favicon-beta.png" alt="Eden Systems">
             <strong>Eden Systems<span>Pagamento via Pix</span></strong>
         </div>
 

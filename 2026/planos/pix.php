@@ -98,7 +98,7 @@ if ($host === 'eden.gabsprojects.uk' && $mount === '/beta') {
         </div>
     </main>
     <aside class="pl-image-side"></aside>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="../js/qrcode.min.js?v=1"></script>
     <script>
         new QRCode(document.getElementById('qrCode'), {
             text: <?= json_encode($pixUrl) ?>,

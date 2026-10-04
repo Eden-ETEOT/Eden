@@ -57,11 +57,7 @@ $destaque = $n > 0 ? $planos[(int) floor($n / 2)]['idPlano'] : null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planos - Eden Systems</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../CSS/planos.css?v=2">
-    <script src="https://unpkg.com/lucide@latest"></script>
     <?php include '../Elements/favicon.php'; ?>
 </head>
 <body>
@@ -76,9 +72,9 @@ $destaque = $n > 0 ? $planos[(int) floor($n / 2)]['idPlano'] : null;
         <p class="pl-subtitle">Gerencie ocorrências, comunicação e histórico em um só lugar.</p>
 
         <div class="pl-perks">
-            <span><i data-lucide="check-circle-2"></i>Sem taxa de instalação</span>
-            <span><i data-lucide="check-circle-2"></i>Suporte Incluso</span>
-            <span><i data-lucide="check-circle-2"></i>Cancele quando quiser</span>
+            <span><span class="pl-check" aria-hidden="true">✓</span>Sem taxa de instalação</span>
+            <span><span class="pl-check" aria-hidden="true">✓</span>Suporte Incluso</span>
+            <span><span class="pl-check" aria-hidden="true">✓</span>Cancele quando quiser</span>
         </div>
 
         <div class="pl-cards">
@@ -100,11 +96,10 @@ $destaque = $n > 0 ? $planos[(int) floor($n / 2)]['idPlano'] : null;
                     <li><?= htmlspecialchars($f) ?></li>
                     <?php endforeach; ?>
                 </ul>
-                <a class="pl-btn" href="./forma-pagamento.php?plano=<?= (int) $p['idPlano'] ?>"><i data-lucide="check-circle-2"></i>Assinar agora</a>
+                <a class="pl-btn" href="./forma-pagamento.php?plano=<?= (int) $p['idPlano'] ?>"><span class="pl-check" aria-hidden="true">✓</span>Assinar agora</a>
             </section>
             <?php endforeach; ?>
         </div>
     </main>
-    <script>if (window.lucide) lucide.createIcons();</script>
 </body>
 </html>

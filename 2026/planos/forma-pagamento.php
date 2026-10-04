@@ -48,7 +48,7 @@ if (!$plano) {
             <form method="get" action="./forma-pagamento.php" id="formaForm"></form>
             <div class="pl-options">
                 <div class="pl-option selected" id="optPix" onclick="selecionarForma('pix')">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 2.4 2.4-2.4L12 0 7.2 2.4 9.6 4.8 12 2zm7.4 7.4L22 12l-2.6 2.6-2.4-2.4 2.4-2.8zM12 7.2l2.8 2.4L12 12l-2.8-2.4L12 7.2zm-9.4 2.2L0 12l2.6 2.6 2.4-2.4-2.4-2.8zm9.4 7.4l-2.4-2.4-2.4 2.4 4.8 4.8 4.8-4.8-2.4-2.4-2.4 2.4z"/></svg>
+                    <img class="pl-option-icon" src="../assets/pix-logo.svg" alt="Pix">
                     Pix
                 </div>
                 <div class="pl-option" id="optCartao" onclick="selecionarForma('cartao')">

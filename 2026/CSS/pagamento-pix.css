@@ -98,3 +98,10 @@
     margin: 0 auto 14px;
 }
 .pix-success h1 { margin-bottom: 6px; }
+
+.pix-brand { position: relative; }
+.pix-mark {
+    width: 30px;
+    height: 30px;
+    margin-left: auto;
+}

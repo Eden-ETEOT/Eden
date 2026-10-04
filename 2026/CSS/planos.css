@@ -581,3 +581,13 @@
     margin-right: 6px;
     flex: none;
 }
+
+.pl-option img.pl-option-icon {
+    width: 44px;
+    height: 44px;
+}
+.pl-pix-logo {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 12px;
+}

@@ -89,7 +89,7 @@ if ($host === 'eden.gabsprojects.uk' && $mount === '/beta') {
                 R$ <?= number_format((float) $plano['valor'], 2, ',', '.') ?>/mês</p>
             <div id="qrCode" class="pl-qr" style="display:flex;justify-content:center"></div>
             <div class="pl-chave-label">Aguardando pagamento…</div>
-            <div class="pl-chave" style="font-size:12px;word-break:break-all"><?= htmlspecialchars($pixUrl) ?></div>
+            <div class="pl-chave" style="font-size:12px;word-break:break-all"><a href="<?= htmlspecialchars($pixUrl) ?>" target="_blank" rel="noopener" style="color:inherit"><?= htmlspecialchars($pixUrl) ?></a></div>
             <?php if ($erro): ?><p style="color:#b3261e;font-size:14px;margin-top:10px"><?= htmlspecialchars($erro) ?></p><?php endif; ?>
             <form method="post" id="confirmForm" style="margin-top:14px">
                 <input type="hidden" name="token" value="<?= htmlspecialchars($token) ?>">

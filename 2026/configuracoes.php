@@ -52,6 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'salvar'
     }
 }
 
+// Só síndico vê/usa a seção "Plano atual" (o fluxo de planos exige sindico no _guard).
+$stmtSind = $conexao->prepare("SELECT 1 FROM sindico WHERE idUsuario = :u LIMIT 1");
+$stmtSind->execute(['u' => $idUsuario]);
+$eSindico = (bool) $stmtSind->fetchColumn();
+
 $pageTitle = 'Configurações';
 $menuAtivo = 'configuracoes';
 
@@ -144,6 +149,7 @@ $endereco = $cond
                             </div>
                         </section>
 
+                        <?php if ($eSindico): ?>
                         <section class="settings-card">
                             <div class="card-title">Plano atual</div>
                             <div class="card-content">
@@ -172,6 +178,7 @@ $endereco = $cond
                                 <a class="btn btn-orange btn-sm" href="./planos/index.php">Trocar de plano</a>
                             </div>
                         </section>
+                        <?php endif; ?>
 
                         <div class="form-actions">
                             <button type="button" id="btnCancelar" class="btn-cancel" onclick="history.back()">Cancelar</button>

@@ -582,10 +582,13 @@
     flex: none;
 }
 
-.pl-option img.pl-option-icon {
+.pl-option svg.pl-option-icon {
     height: 40px;
-    width: auto;
-    max-width: 100%;
+    width: 40px;
+    color: #9aa5a1;
+}
+.pl-option.selected svg.pl-pix {
+    color: #32bcad;
 }
 .pl-pix-logo {
     height: 56px;

@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             $stmt->execute(['t' => $titulo, 'd' => $descricao, 'p' => $prioridade, 'c' => $categoria, 'm' => $idMorador, 'condominio' => $filtroCondominio]);
             $novoId = (int) $conexao->lastInsertId();
+            $imagemOk = true;
             if (isset($_FILES['anexo']) && $_FILES['anexo']['error'] !== UPLOAD_ERR_NO_FILE) {
                 $arq = $_FILES['anexo'];
                 $perm = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif', 'image/webp' => 'webp'];
@@ -52,10 +53,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (move_uploaded_file($arq['tmp_name'], $dir . DIRECTORY_SEPARATOR . $nomeArq)) {
                         $stmt = $conexao->prepare("INSERT INTO chamadoAnexo (caminho, nomeArquivo, chamados_idChamados) VALUES (:c, :n, :id)");
                         $stmt->execute(['c' => 'uploads/chamados/' . $nomeArq, 'n' => $arq['name'], 'id' => $novoId]);
+                    } else {
+                        $imagemOk = false;
                     }
+                } else {
+                    $imagemOk = false;
                 }
             }
             $msg = 'Ocorrência registrada com sucesso.';
+            if (isset($imagemOk) && $imagemOk === false) {
+                $erro = 'A ocorrência foi registrada, mas não foi possível salvar a imagem. Tente anexar novamente.';
+            }
         } elseif ($acao === 'cancelar') {
             $id = (int) ($_POST['id'] ?? 0);
             $stmt = $conexao->prepare(

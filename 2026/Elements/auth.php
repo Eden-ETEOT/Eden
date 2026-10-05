@@ -2,7 +2,9 @@
 // Auth centralizado das páginas da área logada.
 // Requer estar em 2026/*.php. Garante sessão + $conexao e expõe:
 // $idUsuario, $user, $user_name, $user_type, $user_avatar, $user_foto.
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include __DIR__ . '/../config/conexao.php';
 
 if (!isset($_SESSION['id_usuario'])) {

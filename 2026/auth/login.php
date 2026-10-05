@@ -26,7 +26,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (!empty($_SESSION["convite_token"])) {
                     header("Location: ../convite/aceitar.php?token=" . urlencode($_SESSION["convite_token"]));
                 } else {
-                    header("Location: ../dashboard.php");
+                    $eSind = $conexao->prepare("SELECT 1 FROM sindico WHERE idUsuario = :u LIMIT 1");
+                    $eSind->execute(['u' => $idLogado]);
+                    $eFunc = $conexao->prepare("SELECT 1 FROM funcionario WHERE idUsuario = :u LIMIT 1");
+                    $eFunc->execute(['u' => $idLogado]);
+                    if (!$eSind->fetchColumn() && !$eFunc->fetchColumn() && moradorAtivo($conexao, $idLogado) !== null) {
+                        header("Location: ../morador/index.php");
+                    } else {
+                        header("Location: ../dashboard.php");
+                    }
                 }
                 
                 exit();

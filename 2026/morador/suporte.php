@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($prioridade <= 0) throw new Exception('Não foi possível registrar. Tente novamente.');
         $stmt = $conexao->prepare(
             "INSERT INTO chamados (titulo, descricao, dataPedida, status, prioridade_idPrioridade, categoria_idCategoria, morador_idMorador, Condominio_idCondominio)
-             VALUES (:t, :d, NOW(), 'analise', :p, 10, :m, :cond)"
+             VALUES (:t, :d, NOW(), 'analise', :p, 10, :m, :condominio)"
         );
         $stmt->execute([
             't' => '[Suporte: ' . $tipo . '] ' . mb_substr($assunto, 0, 80),

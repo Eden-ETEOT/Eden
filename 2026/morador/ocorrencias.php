@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($prioridade <= 0) throw new Exception('Prioridade padrão indisponível. Tente novamente.');
             $stmt = $conexao->prepare(
                 "INSERT INTO chamados (titulo, descricao, dataPedida, status, prioridade_idPrioridade, categoria_idCategoria, morador_idMorador, Condominio_idCondominio)
-                 VALUES (:t, :d, NOW(), 'analise', :p, :c, :m, :cond)"
+                 VALUES (:t, :d, NOW(), 'analise', :p, :c, :m, :condominio)"
             );
             $stmt->execute(['t' => $titulo, 'd' => $descricao, 'p' => $prioridade, 'c' => $categoria, 'm' => $idMorador, 'condominio' => $filtroCondominio]);
             $novoId = (int) $conexao->lastInsertId();

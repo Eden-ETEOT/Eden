@@ -130,6 +130,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <p class="register">
         <span>Não tem uma conta? <a href="<?= $convitePendente ? '../cadastro/morador/passo-1.php?convite=1' : '../cadastro/comum/escolher-tipo.php' ?>"><?= $convitePendente ? 'Criar conta de morador' : 'Crie agora' ?></a></span>
       </p>
+      <p class="register">
+        <span><a href="../landing-page/index.php">← Voltar ao site</a></span>
+      </p>
 
 
     </form>

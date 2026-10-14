@@ -1,6 +1,40 @@
-<?php 
+<?php
 session_start();
 require_once "../config/conexao.php";
+
+$leadMsg = '';
+$leadErro = '';
+$leadOrigem = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $acao = $_POST['acao'] ?? '';
+    try {
+        if ($acao === 'newsletter') {
+            $email = trim($_POST['email'] ?? '');
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new Exception('Informe um e-mail válido.');
+            $stmt = $conexao->prepare("INSERT INTO leads (email, origem) VALUES (:e, 'newsletter')");
+            $stmt->execute(['e' => $email]);
+            $leadOrigem = 'newsletter';
+            $leadMsg = 'Inscrição confirmada! Obrigado por assinar.';
+        } elseif ($acao === 'contato') {
+            $nome = trim($_POST['nome'] ?? '');
+            $email = trim($_POST['email'] ?? '');
+            $mensagem = trim($_POST['mensagem'] ?? '');
+            if ($nome === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || $mensagem === '') {
+                throw new Exception('Preencha nome, e-mail válido e mensagem.');
+            }
+            $stmt = $conexao->prepare("INSERT INTO leads (nome, email, mensagem, origem) VALUES (:n, :e, :m, 'contato')");
+            $stmt->execute(['n' => $nome, 'e' => $email, 'm' => $mensagem]);
+            $leadOrigem = 'contato';
+            $leadMsg = 'Mensagem enviada! Retornaremos em breve.';
+        }
+    } catch (PDOException $e) {
+        $leadOrigem = $acao;
+        $leadErro = 'Não foi possível enviar. Tente novamente.';
+    } catch (Exception $e) {
+        $leadOrigem = $acao;
+        $leadErro = $e->getMessage();
+    }
+}
 ?>
 
 
@@ -13,6 +47,7 @@ require_once "../config/conexao.php";
     <title>Landing Page - test</title>
     <link rel="stylesheet" href="../CSS/LandingPage.css">
     <link rel="stylesheet" href="../CSS/variaveis.css">
+    <link rel="stylesheet" href="../CSS/fontes.css?v=1">
 
 <?php include '../Elements/favicon.php'; ?>
 </head>
@@ -33,6 +68,7 @@ require_once "../config/conexao.php";
                 <a href="#planos">Planos</a>
                 <a href="#diferenciais">Serviços</a>
                 <a href="#faq">Suporte</a>
+                <a href="#contato">Contato</a>
             </nav>
 
             <a href="../auth/login.php"><button class="botao-primario">Entrar</button></a>
@@ -118,7 +154,8 @@ require_once "../config/conexao.php";
                     <p>
                         Registre ocorrências com tipo, descrição, local e imagens, evitando perda de informação.
                     </p>
-                    <button class="botao-primario btn-sobre"> Saiba mais</button>
+                    <button class="botao-primario btn-sobre" data-detalhe="det-rec-1"> Saiba mais</button>
+                    <div class="detalhe-recurso" id="det-rec-1"><p>Tipo, descrição, local, fotos e histórico em cada ocorrência. Nada se perde em grupos de WhatsApp.</p><a href="../cadastro/comum/escolher-tipo.php" class="link-detalhe">Começar agora →</a></div>
                 </div>
 
                 <div class="cartao-recurso">
@@ -127,7 +164,8 @@ require_once "../config/conexao.php";
                     <p>
                         Monitore o status e o histórico das ocorrências para identificar recorrências.
                     </p>
-                    <button class="botao-primario btn-sobre"> Saiba mais</button>
+                    <button class="botao-primario btn-sobre" data-detalhe="det-rec-2"> Saiba mais</button>
+                    <div class="detalhe-recurso" id="det-rec-2"><p>Linha do tempo completa por unidade e categoria, com filtros por status e período para identificar recorrências.</p><a href="../cadastro/comum/escolher-tipo.php" class="link-detalhe">Começar agora →</a></div>
                 </div>
 
                 <div class="cartao-recurso">
@@ -136,7 +174,8 @@ require_once "../config/conexao.php";
                     <p>
                         Converse diretamente dentro de cada chamado, sem depender de e-mails ou aplicativos externos.
                     </p>
-                    <button class="botao-primario btn-sobre"> Saiba mais</button>
+                    <button class="botao-primario btn-sobre" data-detalhe="det-rec-3"> Saiba mais</button>
+                    <div class="detalhe-recurso" id="det-rec-3"><p>Morador e administração conversam no contexto de cada chamado, com tudo registrado e acessível.</p><a href="../cadastro/comum/escolher-tipo.php" class="link-detalhe">Começar agora →</a></div>
                 </div>
 
             </div>
@@ -183,6 +222,34 @@ require_once "../config/conexao.php";
         </section>
 
         <!-- Fim seção estatísticas -->
+
+        <!-- Início seção depoimentos -->
+
+        <!-- TROCAR: depoimentos ilustrativos abaixo. Substituir por depoimentos reais antes da banca. -->
+        <section class="secao-depoimentos" id="depoimentos">
+            <div class="cabecalho-recursos">
+                <h1 class="titulo-recursos">Quem usa, recomenda</h1>
+                <br>
+                <p class="desc-recursos">Síndicos e moradores que transformaram a gestão com o Éden
+                </p>
+            </div>
+            <div class="grade-depoimentos">
+                <div class="cartao-depoimento">
+                    <p class="texto-depoimento">“Saímos dos grupos de WhatsApp para um controle de verdade. Hoje sei exatamente o que está aberto e o que já foi resolvido.”</p>
+                    <div class="autor-depoimento"><strong>Marcos T.</strong><span>Síndico · Residencial Jardim das Flores</span></div>
+                </div>
+                <div class="cartao-depoimento">
+                    <p class="texto-depoimento">“Registro a ocorrência com foto em menos de um minuto e acompanho tudo pelo celular. Muito mais transparente.”</p>
+                    <div class="autor-depoimento"><strong>Juliana R.</strong><span>Moradora · Condomínio Solaris</span></div>
+                </div>
+                <div class="cartao-depoimento">
+                    <p class="texto-depoimento">“Os relatórios mensais mudaram nossas assembleias. Prestação de contas com dados, sem discussão.”</p>
+                    <div class="autor-depoimento"><strong>Paulo H.</strong><span>Síndico · Edifício Aurora</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fim seção depoimentos -->
 
         <!-- Início seção planos -->
 
@@ -239,9 +306,9 @@ require_once "../config/conexao.php";
                     <hr class="divisor-horizontal">
 
                     <div class="rodape-cartao">
-                        <button class="botao-secundario">
-                            Saiba mais
-                        </button>
+                        <a href="../cadastro/comum/escolher-tipo.php"><button class="botao-secundario" type="button">
+                            Quero este plano
+                        </button></a>
                     </div>
                 </article>
 
@@ -288,9 +355,9 @@ require_once "../config/conexao.php";
                     <hr class="divisor-horizontal">
 
                     <div class="rodape-cartao">
-                        <button class="botao-secundario">
-                            Saiba mais
-                        </button>
+                        <a href="../cadastro/comum/escolher-tipo.php"><button class="botao-secundario" type="button">
+                            Quero este plano
+                        </button></a>
                     </div>
                 </article>
 
@@ -337,9 +404,9 @@ require_once "../config/conexao.php";
                     <hr class="divisor-horizontal">
 
                     <div class="rodape-cartao">
-                        <button class="botao-secundario">
-                            Saiba mais
-                        </button>
+                        <a href="../cadastro/comum/escolher-tipo.php"><button class="botao-secundario" type="button">
+                            Quero este plano
+                        </button></a>
                     </div>
                 </article>
             </div>
@@ -442,8 +509,52 @@ require_once "../config/conexao.php";
 
         <!-- Fim seção faq -->
 
+        <!-- Início seção contato -->
+
+        <section class="secao-contato" id="contato">
+            <div class="cabecalho-recursos">
+                <h1 class="titulo-recursos">Fale com a gente</h1>
+                <br>
+                <p class="desc-recursos">Dúvidas sobre planos ou uma demonstração? Deixe sua mensagem.
+                </p>
+            </div>
+            <form method="post" class="form-contato">
+                <input type="hidden" name="acao" value="contato">
+                <div class="linha-contato">
+                    <input type="text" name="nome" placeholder="Seu nome" required>
+                    <input type="email" name="email" placeholder="Seu e-mail" required>
+                </div>
+                <textarea name="mensagem" placeholder="Como podemos ajudar?" required></textarea>
+                <?php if ($leadOrigem === 'contato' && $leadMsg): ?><p class="lead-msg"><?= htmlspecialchars($leadMsg) ?></p><?php endif; ?>
+                <?php if ($leadOrigem === 'contato' && $leadErro): ?><p class="lead-erro"><?= htmlspecialchars($leadErro) ?></p><?php endif; ?>
+                <button class="botao-primario" type="submit">Enviar mensagem</button>
+            </form>
+        </section>
+
+        <!-- Fim seção contato -->
+
 
     </main>
+
+    <!-- Início newsletter -->
+
+    <section class="secao-newsletter" id="newsletter">
+        <div class="conteudo-newsletter">
+            <div>
+                <h2>Receba novidades do Éden</h2>
+                <p>Dicas de gestão condominial e atualizações do sistema no seu e-mail.</p>
+            </div>
+            <form method="post" class="form-newsletter">
+                <input type="hidden" name="acao" value="newsletter">
+                <input type="email" name="email" placeholder="Seu melhor e-mail" required>
+                <button class="botao-secundario" type="submit">Assinar</button>
+            </form>
+            <?php if ($leadOrigem === 'newsletter' && $leadMsg): ?><p class="lead-msg"><?= htmlspecialchars($leadMsg) ?></p><?php endif; ?>
+            <?php if ($leadOrigem === 'newsletter' && $leadErro): ?><p class="lead-erro"><?= htmlspecialchars($leadErro) ?></p><?php endif; ?>
+        </div>
+    </section>
+
+    <!-- Fim newsletter -->
 
     <!-- Início rodapé -->
 
@@ -463,7 +574,7 @@ require_once "../config/conexao.php";
                         <li><a href="#sobre">Sobre nós</a></li>
                         <li><a href="#diferenciais">Funcionalidades</a></li>
                         <li><a href="#planos">Planos</a></li>
-                        <li><a href="#faq">Contato</a></li>
+                        <li><a href="#contato">Contato</a></li>
                     </ul>
                 </div>
 
@@ -482,16 +593,16 @@ require_once "../config/conexao.php";
                     <p class="texto-social">Rio de Janeiro - RJ <br> contato@edensystems.com <br> (21) 98765-4321</p>
 
                     <div class="icones-sociais">
-                        <a href="#" class="icone-social" aria-label="Instagram">
+                        <a href="https://instagram.com/" target="_blank" rel="noopener" class="icone-social" aria-label="Instagram">
                             <img src="../assets/icones/instagram.png" alt="Instagram">
                         </a>
-                        <a href="#" class="icone-social" aria-label="LinkedIn">
+                        <a href="https://linkedin.com/" target="_blank" rel="noopener" class="icone-social" aria-label="LinkedIn">
                             <img src="../assets/icones/linkedin.png" alt="LinkedIn">
                         </a>
-                        <a href="#" class="icone-social" aria-label="Facebook">
+                        <a href="https://facebook.com/" target="_blank" rel="noopener" class="icone-social" aria-label="Facebook">
                             <img src="../assets/icones/facebook.png" alt="Facebook">
                         </a>
-                        <a href="#" class="icone-social" aria-label="Twitter/X">
+                        <a href="https://x.com/" target="_blank" rel="noopener" class="icone-social" aria-label="Twitter/X">
                             <img src="../assets/icones/twitter.png" alt="Twitter/X">
                         </a>
                     </div>
@@ -506,8 +617,8 @@ require_once "../config/conexao.php";
                 </div>
 
                 <div class="links-legais">
-                    <a href="#">Termos de Uso</a>
-                    <a href="#">Política de Privacidade</a>
+                    <a href="./termos.php">Termos de Uso</a>
+                    <a href="./privacidade.php">Política de Privacidade</a>
                 </div>
             </div>
 

@@ -357,6 +357,16 @@ CREATE TABLE IF NOT EXISTS pagamento_pix (
         ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
+CREATE TABLE IF NOT EXISTS leads (
+    idLead      INT          NOT NULL AUTO_INCREMENT,
+    nome        VARCHAR(100) NULL DEFAULT NULL,
+    email       VARCHAR(150) NOT NULL,
+    mensagem    TEXT         NULL DEFAULT NULL,
+    origem      ENUM('newsletter','contato') NOT NULL DEFAULT 'contato',
+    dataCriacao DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    PRIMARY KEY (idLead)
+);
+
 -- 10 registros por tabela, respeitando as FK do schema (BancoV1-2026.sql).
 -- ==============================================================
 -- PLANO (10)

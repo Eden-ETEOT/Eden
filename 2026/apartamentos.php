@@ -99,7 +99,7 @@ try {
 
 <?php banner($msg, $erro); ?>
                     <?php if (!$idCondominio): ?>
-                    <p style="width:100%;padding:12px;border:1px solid #e7c77b;background:#fff8e6;color:#684d12;margin:0 0 16px">
+                    <p style="width:100%;padding:12px;border:1px solid var(--yellow-200);background:var(--yellow-50);color:var(--warning);margin:0 0 16px">
                         Sua conta ainda não está associada a um condomínio. <a href="./configurar-condominio.php">Configurar condomínio</a> para visualizar e gerenciar apartamentos.
                     </p>
                     <?php endif; ?>

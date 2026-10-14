@@ -211,9 +211,9 @@ button {
   width: 100%;
   padding: var(--spacing200) var(--spacing300);
   border-radius: var(--spacing200);
-  background: #e6f4ea;
-  color: #1a6b2e;
-  border: 1px solid #bfe3cb;
+  background: var(--blue-50);
+  color: var(--info);
+  border: 1px solid var(--blue-200);
   font-size: 0.9rem;
   font-family: var(--fonteTextos);
   font-weight: var(--medium);
@@ -226,7 +226,7 @@ button {
   padding: var(--spacing200) var(--spacing300);
   border-radius: var(--spacing200);
   background: var(--red-50);
-  color: var(--red-800);
+  color: var(--error);
   border: 1px solid var(--red-200);
   font-size: 0.9rem;
   font-family: var(--fonteTextos);

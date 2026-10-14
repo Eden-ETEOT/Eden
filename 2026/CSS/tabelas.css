@@ -38,7 +38,7 @@
     color: var(--orange1-default);
 }
 .tbl-action.danger:hover {
-    color: var(--red-default);
+    color: var(--error);
 }
 
 /* ===== Rolagem horizontal padrão das tabelas ===== */

@@ -1,6 +1,7 @@
 /* planos.css — fluxo de escolha de plano e pagamento (mock).
    Páginas públicas da área logada do síndico em 2026/planos/.
    Layout dividido (form + imagem) no padrão das telas de cadastro. */
+@import url('variaveis.css');
 
 * {
     box-sizing: border-box;
@@ -153,7 +154,7 @@
 
 .pl-plan ul li::before {
     content: '✓ ';
-    color: #4D8F14;
+    color: var(--sucess);
     font-weight: 700;
 }
 
@@ -199,8 +200,8 @@
 }
 
 .pl-option.selected {
-    border-color: #4D8F14;
-    color: #4D8F14;
+    border-color: var(--sucess);
+    color: var(--sucess);
 }
 
 /* ===== formulário ===== */
@@ -270,9 +271,9 @@
 .pl-error {
     width: 100%;
     max-width: 420px;
-    background: #fdecea;
-    color: #8f1d1d;
-    border: 1px solid #f5c6c2;
+    background: var(--red-50);
+    color: var(--error);
+    border: 1px solid var(--red-200);
     border-radius: 10px;
     padding: 10px 14px;
     font-size: 14px;
@@ -335,13 +336,13 @@
 }
 
 .pl-result-icon.ok {
-    background: #e5f2e8;
-    color: #2e7d32;
+    background: var(--green3-50);
+    color: var(--sucess);
 }
 
 .pl-result-icon.err {
-    background: #fdecea;
-    color: #c62828;
+    background: var(--red-50);
+    color: var(--error);
 }
 
 @media (max-width: 1100px) {
@@ -443,7 +444,7 @@
 .pl-perks svg {
     width: 22px;
     height: 22px;
-    color: #4D8F14;
+    color: var(--sucess);
 }
 
 .pl-cards {
@@ -545,7 +546,7 @@
 
 .pl-card ul li::before {
     content: '✓';
-    color: #2e7d32;
+    color: var(--sucess);
     font-weight: 800;
     font-size: 17px;
     line-height: 1.3;
@@ -574,7 +575,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #2e9e5b;
+    background: var(--sucess);
     color: #fff;
     font-size: 13px;
     font-weight: 800;

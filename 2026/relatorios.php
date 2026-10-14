@@ -118,7 +118,7 @@ try {
                         <p>Análise e exportação de dados condominiais</p>
                     </section>
                     <?php if (!$idCondominio): ?>
-                    <p style="width:100%;padding:12px;border:1px solid #e7c77b;background:#fff8e6;color:#684d12;margin:0 0 16px">
+                    <p style="width:100%;padding:12px;border:1px solid var(--yellow-200);background:var(--yellow-50);color:var(--warning);margin:0 0 16px">
                         Sua conta não está associada a um condomínio. Os gráficos e indicadores aparecerão após <a href="./configurar-condominio.php">configurar o condomínio</a>.
                     </p>
                     <?php endif; ?>

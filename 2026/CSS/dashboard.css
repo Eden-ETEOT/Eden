@@ -159,7 +159,7 @@ body {
     display: flex;
     align-items: center;
     gap: var(--spacing300);
-    color: var(--red-default);
+    color: var(--error);
     text-decoration: none;
     font-size: 16px;
     font-weight: var(--semi-bold);
@@ -167,7 +167,7 @@ body {
 }
 
 .sidebar-logout:hover {
-    color: var(--red-400);
+    color: var(--red-600);
 }
 
 /* ========== MAIN CONTENT ========== */
@@ -267,7 +267,7 @@ body {
     right: -4px;
     width: 8px;
     height: 8px;
-    background-color: var(--red-default);
+    background-color: var(--error);
     border-radius: 50%;
 }
 
@@ -376,15 +376,15 @@ body {
 }
 
 .profile-menu a.danger {
-    color: var(--red-default);
+    color: var(--error);
 }
 
 .profile-menu a.danger:hover {
-    background-color: #fdecea;
+    background-color: var(--red-50);
 }
 
 .profile-menu a.danger svg {
-    color: var(--red-default);
+    color: var(--error);
 }
 
 .user-avatar {
@@ -469,12 +469,12 @@ body {
 
 .stat-icon.yellow {
     background-color: var(--yellow-50);
-    color: var(--yellow-default);
+    color: var(--warning);
 }
 
 .stat-icon.green {
     background-color: var(--green3-50);
-    color: var(--green3-default);
+    color: var(--sucess);
 }
 
 .stat-icon.orange {
@@ -484,7 +484,7 @@ body {
 
 .stat-icon.blue {
     background-color: var(--blue-50);
-    color: var(--blue-default);
+    color: var(--info);
 }
 
 .stat-icon img {

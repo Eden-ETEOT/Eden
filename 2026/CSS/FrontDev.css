@@ -1019,7 +1019,7 @@
 
     color: #ffffff;
 
-    background: #315840;
+    background: var(--sucess);
 
     border-radius: 9px;
 
@@ -1798,8 +1798,8 @@
 
     border-radius: 50%;
 
-    background: #e5f2e8;
-    color: #31563e;
+    background: var(--green3-50);
+    color: var(--sucess);
 
     display: flex;
     align-items: center;

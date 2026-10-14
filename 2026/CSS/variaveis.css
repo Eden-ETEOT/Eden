@@ -73,6 +73,12 @@
     --blue-100: #DBE9F0;
     --blue-50:  #EEF4F8;
 
+    /* Atalhos semânticos (mesmos valores das cores de referência) */
+    --sucess: #4D8F14;
+    --error: #C64539;
+    --warning: #FFBF00;
+    --info: #4C90B2;
+
     /* Highlight (beige) */
     --beige-900: #332600;
     --beige-800: #2E271F;
@@ -213,7 +219,7 @@
   white-space: nowrap;
   padding: var(--spacing300) var(--spacing400);
   background-color: var(--green3-50);
-  color: var(--green3-default);
+  color: var(--sucess);
   font-size: 1rem;
   font-weight: var(--normal);
   border-radius: 20px;
@@ -228,7 +234,7 @@
   white-space: nowrap;
   padding: var(--spacing300) var(--spacing400);
   background-color: var(--blue-50);
-  color: var(--blue-default);
+  color: var(--info);
   font-size: 1rem;
   font-weight: var(--normal);
   border-radius: 20px;
@@ -243,7 +249,7 @@
   white-space: nowrap;
   padding: var(--spacing300) var(--spacing400);
   background-color: var(--yellow-50);
-  color: var(--yellow-default);
+  color: var(--warning);
   font-size: 1rem;
   font-weight: var(--normal);
   border-radius: 20px;
@@ -258,7 +264,7 @@
   white-space: nowrap;
   padding: var(--spacing300) var(--spacing400);
   background-color: var(--red-50);
-  color: var(--red-default);
+  color: var(--error);
   font-size: 1rem;
   font-weight: var(--normal);
   border-radius: 20px;
@@ -273,7 +279,7 @@
   white-space: nowrap;
   padding: var(--spacing300) var(--spacing400);
   background-color: var(--green3-50);
-  color: var(--green3-400);
+  color: var(--sucess);
   font-size: 1rem;
   font-weight: var(--normal);
   border-radius: 20px;
@@ -301,7 +307,7 @@
   white-space: nowrap;
   padding: var(--spacing300) var(--spacing400);
   background-color: var(--yellow-50);
-  color: var(--yellow-400);
+  color: var(--warning);
   font-size: 1rem;
   font-weight: var(--normal);
   border-radius: 20px;
@@ -331,7 +337,7 @@
   white-space: nowrap;
   padding: var(--spacing300) var(--spacing400);
   background-color: var(--red-50);
-  color: var(--red-400);
+  color: var(--error);
   font-size: 1rem;
   font-weight: var(--normal);
   border-radius: 20px;
@@ -362,11 +368,11 @@
 }
 .badge.ativo {
     background-color: var(--green3-50);
-    color: var(--green3-default);
+    color: var(--sucess);
 }
 .badge.inativo {
     background-color: var(--red-50);
-    color: var(--red-default);
+    color: var(--error);
 }
 .input-field-default-sm {
     width: 100%;

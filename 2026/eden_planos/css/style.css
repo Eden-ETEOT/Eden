@@ -1,4 +1,5 @@
 @import url('../../CSS/fontes.css');
+@import url('../../CSS/variaveis.css');
 
 * {
     box-sizing: border-box;
@@ -222,11 +223,11 @@ h1 {
 }
 
 .success {
-    color: #3e9417
+    color: var(--sucess)
 }
 
 .warning {
-    color: #ffbd00
+    color: var(--warning)
 }
 
 .plan-head {

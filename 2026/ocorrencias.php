@@ -237,7 +237,7 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </section>
 <?php banner($msg, $erro); ?>
                     <?php if (!$idCondominio): ?>
-                    <p style="width:100%;padding:12px;border:1px solid #e7c77b;background:#fff8e6;color:#684d12;margin:0 0 16px">
+                    <p style="width:100%;padding:12px;border:1px solid var(--yellow-200);background:var(--yellow-50);color:var(--warning);margin:0 0 16px">
                         Sua conta ainda não gerencia um condomínio. <a href="./configurar-condominio.php">Criar um condomínio e vincular esta conta como síndico</a>.
                     </p>
                     <?php endif; ?>

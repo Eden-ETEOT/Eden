@@ -1,4 +1,5 @@
 @import url('../../CSS/fontes.css');
+@import url('../../CSS/variaveis.css');
 * {
     box-sizing: border-box;
     margin: 0;
@@ -506,10 +507,10 @@ label {
 }
 
 .alert {
-    border: 1px solid #df665d;
+    border: 1px solid var(--error);
     border-radius: 8px;
     padding: 12px 18px;
-    color: #b72c24;
+    color: var(--error);
     display: flex;
     align-items: center;
     gap: 15px;
@@ -518,7 +519,7 @@ label {
 }
 
 .alert svg {
-    color: #d14a42
+    color: var(--error)
 }
 
 .table-panel {

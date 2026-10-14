@@ -1,5 +1,6 @@
 /* pagamento-pix.css — página pública mobile do Pix fake (demonstração).
    Mobile-first, cores da marca Eden. */
+@import url('variaveis.css');
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 .pix-body {
@@ -74,7 +75,7 @@
     width: 100%;
     border: none;
     border-radius: 12px;
-    background: #2e9e5b;
+    background: var(--sucess);
     color: #fff;
     font-size: 17px;
     font-weight: 800;
@@ -91,7 +92,7 @@
 .pix-check {
     width: 76px; height: 76px;
     border-radius: 50%;
-    background: #2e9e5b;
+    background: var(--sucess);
     color: #fff;
     font-size: 38px;
     line-height: 76px;

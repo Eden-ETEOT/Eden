@@ -2738,7 +2738,118 @@
     font-weight: 600;
 }
 .fd-ocorrencias .details-modal {
-    width: 552px;
+    display: flex;
+    flex-direction: column;
+    width: min(920px, calc(100vw - 32px));
+    max-height: 88vh;
+}
+.fd-ocorrencias .details-modal .modal-header {
+    min-height: 70px;
+    flex: 0 0 auto;
+}
+.fd-ocorrencias .details-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    height: min(560px, calc(88vh - 70px));
+    min-height: 0;
+}
+.fd-ocorrencias .details-side {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+.fd-ocorrencias .details-modal .details-content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 20px 22px 24px;
+}
+.fd-ocorrencias .details-modal .details-footer {
+    min-height: 48px;
+    flex: 0 0 auto;
+    padding: 0 22px;
+}
+.fd-ocorrencias .occurrence-chat {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    padding: 18px 16px 14px;
+    background: var(--green1-50);
+}
+.fd-ocorrencias .chat-messages {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    padding: 8px 2px 14px;
+}
+.fd-ocorrencias .chat-message {
+    max-width: 86%;
+    padding: 9px 11px 6px;
+    border-radius: 9px;
+    color: #294633;
+    font-size: 12px;
+    line-height: 1.45;
+}
+.fd-ocorrencias .chat-message p {
+    margin: 0;
+}
+.fd-ocorrencias .chat-message time {
+    display: block;
+    margin-top: 3px;
+    color: #7b8c80;
+    font-size: 9px;
+    text-align: right;
+}
+.fd-ocorrencias .chat-message-outgoing {
+    align-self: flex-end;
+    background: #dcebd7;
+}
+.fd-ocorrencias .chat-message-incoming {
+    align-self: flex-start;
+    background: #fff;
+}
+.fd-ocorrencias .chat-composer {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid #e0e9e3;
+}
+.fd-ocorrencias .chat-composer input {
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    padding: 0 11px;
+    border: 1px solid #e4eae5;
+    border-radius: 7px;
+    background: #fff;
+    color: #809087;
+    font-size: 12px;
+}
+.fd-ocorrencias .chat-composer input::placeholder {
+    color: #a2ada5;
+}
+.fd-ocorrencias .chat-composer button {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 5px;
+    height: 38px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 7px;
+    background: #f18700;
+    color: #fff;
+    font-size: 11px;
+}
+.fd-ocorrencias .chat-composer button svg {
+    width: 14px;
+    height: 14px;
 }
 .fd-ocorrencias .details-content {
     padding: 21px 29px 33px;
@@ -2849,11 +2960,13 @@
 }
 .fd-ocorrencias .status-buttons {
     display: flex;
-
-    gap: 9px;
+    flex-wrap: nowrap;
+    gap: 7px;
 }
 .fd-ocorrencias .status-buttons button {
-    height: 30px;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 32px;
 
     border: 1px solid #52705d;
     border-radius: 18px;
@@ -2862,9 +2975,10 @@
 
     color: #294633;
 
-    padding: 0 17px;
+    padding: 0 7px;
 
-    font-size: 12px;
+    font-size: 10px;
+    white-space: nowrap;
 
     cursor: pointer;
 }
@@ -2929,12 +3043,31 @@
         max-height: 92vh;
         overflow-y: auto;
     }
+    .fd-ocorrencias .details-modal {
+                display: block;
+                max-height: 92vh;
+        }
+    .fd-ocorrencias .details-workspace {
+                display: flex;
+                flex-direction: column;
+                height: auto;
+        }
+    .fd-ocorrencias .details-modal .details-content {
+                overflow: visible;
+        }
+    .fd-ocorrencias .occurrence-chat {
+                min-height: 260px;
+                border-top: 1px solid #e0e9e3;
+        }
   .fd-ocorrencias .form-grid, .fd-ocorrencias .detail-grid, .fd-ocorrencias .modal-form-buttons {
         grid-template-columns: 1fr;
         gap: 0;
     }
   .fd-ocorrencias .status-buttons {
-        flex-wrap: wrap;
+      flex-wrap: wrap;
+    }
+  .fd-ocorrencias .status-buttons button {
+      flex: 1 1 calc(50% - 7px);
     }
 }
 /* ===== documentacao (.fd-documentacao) ===== */

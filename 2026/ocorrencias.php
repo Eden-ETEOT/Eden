@@ -340,53 +340,64 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <h2 id="viewTitle"></h2>
                 <button type="button" onclick="fecharModal('viewModal')"><i data-lucide="x"></i></button>
             </div>
-            <div class="details-content">
-                <div class="details-top">
-                    <h3>Ocorrência <span id="viewId"></span></h3>
-                    <span id="viewPriority" class="badge badge-prioridade-media"></span>
+            <div class="details-workspace">
+                <div class="details-side">
+                    <div class="details-content">
+                        <div class="details-top">
+                            <h3>Ocorrência <span id="viewId"></span></h3>
+                            <span id="viewPriority" class="badge badge-prioridade-media"></span>
+                        </div>
+                        <div class="detail-grid">
+                            <div class="detail-box"><span>Morador</span><strong id="viewResident"></strong></div>
+                            <div class="detail-box"><span>Apartamento</span><strong id="viewApartment"></strong></div>
+                            <div class="detail-box"><span>Categoria</span><strong id="viewCategory"></strong></div>
+                            <div class="detail-box"><span>Data da Ocorrência</span><strong id="viewDate"></strong></div>
+                        </div>
+                        <div class="description-title">Descrição</div>
+                        <div class="description-box" id="viewDescription"></div>
+                        <div class="description-title">Imagens anexadas</div>
+                        <div class="occurrence-attachments" id="viewAttachments"></div>
+                        <?php if ($podeGerenciar): ?><div class="update-title">Atualizar prioridade</div>
+                        <form method="post" class="priority-form">
+                            <input type="hidden" name="acao" value="definir_prioridade">
+                            <input type="hidden" name="id" id="priorityId" value="">
+                            <select name="prioridade" id="prioritySelect" class="select-medium-iconR" onchange="this.form.submit()" required>
+                                <option value="">Definir prioridade</option>
+                                <?php foreach ($prioridades as $pp): ?>
+                                <?php if (!in_array($pp['nome'], ['Baixa', 'Média', 'Alta', 'Urgente'], true)) continue; ?>
+                                <option value="<?= (int) $pp['idPrioridade'] ?>"><?= htmlspecialchars($pp['nome']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </form>
+                        <div class="update-title">Atualizar Status</div>
+                        <div class="status-buttons" id="statusButtons">
+                            <button type="button" data-status="resolvida" onclick="alterarStatus(this)">Finalizado</button>
+                            <button type="button" data-status="andamento" onclick="alterarStatus(this)">Em andamento</button>
+                            <button type="button" data-status="analise" onclick="alterarStatus(this)">Em análise</button>
+                            <button type="button" data-status="cancelada" onclick="alterarStatus(this)">Cancelado</button>
+                        </div>
+                        <?php else: ?>
+                        <div class="update-title">Ações indisponíveis</div>
+                        <p>Sua conta ainda não está vinculada como síndico ou funcionário de um condomínio. <a href="./configurar-condominio.php">Configurar um condomínio</a> para habilitar o gerenciamento.</p>
+                        <?php endif; ?>
+                    </div>
+                    <div class="details-footer">
+                        <?php if ($podeGerenciar): ?>
+                        <form method="post" id="cancelForm" style="display:inline">
+                            <input type="hidden" name="acao" value="cancelar">
+                            <input type="hidden" name="id" id="cancelId" value="">
+                            <button type="submit" onclick="return confirm('Deseja realmente cancelar esta ocorrência?')">Excluir Ocorrência</button>
+                        </form>
+                        <?php endif; ?>
+                    </div>
                 </div>
-                <div class="detail-grid">
-                    <div class="detail-box"><span>Morador</span><strong id="viewResident"></strong></div>
-                    <div class="detail-box"><span>Apartamento</span><strong id="viewApartment"></strong></div>
-                    <div class="detail-box"><span>Categoria</span><strong id="viewCategory"></strong></div>
-                    <div class="detail-box"><span>Data da Ocorrência</span><strong id="viewDate"></strong></div>
-                </div>
-                <div class="description-title">Descrição</div>
-                <div class="description-box" id="viewDescription"></div>
-                <div class="description-title">Imagens anexadas</div>
-                <div class="occurrence-attachments" id="viewAttachments"></div>
-                <?php if ($podeGerenciar): ?><div class="update-title">Atualizar prioridade</div>
-                <form method="post" class="priority-form">
-                    <input type="hidden" name="acao" value="definir_prioridade">
-                    <input type="hidden" name="id" id="priorityId" value="">
-                    <select name="prioridade" id="prioritySelect" class="select-medium-iconR" onchange="this.form.submit()" required>
-                        <option value="">Definir prioridade</option>
-                        <?php foreach ($prioridades as $pp): ?>
-                        <?php if (!in_array($pp['nome'], ['Baixa', 'Média', 'Alta', 'Urgente'], true)) continue; ?>
-                        <option value="<?= (int) $pp['idPrioridade'] ?>"><?= htmlspecialchars($pp['nome']) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </form>
-                <div class="update-title">Atualizar Status</div>
-                <div class="status-buttons" id="statusButtons">
-                    <button type="button" data-status="resolvida" onclick="alterarStatus(this)">Finalizado</button>
-                    <button type="button" data-status="andamento" onclick="alterarStatus(this)">Em andamento</button>
-                    <button type="button" data-status="analise" onclick="alterarStatus(this)">Em análise</button>
-                    <button type="button" data-status="cancelada" onclick="alterarStatus(this)">Cancelado</button>
-                </div>
-                <?php else: ?>
-                <div class="update-title">Ações indisponíveis</div>
-                <p>Sua conta ainda não está vinculada como síndico ou funcionário de um condomínio. <a href="./configurar-condominio.php">Configurar um condomínio</a> para habilitar o gerenciamento.</p>
-                <?php endif; ?>
-            </div>
-            <div class="details-footer">
-                <?php if ($podeGerenciar): ?>
-                <form method="post" id="cancelForm" style="display:inline">
-                    <input type="hidden" name="acao" value="cancelar">
-                    <input type="hidden" name="id" id="cancelId" value="">
-                    <button type="submit" onclick="return confirm('Deseja realmente cancelar esta ocorrência?')">Excluir Ocorrência</button>
-                </form>
-                <?php endif; ?>
+                <section class="occurrence-chat" aria-label="Conversa da ocorrência">
+                    <div class="chat-messages" aria-label="Mensagens da conversa"></div>
+                    <div class="chat-composer">
+                        <input type="text" placeholder="Digite aqui" aria-label="Mensagem" disabled>
+                        <button type="button" disabled><i data-lucide="send"></i><span>Enviar</span></button>
+                    </div>
+                </section>
             </div>
         </div>
     </div>

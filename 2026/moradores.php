@@ -319,7 +319,7 @@ try {
                     <input type="email" name="email_esperado" placeholder="pessoa@email.com">
                 </div>
                 <div class="form-buttons">
-                    <button type="button" class="btn btn-secondary-success" onclick="fecharModal('inviteModal')">Cancelar</button>
+                    <button type="button" class="btn btn-secondary-error" onclick="fecharModal('inviteModal')">Cancelar</button>
                     <button type="submit" class="btn btn-primary-success">Gerar convite</button>
                 </div>
             </form>

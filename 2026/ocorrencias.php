@@ -430,7 +430,7 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <span id="fileName"></span>
                 </div>
                 <div class="modal-form-buttons">
-                    <button type="button" class="btn btn-secondary-success" onclick="fecharModal('newModal')">Cancelar</button>
+                    <button type="button" class="btn btn-secondary-error" onclick="fecharModal('newModal')">Cancelar</button>
                     <button type="submit" class="btn btn-primary-success">Registrar Ocorrência</button>
                 </div>
             </form>

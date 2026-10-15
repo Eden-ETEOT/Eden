@@ -41,8 +41,6 @@
     display: flex;
 
     gap: 10px;
-
-    margin-top: 25px;
 }
 .fd-apartamentos .apartments-card {
     background: white;
@@ -300,9 +298,6 @@
         flex-direction: column;
 
         gap: 20px;
-    }
-  .fd-apartamentos .top-buttons {
-        margin-top: 0;
     }
 }
 @media (max-width: 650px) {

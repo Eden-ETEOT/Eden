@@ -298,7 +298,7 @@ $fotoUrl = !empty($eu['foto'])
                     <input type="text" name="telefone" value="<?= htmlspecialchars($eu['telefone'] ?? '') ?>">
                 </div>
                 <div class="pf-form-actions">
-                    <button type="button" class="btn btn-secondary-success" onclick="fecharModal('pfEditModal')">Cancelar</button>
+                    <button type="button" class="btn btn-secondary-error" onclick="fecharModal('pfEditModal')">Cancelar</button>
                     <button type="submit" class="btn btn-primary-success">Salvar Informações</button>
                 </div>
             </form>

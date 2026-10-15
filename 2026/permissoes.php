@@ -232,7 +232,7 @@ function iniciais($nome) {
                         </select>
                     </div>
                     <div class="form-buttons">
-                        <button type="button" class="btn btn-secondary-success" onclick="fdFecharModal('employeeModal')">Cancelar</button>
+                        <button type="button" class="btn btn-secondary-error" onclick="fdFecharModal('employeeModal')">Cancelar</button>
                         <button type="submit" class="btn btn-primary-success">Registrar Funcionário</button>
                     </div>
                 </form>
@@ -276,7 +276,7 @@ function iniciais($nome) {
                         </select>
                     </div>
                     <div class="form-buttons">
-                        <button type="button" class="btn btn-secondary-success" onclick="fdFecharModal('editModal')">Cancelar</button>
+                        <button type="button" class="btn btn-secondary-error" onclick="fdFecharModal('editModal')">Cancelar</button>
                         <button type="submit" class="btn btn-primary-success">Salvar Alterações</button>
                     </div>
                 </form>

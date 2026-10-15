@@ -252,6 +252,7 @@
     height: 48px;
     border: 0;
     border-radius: 12px;
+    padding: 0 var(--btn-padding-x);
     background: var(--orange1-default);
     color: white;
     font-size: 15px;

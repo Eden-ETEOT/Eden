@@ -220,7 +220,7 @@ try {
                         </div>
                     </div>
                     <div class="form-buttons">
-                        <button type="button" class="btn btn-secondary-success" onclick="fdFecharModal('newApartmentModal')">Cancelar</button>
+                        <button type="button" class="btn btn-secondary-error" onclick="fdFecharModal('newApartmentModal')">Cancelar</button>
                         <button type="submit" class="btn btn-primary-success">Registrar Apartamento</button>
                     </div>
                 </form>
@@ -242,7 +242,7 @@ try {
                         <input class="input-field-default-m" type="text" id="blockName" placeholder="Digite aqui..." required>
                     </div>
                     <div class="form-buttons block-buttons">
-                        <button type="button" class="btn btn-secondary-success" onclick="fdFecharModal('newBlockModal')">Cancelar</button>
+                        <button type="button" class="btn btn-secondary-error" onclick="fdFecharModal('newBlockModal')">Cancelar</button>
                         <button type="submit" class="btn btn-primary-success">Adicionar Bloco</button>
                     </div>
                 </form>

@@ -121,7 +121,7 @@ function iniciais($nome) {
                     <section class="card users-card">
                         <div class="section-header">
                             <h2>Funcionários do Sistema</h2>
-                            <button class="new-user-button" type="button" onclick="fdAbrirModal('employeeModal')">
+                            <button class="btn btn-primary-success" type="button" onclick="fdAbrirModal('employeeModal')">
                                 <i data-lucide="plus"></i>
                                 Novo Funcionário
                             </button>
@@ -198,7 +198,7 @@ function iniciais($nome) {
             <div class="modal">
                 <div class="modal-header">
                     <h2>Novo Funcionário</h2>
-                    <button type="button" onclick="fdFecharModal('employeeModal')"><i data-lucide="x"></i></button>
+                    <button type="button" class="btn btn-icon" onclick="fdFecharModal('employeeModal')"><i data-lucide="x"></i></button>
                 </div>
                 <form method="post" class="employee-form">
                     <input type="hidden" name="acao" value="novo">
@@ -232,8 +232,8 @@ function iniciais($nome) {
                         </select>
                     </div>
                     <div class="form-buttons">
-                        <button type="button" class="cancel-button" onclick="fdFecharModal('employeeModal')">Cancelar</button>
-                        <button type="submit" class="register-button">Registrar Funcionário</button>
+                        <button type="button" class="btn btn-secondary-success" onclick="fdFecharModal('employeeModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary-success">Registrar Funcionário</button>
                     </div>
                 </form>
             </div>
@@ -246,7 +246,7 @@ function iniciais($nome) {
             <div class="modal edit-modal">
                 <div class="modal-header">
                     <h2>Editar Funcionário</h2>
-                    <button type="button" onclick="fdFecharModal('editModal')"><i data-lucide="x"></i></button>
+                    <button type="button" class="btn btn-icon" onclick="fdFecharModal('editModal')"><i data-lucide="x"></i></button>
                 </div>
                 <form method="post" class="employee-form">
                     <input type="hidden" name="acao" value="editar">
@@ -276,8 +276,8 @@ function iniciais($nome) {
                         </select>
                     </div>
                     <div class="form-buttons">
-                        <button type="button" class="cancel-button" onclick="fdFecharModal('editModal')">Cancelar</button>
-                        <button type="submit" class="register-button">Salvar Alterações</button>
+                        <button type="button" class="btn btn-secondary-success" onclick="fdFecharModal('editModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary-success">Salvar Alterações</button>
                     </div>
                 </form>
             </div>

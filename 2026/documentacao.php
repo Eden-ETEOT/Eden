@@ -104,7 +104,7 @@ $tipos = $conexao->query("SELECT codigo, nome FROM tipoDocumento WHERE ativo = 1
                         <p>Centraliza todos os documentos cadastrados no condomínio, organizados em cards para facilitar a consulta. Permite
                             buscar documentos, realizar o download dos arquivos e cadastrar novos documentos.</p>
                         </div>
-                        <button class="new-document-button" onclick="abrirModal('newModal')"><i data-lucide="plus"></i>Novo Documento</button>
+                        <button class="btn btn-orange" onclick="abrirModal('newModal')"><i data-lucide="plus"></i>Novo Documento</button>
                     </section>
 <?php banner($msg, $erro); ?>
                     <section class="documents-card">
@@ -190,7 +190,7 @@ $tipos = $conexao->query("SELECT codigo, nome FROM tipoDocumento WHERE ativo = 1
         <div class="modal">
             <div class="modal-header">
                 <h2>Novo Documento</h2>
-                <button type="button" onclick="fecharModal('newModal')"><i data-lucide="x"></i></button>
+                <button type="button" class="btn btn-icon" onclick="fecharModal('newModal')"><i data-lucide="x"></i></button>
             </div>
             <form id="documentForm" class="document-form" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="acao" value="criar">
@@ -211,12 +211,12 @@ $tipos = $conexao->query("SELECT codigo, nome FROM tipoDocumento WHERE ativo = 1
                 </div>
                 <div class="file-section">
                     <input type="file" id="docInput" name="arquivo" hidden onchange="mostrarArquivo()">
-                    <button type="button" class="attach-document" onclick="document.getElementById('docInput').click()">Anexar arquivo</button>
+                    <button type="button" class="btn btn-orange" onclick="document.getElementById('docInput').click()">Anexar arquivo</button>
                     <span id="fileName"></span>
                 </div>
                 <div class="form-buttons">
-                    <button type="button" class="cancel-button" onclick="fecharModal('newModal')">Cancelar</button>
-                    <button type="submit" class="register-button">Cadastrar Documento</button>
+                    <button type="button" class="btn btn-secondary-success" onclick="fecharModal('newModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary-success">Cadastrar Documento</button>
                 </div>
             </form>
         </div>

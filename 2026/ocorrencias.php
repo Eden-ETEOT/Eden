@@ -233,7 +233,7 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <h1>Tela de Ocorrências Condominiais</h1>
                             <p>Permite consultar, visualizar e excluir as ocorrências, além de registrar novas ocorrências.</p>
                         </div>
-                        <button class="new-occurrence-button" type="button" onclick="abrirModal('newModal')"><i data-lucide="plus"></i>Nova Ocorrência</button>
+                        <button class="btn btn-orange" type="button" onclick="abrirModal('newModal')"><i data-lucide="plus"></i>Nova Ocorrência</button>
                     </section>
 <?php banner($msg, $erro); ?>
                     <?php if (!$idCondominio): ?>
@@ -338,7 +338,7 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="modal details-modal">
             <div class="modal-header">
                 <h2 id="viewTitle"></h2>
-                <button type="button" onclick="fecharModal('viewModal')"><i data-lucide="x"></i></button>
+                <button type="button" class="btn btn-icon" onclick="fecharModal('viewModal')"><i data-lucide="x"></i></button>
             </div>
             <div class="details-content">
                 <div class="details-top">
@@ -369,10 +369,10 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </form>
                 <div class="update-title">Atualizar Status</div>
                 <div class="status-buttons" id="statusButtons">
-                    <button type="button" data-status="resolvida" onclick="alterarStatus(this)">Finalizado</button>
-                    <button type="button" data-status="andamento" onclick="alterarStatus(this)">Em andamento</button>
-                    <button type="button" data-status="analise" onclick="alterarStatus(this)">Em análise</button>
-                    <button type="button" data-status="cancelada" onclick="alterarStatus(this)">Cancelado</button>
+                    <button type="button" class="btn btn-secondary-success btn-sm" data-status="resolvida" onclick="alterarStatus(this)">Finalizado</button>
+                    <button type="button" class="btn btn-secondary-success btn-sm" data-status="andamento" onclick="alterarStatus(this)">Em andamento</button>
+                    <button type="button" class="btn btn-secondary-success btn-sm" data-status="analise" onclick="alterarStatus(this)">Em análise</button>
+                    <button type="button" class="btn btn-secondary-success btn-sm" data-status="cancelada" onclick="alterarStatus(this)">Cancelado</button>
                 </div>
                 <?php else: ?>
                 <div class="update-title">Ações indisponíveis</div>
@@ -384,7 +384,7 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <form method="post" id="cancelForm" style="display:inline">
                     <input type="hidden" name="acao" value="cancelar">
                     <input type="hidden" name="id" id="cancelId" value="">
-                    <button type="submit" onclick="return confirm('Deseja realmente cancelar esta ocorrência?')">Excluir Ocorrência</button>
+                    <button type="submit" class="btn btn-tertiary-error" onclick="return confirm('Deseja realmente cancelar esta ocorrência?')">Excluir Ocorrência</button>
                 </form>
                 <?php endif; ?>
             </div>
@@ -395,7 +395,7 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="modal new-modal">
             <div class="modal-header">
                 <h2>Nova Ocorrência</h2>
-                <button type="button" onclick="fecharModal('newModal')"><i data-lucide="x"></i></button>
+                <button type="button" class="btn btn-icon" onclick="fecharModal('newModal')"><i data-lucide="x"></i></button>
             </div>
             <form class="new-occurrence-form" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="acao" value="criar">
@@ -426,12 +426,12 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="image-area">
                     <input type="file" id="imageInput" name="anexo" accept="image/*" hidden onchange="mostrarArquivo()">
-                    <button type="button" class="attach-button" onclick="document.getElementById('imageInput').click()">Anexar imagem</button>
+                    <button type="button" class="btn btn-primary-success" onclick="document.getElementById('imageInput').click()">Anexar imagem</button>
                     <span id="fileName"></span>
                 </div>
                 <div class="modal-form-buttons">
-                    <button type="button" class="cancel-button" onclick="fecharModal('newModal')">Cancelar</button>
-                    <button type="submit" class="register-button">Registrar Ocorrência</button>
+                    <button type="button" class="btn btn-secondary-success" onclick="fecharModal('newModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary-success">Registrar Ocorrência</button>
                 </div>
             </form>
         </div>
@@ -510,7 +510,7 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
             document.getElementById('cancelId').value = o.idChamados;
             document.querySelectorAll('#statusButtons button').forEach(b => {
-                b.classList.toggle('selected', b.dataset.status === o.status);
+                b.className = 'btn btn-sm ' + (b.dataset.status === o.status ? 'btn-primary-success' : 'btn-secondary-success');
             });
             abrirModal('viewModal');
         }

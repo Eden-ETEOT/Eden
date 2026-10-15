@@ -95,7 +95,7 @@ function desenharPaginacao(tbodyId) {
   const btn = (label, pg, cls) => {
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = 'page' + (cls ? ' ' + cls : '');
+    b.className = cls ? 'btn btn-orange btn-sm btn-icon' : 'btn btn-secondary-orange btn-sm btn-icon';
     b.textContent = label;
     b.onclick = () => { pagEstado[tbodyId].pagina = pg; desenharPaginacao(tbodyId); };
     pager.appendChild(b);

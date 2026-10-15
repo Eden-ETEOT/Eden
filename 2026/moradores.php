@@ -116,7 +116,7 @@ try {
                                 Permite buscar moradores, visualizar seus dados e desativar
                                 suas contas.</p>
                         </div>
-                        <button class="new-btn" type="button" onclick="abrirModal('inviteModal')"><i data-lucide="mail-plus"></i>Gerar convite</button>
+                        <button class="btn btn-orange" type="button" onclick="abrirModal('inviteModal')"><i data-lucide="mail-plus"></i>Gerar convite</button>
                     </section>
 <?php banner($msg, $erro); ?>
                     <section class="residents-card">
@@ -252,7 +252,7 @@ try {
             <div class="modal-top">
                 <div class="modal-title">
                     <h2>Detalhes do Morador</h2>
-                    <button class="close-modal" type="button" onclick="fecharModal('residentModal')"><i data-lucide="x"></i></button>
+                    <button class="btn btn-icon" type="button" onclick="fecharModal('residentModal')"><i data-lucide="x"></i></button>
                 </div>
             </div>
             <div class="modal-content">
@@ -269,7 +269,7 @@ try {
                 <form method="post" id="deleteForm" style="display:inline">
                     <input type="hidden" name="acao" value="desativar">
                     <input type="hidden" name="id" id="deleteId" value="">
-                    <button type="submit" class="delete-button" onclick="return confirm('Deseja realmente desativar este morador?')">Excluir Morador</button>
+                    <button type="submit" class="btn btn-tertiary-error" onclick="return confirm('Deseja realmente desativar este morador?')">Excluir Morador</button>
                 </form>
             </div>
         </div>
@@ -283,7 +283,7 @@ try {
             <div class="modal-top">
                 <div class="modal-title">
                     <h2>Gerar convite</h2>
-                    <button class="close-modal" type="button" onclick="fecharModal('inviteModal')"><i data-lucide="x"></i></button>
+                    <button class="btn btn-icon" type="button" onclick="fecharModal('inviteModal')"><i data-lucide="x"></i></button>
                 </div>
             </div>
             <form method="post" class="resident-form">
@@ -319,8 +319,8 @@ try {
                     <input type="email" name="email_esperado" placeholder="pessoa@email.com">
                 </div>
                 <div class="form-buttons">
-                    <button type="button" class="cancel-button" onclick="fecharModal('inviteModal')">Cancelar</button>
-                    <button type="submit" class="register-button">Gerar convite</button>
+                    <button type="button" class="btn btn-secondary-success" onclick="fecharModal('inviteModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary-success">Gerar convite</button>
                 </div>
             </form>
         </div>

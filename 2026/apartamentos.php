@@ -86,11 +86,11 @@ try {
                             </p>
                         </div>
                         <div class="top-buttons">
-                            <button class="new-btn" type="button" onclick="fdAbrirModal('newBlockModal')">
+                            <button class="btn btn-orange" type="button" onclick="fdAbrirModal('newBlockModal')">
                                 <i data-lucide="plus"></i>
                                 Novo Bloco
                             </button>
-                            <button class="new-btn" type="button" onclick="fdAbrirModal('newApartmentModal')">
+                            <button class="btn btn-orange" type="button" onclick="fdAbrirModal('newApartmentModal')">
                                 <i data-lucide="plus"></i>
                                 Novo Apartamento
                             </button>
@@ -190,7 +190,7 @@ try {
             <div class="modal apartment-register-modal">
                 <div class="modal-header">
                     <h2>Novo apartamento</h2>
-                    <button class="close-modal" type="button" onclick="fdFecharModal('newApartmentModal')"><i data-lucide="x"></i></button>
+                    <button class="btn btn-icon" type="button" onclick="fdFecharModal('newApartmentModal')"><i data-lucide="x"></i></button>
                 </div>
                 <form method="post" class="modal-form">
                     <input type="hidden" name="acao" value="novo">
@@ -220,8 +220,8 @@ try {
                         </div>
                     </div>
                     <div class="form-buttons">
-                        <button type="button" class="cancel-button" onclick="fdFecharModal('newApartmentModal')">Cancelar</button>
-                        <button type="submit" class="register-button">Registrar Apartamento</button>
+                        <button type="button" class="btn btn-secondary-success" onclick="fdFecharModal('newApartmentModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary-success">Registrar Apartamento</button>
                     </div>
                 </form>
             </div>
@@ -234,7 +234,7 @@ try {
             <div class="modal block-modal">
                 <div class="modal-header">
                     <h2>Novo bloco</h2>
-                    <button class="close-modal" type="button" onclick="fdFecharModal('newBlockModal')"><i data-lucide="x"></i></button>
+                    <button class="btn btn-icon" type="button" onclick="fdFecharModal('newBlockModal')"><i data-lucide="x"></i></button>
                 </div>
                 <form class="modal-form" onsubmit="return fdCadastrarBloco(event)">
                     <div class="form-group">
@@ -242,8 +242,8 @@ try {
                         <input class="input-field-default-m" type="text" id="blockName" placeholder="Digite aqui..." required>
                     </div>
                     <div class="form-buttons block-buttons">
-                        <button type="button" class="cancel-button" onclick="fdFecharModal('newBlockModal')">Cancelar</button>
-                        <button type="submit" class="register-button">Adicionar Bloco</button>
+                        <button type="button" class="btn btn-secondary-success" onclick="fdFecharModal('newBlockModal')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary-success">Adicionar Bloco</button>
                     </div>
                 </form>
             </div>
@@ -256,7 +256,7 @@ try {
             <div class="modal details-modal">
                 <div class="modal-header">
                     <h2>Detalhes do Apartamento</h2>
-                    <button class="close-modal" type="button" onclick="fdFecharModal('apartmentDetailsModal')"><i data-lucide="x"></i></button>
+                    <button class="btn btn-icon" type="button" onclick="fdFecharModal('apartmentDetailsModal')"><i data-lucide="x"></i></button>
                 </div>
                 <div class="details-content">
                     <div class="apartment-title" id="viewApartmentTitle">—</div>
@@ -278,7 +278,7 @@ try {
                         <input type="hidden" name="acao" value="status">
                         <input type="hidden" name="id" id="aptStatusId" value="">
                         <input type="hidden" name="ativo" id="aptStatusAtivo" value="0">
-                        <button class="delete-button" type="submit" id="aptStatusBtn">Desativar Apartamento</button>
+                        <button class="btn btn-tertiary-error" type="submit" id="aptStatusBtn">Desativar Apartamento</button>
                     </form>
                 </div>
             </div>

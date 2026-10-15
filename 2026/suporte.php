@@ -82,7 +82,7 @@ $faqs = [
                                 <textarea id="ticketMessage" placeholder="Descreva detalhadamente o que precisa de ajuda..." required></textarea>
                             </div>
                             <div class="form-footer">
-                                <button type="submit" class="send-button">
+                                <button type="submit" class="btn btn-primary-success">
                                     <i data-lucide="send"></i>
                                     Enviar Chamado
                                 </button>
@@ -98,11 +98,11 @@ $faqs = [
     <div class="fd-suporte">
         <div class="modal-overlay" id="successModal" onclick="fdFecharClicandoFora(event, 'successModal')">
             <div class="success-modal">
-                <button class="modal-close" onclick="fdFecharModal('successModal')" type="button"><i data-lucide="x"></i></button>
+                <button class="btn btn-icon" onclick="fdFecharModal('successModal')" type="button"><i data-lucide="x"></i></button>
                 <div class="success-icon"><i data-lucide="check"></i></div>
                 <h2>Chamado enviado!</h2>
                 <p>Seu chamado foi registrado com sucesso. Nossa equipe responderá em até 24 horas úteis.</p>
-                <button type="button" class="success-button" onclick="fdFecharModal('successModal')">Entendi</button>
+                <button type="button" class="btn btn-primary-success" onclick="fdFecharModal('successModal')">Entendi</button>
             </div>
         </div>
     </div>

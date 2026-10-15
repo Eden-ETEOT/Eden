@@ -44,37 +44,6 @@
 
     margin-top: 25px;
 }
-.fd-apartamentos .new-btn {
-    height: var(--btn-height-m);
-
-    padding: 0 18px;
-
-    border: 0;
-    border-radius: 13px;
-
-    background: var(--orange1-default);
-    color: white;
-
-    display: flex;
-    align-items: center;
-
-    gap: 8px;
-
-    font-size: 14px;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-.fd-apartamentos .new-btn:hover {
-    background: var(--orange1-600);
-}
-.fd-apartamentos .new-btn:active {
-    background: var(--orange1-700);
-}
-.fd-apartamentos .new-btn i {
-    width: 25px;
-    height: 25px;
-}
 .fd-apartamentos .apartments-card {
     background: white;
 
@@ -177,48 +146,6 @@
 
     background: #fdeceb;
 }
-.fd-apartamentos .pagination {
-    display: flex;
-
-    justify-content: flex-end;
-    align-items: center;
-
-    gap: 7px;
-
-    margin-top: 45px;
-
-    padding-right: 25px;
-}
-.fd-apartamentos .page {
-    width: 30px;
-    height: 30px;
-
-    background: white;
-
-    border: 1px solid #e4e7e5;
-
-    border-radius: 6px;
-
-    font-size: 16px;
-
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.fd-apartamentos .page i {
-    width: 18px;
-}
-.fd-apartamentos .page.active {
-    background: var(--orange1-default);
-
-    color: white;
-
-    border-color: var(--orange1-default);
-
-    font-weight: bold;
-}
 .fd-apartamentos .modal-overlay {
     position: fixed;
 
@@ -266,19 +193,6 @@
     font-size: 21px;
     font-weight: 600;
 }
-.fd-apartamentos .close-modal {
-    border: 0;
-
-    background: transparent;
-
-    color: #999;
-
-    cursor: pointer;
-}
-.fd-apartamentos .close-modal i {
-    width: 28px;
-    height: 28px;
-}
 .fd-apartamentos .modal-form {
     padding: 28px 28px 35px;
 }
@@ -309,34 +223,6 @@
     gap: 22px;
 
     margin-top: 42px;
-}
-.fd-apartamentos .cancel-button, .fd-apartamentos .register-button {
-    height: var(--btn-height-lg);
-
-    border-radius: 13px;
-
-    font-size: 14px;
-
-    cursor: pointer;
-}
-.fd-apartamentos .cancel-button {
-    background: white;
-
-    color: #294633;
-
-    border: 1px solid #52705d;
-}
-.fd-apartamentos .register-button {
-    background: #31553e;
-
-    color: white;
-
-    border: 1px solid #31553e;
-
-    font-weight: 600;
-}
-.fd-apartamentos .register-button:hover {
-    background: #274731;
 }
 .fd-apartamentos .block-modal {
     width: 552px;
@@ -404,17 +290,6 @@
     border-top: 1px solid #ddd;
 
     padding: 24px 34px;
-}
-.fd-apartamentos .delete-button {
-    border: 0;
-
-    background: transparent;
-
-    color: var(--error);
-
-    font-size: 13px;
-
-    cursor: pointer;
 }
 @media (max-width: 850px) {
   .fd-apartamentos .menu-link {
@@ -970,46 +845,6 @@
 
     margin-top: 3px;
 }
-.fd-configuracoes .btn-cancel, .fd-configuracoes .btn-save {
-    height: var(--btn-height-m);
-
-    padding: 0 20px;
-
-    border-radius: 9px;
-
-    font-family: inherit;
-
-    font-size: 13px;
-    font-weight: 500;
-
-    cursor: pointer;
-
-    transition: .2s;
-}
-.fd-configuracoes .btn-cancel {
-    min-width: 100px;
-
-    color: #405148;
-
-    background: #ffffff;
-
-    border: 1px solid #ccd4cf;
-}
-.fd-configuracoes .btn-cancel:hover {
-    background: #f6f8f7;
-}
-.fd-configuracoes .btn-save {
-    min-width: 150px;
-
-    color: #ffffff;
-
-    background: #315840;
-
-    border: 1px solid #315840;
-}
-.fd-configuracoes .btn-save:hover {
-    background: #244b36;
-}
 .fd-configuracoes .success-message {
     position: fixed;
 
@@ -1048,9 +883,6 @@
     }
   .fd-configuracoes .form-actions {
         flex-direction: column-reverse;
-    }
-  .fd-configuracoes .btn-cancel, .fd-configuracoes .btn-save {
-        width: 100%;
     }
 }
 /* ===== permissoes (.fd-permissoes) ===== */
@@ -1095,33 +927,6 @@
 .fd-permissoes .section-header h2, .fd-permissoes .permissions-title h2 {
     font-size: 18px;
     font-weight: 600;
-}
-.fd-permissoes .new-user-button {
-    height: var(--btn-height-m);
-
-    border: 0;
-    border-radius: 11px;
-
-    padding: 0 16px;
-
-    background: #294633;
-    color: white;
-
-    display: flex;
-    align-items: center;
-    gap: 7px;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    cursor: pointer;
-}
-.fd-permissoes .new-user-button:hover {
-    background: #345a41;
-}
-.fd-permissoes .new-user-button svg {
-    width: 17px;
-    height: 17px;
 }
 .fd-permissoes .table-container {
     width: 100%;
@@ -1199,29 +1004,6 @@
 .fd-permissoes .status-inactive {
     color: #69737c;
     background: #eef0f2;
-}
-.fd-permissoes .edit-button {
-    width: var(--btn-height-sm);
-    height: var(--btn-height-sm);
-
-    border: 0;
-
-    background: transparent;
-
-    color: #64766b;
-
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.fd-permissoes .edit-button:hover {
-    color: #294633;
-}
-.fd-permissoes .edit-button svg {
-    width: 16px;
-    height: 16px;
 }
 .fd-permissoes .permissions-title {
     min-height: 68px;
@@ -1341,19 +1123,6 @@
     font-size: 21px;
     font-weight: 600;
 }
-.fd-permissoes .modal-header button {
-    border: 0;
-
-    background: transparent;
-
-    color: #999;
-
-    cursor: pointer;
-}
-.fd-permissoes .modal-header button svg {
-    width: 28px;
-    height: 28px;
-}
 .fd-permissoes .employee-form {
     padding: 27px 28px 35px;
 }
@@ -1398,33 +1167,6 @@
     gap: 22px;
 
     margin-top: 30px;
-}
-.fd-permissoes .cancel-button, .fd-permissoes .register-button {
-    height: var(--btn-height-lg);
-
-    border-radius: 13px;
-
-    font-size: 14px;
-
-    cursor: pointer;
-}
-.fd-permissoes .cancel-button {
-    background: white;
-
-    border: 1px solid #52705d;
-
-    color: #294633;
-}
-.fd-permissoes .register-button {
-    border: 1px solid #31563e;
-
-    background: #31563e;
-    color: white;
-
-    font-weight: 600;
-}
-.fd-permissoes .register-button:hover {
-    background: #294a35;
 }
 @media (max-width: 650px) {
   .fd-permissoes .section-header {
@@ -1713,38 +1455,6 @@
     display: flex;
     justify-content: flex-end;
 }
-.fd-suporte .send-button {
-    min-width: 180px;
-    height: var(--btn-height-m);
-
-    border: 0;
-    border-radius: 11px;
-
-    background: #8ea097;
-    color: white;
-
-    padding: 0 17px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 8px;
-
-    font-size: 13px;
-    font-weight: 500;
-
-    cursor: pointer;
-
-    transition: background .2s ease;
-}
-.fd-suporte .send-button:hover {
-    background: #31563e;
-}
-.fd-suporte .send-button svg {
-    width: 16px;
-    height: 16px;
-}
 .fd-suporte .modal-overlay {
     position: fixed;
 
@@ -1775,23 +1485,6 @@
     text-align: center;
 
     box-shadow: 0 20px 60px rgba(0,0,0,.22);
-}
-.fd-suporte .modal-close {
-    position: absolute;
-
-    top: 18px;
-    right: 18px;
-
-    border: 0;
-    background: transparent;
-
-    color: #999;
-
-    cursor: pointer;
-}
-.fd-suporte .modal-close svg {
-    width: 25px;
-    height: 25px;
 }
 .fd-suporte .success-icon {
     width: 60px;
@@ -1824,21 +1517,6 @@
     line-height: 1.6;
 
     margin-bottom: 25px;
-}
-.fd-suporte .success-button {
-    width: 160px;
-    height: var(--btn-height-m);
-
-    border: 0;
-    border-radius: 10px;
-
-    background: #31563e;
-    color: white;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    cursor: pointer;
 }
 @media (max-width: 900px) {
   .fd-suporte .contact-grid {
@@ -1890,39 +1568,6 @@
 
     font-size: 14px;
     line-height: 1.55;
-}
-.fd-moradores .new-btn {
-    height: var(--btn-height-m);
-
-    padding: 0 18px;
-
-    margin-top: 25px;
-
-    border: 0;
-    border-radius: 13px;
-
-    background: var(--orange1-default);
-    color: white;
-
-    display: flex;
-    align-items: center;
-
-    gap: 11px;
-
-    font-size: 14px;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-.fd-moradores .new-btn:hover {
-    background: var(--orange1-600);
-}
-.fd-moradores .new-btn:active {
-    background: var(--orange1-700);
-}
-.fd-moradores .new-btn i {
-    width: 25px;
-    height: 25px;
 }
 .fd-moradores .residents-card + .residents-card {
     margin-top: 24px;
@@ -2043,39 +1688,6 @@
 
     padding-right: 25px;
 }
-.fd-moradores .page {
-    width: 30px;
-    height: 30px;
-
-    background: white;
-
-    border: 1px solid #e4e7e5;
-
-    border-radius: 6px;
-
-    font-size: 16px;
-
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.fd-moradores .page i {
-    width: 18px;
-}
-.fd-moradores .page:hover {
-    background: #f0f4f1;
-}
-.fd-moradores .page.active {
-    background: var(--orange1-default);
-
-    color: white;
-
-    border-color: var(--orange1-default);
-
-    font-weight: bold;
-}
 .fd-moradores .modal-overlay {
     position: fixed;
 
@@ -2122,28 +1734,6 @@
 
     font-size: 21px;
     font-weight: 600;
-}
-.fd-moradores .close-modal {
-    border: none;
-
-    background: transparent;
-
-    color: #999;
-
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.fd-moradores .close-modal i {
-    width: 28px;
-    height: 28px;
-
-    stroke-width: 2;
-}
-.fd-moradores .close-modal:hover {
-    color: #555;
 }
 .fd-moradores .modal-content {
     padding: 28px 30px 35px;
@@ -2204,20 +1794,6 @@
 
     padding: 26px 37px;
 }
-.fd-moradores .delete-button {
-    border: 0;
-
-    background: transparent;
-
-    color: var(--error);
-
-    font-size: 13px;
-
-    cursor: pointer;
-}
-.fd-moradores .delete-button:hover {
-    text-decoration: underline;
-}
 .fd-moradores .resident-form {
     padding: 28px 28px 30px;
 }
@@ -2271,36 +1847,6 @@
 
     margin-top: 30px;
 }
-.fd-moradores .cancel-button, .fd-moradores .register-button {
-    height: var(--btn-height-m);
-
-    border-radius: 10px;
-
-    font-size: 14px;
-    font-weight: 600;
-
-    cursor: pointer;
-}
-.fd-moradores .cancel-button {
-    background: white;
-
-    color: #31553e;
-
-    border: 1px solid #52705d;
-}
-.fd-moradores .cancel-button:hover {
-    background: #f4f7f5;
-}
-.fd-moradores .register-button {
-    background: #31553e;
-
-    color: white;
-
-    border: 1px solid #31553e;
-}
-.fd-moradores .register-button:hover {
-    background: #274731;
-}
 @media (max-width: 850px) {
   .fd-moradores .menu-link {
         display: none;
@@ -2310,9 +1856,6 @@
         flex-direction: column;
 
         gap: 15px;
-    }
-  .fd-moradores .new-btn {
-        margin-top: 0;
     }
 }
 @media (max-width: 650px) {
@@ -2518,40 +2061,6 @@
     color: #294633;
     font-size: 13px;
 }
-.fd-ocorrencias .new-occurrence-button {
-    height: var(--btn-height-m);
-
-    border: 0;
-    border-radius: 11px;
-
-    padding: 0 14px;
-
-    background: var(--orange1-default);
-    color: white;
-
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    font-weight: 600;
-    cursor: pointer;
-}
-.fd-ocorrencias .new-occurrence-button:hover {
-    background: var(--orange1-600);
-}
-.fd-ocorrencias .new-occurrence-button:active {
-    background: var(--orange1-700);
-}
-.fd-ocorrencias .intro .new-occurrence-button {
-    min-width: 170px;
-    height: var(--btn-height-lg);
-    justify-content: center;
-    border-radius: 10px;
-    white-space: nowrap;
-}
-.fd-ocorrencias .new-occurrence-button svg {
-    width: 25px;
-}
 .fd-ocorrencias .table-container {
     overflow-x: auto;
 }
@@ -2574,28 +2083,6 @@
 
     margin-top: 32px;
     padding-right: 25px;
-}
-.fd-ocorrencias .pagination button {
-    width: 30px;
-    height: 30px;
-
-    border: 1px solid #e2e5e3;
-    border-radius: 6px;
-
-    background: white;
-
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 16px;
-}
-.fd-ocorrencias .pagination button.selected {
-    background: var(--orange1-default);
-    color: white;
-    border-color: var(--orange1-default);
 }
 .fd-ocorrencias .modal-overlay {
     position: fixed;
@@ -2636,17 +2123,6 @@
     color: #294633;
     font-size: 21px;
     font-weight: 600;
-}
-.fd-ocorrencias .modal-header button {
-    border: 0;
-    background: transparent;
-    color: #999;
-
-    cursor: pointer;
-}
-.fd-ocorrencias .modal-header button svg {
-    width: 28px;
-    height: 28px;
 }
 .fd-ocorrencias .new-modal {
     width: 552px;
@@ -2697,22 +2173,6 @@
 
     min-height: 43px;
 }
-.fd-ocorrencias .attach-button {
-    height: var(--btn-height-m);
-
-    border: 0;
-    border-radius: 12px;
-
-    background: #31563e;
-    color: white;
-
-    padding: 0 17px;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    cursor: pointer;
-}
 .fd-ocorrencias #fileName {
     color: #7d8881;
     font-size: 12px;
@@ -2724,30 +2184,6 @@
     gap: 22px;
 
     margin-top: 32px;
-}
-.fd-ocorrencias .cancel-button, .fd-ocorrencias .register-button {
-    height: var(--btn-height-lg);
-
-    border-radius: 13px;
-
-    font-size: 14px;
-
-    cursor: pointer;
-}
-.fd-ocorrencias .cancel-button {
-    background: white;
-
-    border: 1px solid #52705d;
-
-    color: #294633;
-}
-.fd-ocorrencias .register-button {
-    border: 1px solid #31563e;
-
-    background: #31563e;
-    color: white;
-
-    font-weight: 600;
 }
 .fd-ocorrencias .details-modal {
     width: 552px;
@@ -2864,27 +2300,6 @@
 
     gap: 9px;
 }
-.fd-ocorrencias .status-buttons button {
-    height: 30px;
-
-    border: 1px solid #52705d;
-    border-radius: 18px;
-
-    background: white;
-
-    color: #294633;
-
-    padding: 0 17px;
-
-    font-size: 12px;
-
-    cursor: pointer;
-}
-.fd-ocorrencias .status-buttons button.selected {
-    background: #31563e;
-    color: white;
-    border-color: #31563e;
-}
 .fd-ocorrencias .details-footer {
     min-height: 68px;
 
@@ -2894,16 +2309,6 @@
     align-items: center;
 
     padding: 0 36px;
-}
-.fd-ocorrencias .details-footer button {
-    border: 0;
-    background: transparent;
-
-    color: var(--error);
-
-    font-size: 12px;
-
-    cursor: pointer;
 }
 @media (max-width: 850px) {
   .fd-ocorrencias .intro {
@@ -2979,38 +2384,6 @@
     font-size: 14px;
     line-height: 1.55;
 }
-.fd-documentacao .new-document-button {
-    height: var(--btn-height-m);
-
-    margin-top: 25px;
-
-    padding: 0 18px;
-
-    border: 0;
-    border-radius: 13px;
-
-    background: var(--orange1-default);
-    color: white;
-
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    font-size: 14px;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-.fd-documentacao .new-document-button:hover {
-    background: var(--orange1-600);
-}
-.fd-documentacao .new-document-button:active {
-    background: var(--orange1-700);
-}
-.fd-documentacao .new-document-button svg {
-    width: 25px;
-    height: 25px;
-}
 .fd-documentacao .documents-card {
     min-height: 545px;
 
@@ -3084,26 +2457,6 @@
 .fd-documentacao .table-container {
     overflow-x: auto;
 }
-.fd-documentacao .document-actions {
-    display: flex;
-
-    gap: 12px;
-
-    align-items: center;
-}
-.fd-documentacao .document-actions button {
-    border: 0;
-
-    background: transparent;
-
-    color: #777;
-
-    cursor: pointer;
-}
-.fd-documentacao .document-actions svg {
-    width: 17px;
-    height: 17px;
-}
 .fd-documentacao .pagination {
     display: flex;
     justify-content: flex-end;
@@ -3113,29 +2466,6 @@
     margin-top: 43px;
 
     padding-right: 25px;
-}
-.fd-documentacao .pagination button {
-    width: 30px;
-    height: 30px;
-
-    border: 1px solid #e2e5e3;
-    border-radius: 6px;
-
-    background: white;
-
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 16px;
-}
-.fd-documentacao .pagination button.selected {
-    background: var(--orange1-default);
-    color: white;
-
-    border-color: var(--orange1-default);
 }
 .fd-documentacao .modal-overlay {
     position: fixed;
@@ -3180,19 +2510,6 @@
 
     font-size: 21px;
     font-weight: 600;
-}
-.fd-documentacao .modal-header button {
-    border: 0;
-
-    background: transparent;
-
-    color: #999;
-
-    cursor: pointer;
-}
-.fd-documentacao .modal-header button svg {
-    width: 28px;
-    height: 28px;
 }
 .fd-documentacao .document-form {
     padding: 27px 28px 35px;
@@ -3301,22 +2618,6 @@
 
     gap: 13px;
 }
-.fd-documentacao .attach-document {
-    height: 37px;
-
-    padding: 0 17px;
-
-    border: 0;
-    border-radius: 12px;
-
-    background: #ff8500;
-    color: white;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    cursor: pointer;
-}
 .fd-documentacao #fileName {
     max-width: 290px;
 
@@ -3337,38 +2638,11 @@
 
     margin-top: 31px;
 }
-.fd-documentacao .cancel-button, .fd-documentacao .register-button {
-    height: var(--btn-height-lg);
-
-    border-radius: 13px;
-
-    font-size: 14px;
-
-    cursor: pointer;
-}
-.fd-documentacao .cancel-button {
-    background: white;
-
-    border: 1px solid #52705d;
-
-    color: #294633;
-}
-.fd-documentacao .register-button {
-    border: 1px solid #31563e;
-
-    background: #31563e;
-    color: white;
-
-    font-weight: 600;
-}
 @media (max-width: 650px) {
   .fd-documentacao .intro {
         flex-direction: column;
 
         gap: 20px;
-    }
-  .fd-documentacao .new-document-button {
-        margin-top: 0;
     }
   .fd-documentacao .card-header {
         flex-direction: column;
@@ -3421,12 +2695,4 @@
         transform: translateY(0);
     }
 
-}
-/* Compat: paginacao gerada pelo sindicoPages.js usa .page.active */
-.fd-moradores .pagination button.active,
-.fd-ocorrencias .pagination button.active,
-.fd-documentacao .pagination button.active {
-    background: var(--orange1-default);
-    color: #fff;
-    border-color: var(--orange1-default);
 }

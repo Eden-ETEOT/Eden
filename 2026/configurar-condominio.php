@@ -250,8 +250,8 @@ $menuAtivo = 'apartamentos';
             </fieldset>
             <?php endif; ?>
             <div class="form-buttons">
-                <a class="cancel-button" href="./ocorrencias.php">Cancelar</a>
-                <button class="register-button" type="submit">Criar condomínio</button>
+                <a class="btn btn-secondary-success" href="./ocorrencias.php">Cancelar</a>
+                <button class="btn btn-primary-success" type="submit">Criar condomínio</button>
             </div>
         </form>
         <?php endif; ?>

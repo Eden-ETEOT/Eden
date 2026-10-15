@@ -23,7 +23,9 @@ function pageHead($titulo, $cssExtras = [], $jsExtras = []) {
     echo "    <meta charset=\"UTF-8\">\n";
     echo "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n";
     echo '    <title>' . htmlspecialchars($titulo) . "</title>\n";
-    $css = array_merge(['./CSS/dashboard.css', './CSS/botoes.css'], $cssExtras);
+    // Base primeiro, extras da página depois e o sistema de botões por último,
+    // para que .btn (variáveis centralizadas) vença empates de especificidade.
+    $css = array_merge(['./CSS/dashboard.css'], $cssExtras, ['./CSS/botoes.css']);
     foreach ($css as $c) {
         echo '    <link rel="stylesheet" href="' . htmlspecialchars(assetUrl($c)) . "\">\n";
     }

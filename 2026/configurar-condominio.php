@@ -251,7 +251,7 @@ $menuAtivo = 'apartamentos';
             <?php endif; ?>
             <div class="form-buttons">
                 <a class="btn btn-secondary-error" href="./ocorrencias.php">Cancelar</a>
-                <button class="btn btn-primary-success" type="submit">Criar condomínio</button>
+                <button class="btn btn-green btn-lg" type="submit">Criar condomínio</button>
             </div>
         </form>
         <?php endif; ?>

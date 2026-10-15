@@ -320,7 +320,7 @@ try {
                 </div>
                 <div class="form-buttons">
                     <button type="button" class="btn btn-secondary-error" onclick="fecharModal('inviteModal')">Cancelar</button>
-                    <button type="submit" class="btn btn-primary-success">Gerar convite</button>
+                    <button type="submit" class="btn btn-green">Gerar convite</button>
                 </div>
             </form>
         </div>

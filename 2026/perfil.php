@@ -192,7 +192,7 @@ $fotoUrl = !empty($eu['foto'])
                             <div class="pf-row"><span>Telefone</span><strong><?= htmlspecialchars($eu['telefone'] ?? '—') ?></strong></div>
                             <div class="pf-row"><span>E-mail</span><strong><?= htmlspecialchars($eu['email'] ?? '') ?></strong></div>
                             <div style="margin-top:18px">
-                                <button type="button" class="btn btn-primary-success" onclick="abrirModal('pfEditModal')"><i data-lucide="pencil"></i>Editar perfil</button>
+                                <button type="button" class="btn btn-green" onclick="abrirModal('pfEditModal')"><i data-lucide="pencil"></i>Editar perfil</button>
                             </div>
                         </section>
                         <?php if ($eMorador): ?>
@@ -241,7 +241,7 @@ $fotoUrl = !empty($eu['foto'])
                             <div class="pf-stat-label">Nenhum plano vinculado.</div>
                             <?php endif; ?>
                             <div style="margin-top:18px">
-                                <a class="btn btn-primary-success" href="./planos/index.php">Trocar de plano</a>
+                                <a class="btn btn-green" href="./planos/index.php">Trocar de plano</a>
                             </div>
                         </section>
                         <?php endif; ?>
@@ -299,7 +299,7 @@ $fotoUrl = !empty($eu['foto'])
                 </div>
                 <div class="pf-form-actions">
                     <button type="button" class="btn btn-secondary-error" onclick="fecharModal('pfEditModal')">Cancelar</button>
-                    <button type="submit" class="btn btn-primary-success">Salvar Informações</button>
+                    <button type="submit" class="btn btn-green">Salvar Informações</button>
                 </div>
             </form>
         </div>

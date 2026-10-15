@@ -426,12 +426,12 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="image-area">
                     <input type="file" id="imageInput" name="anexo" accept="image/*" hidden onchange="mostrarArquivo()">
-                    <button type="button" class="btn btn-primary-success" onclick="document.getElementById('imageInput').click()">Anexar imagem</button>
+                    <button type="button" class="btn btn-green" onclick="document.getElementById('imageInput').click()">Anexar imagem</button>
                     <span id="fileName"></span>
                 </div>
                 <div class="modal-form-buttons">
                     <button type="button" class="btn btn-secondary-error" onclick="fecharModal('newModal')">Cancelar</button>
-                    <button type="submit" class="btn btn-primary-success">Registrar Ocorrência</button>
+                    <button type="submit" class="btn btn-green btn-lg">Registrar Ocorrência</button>
                 </div>
             </form>
         </div>

@@ -216,7 +216,7 @@ $tipos = $conexao->query("SELECT codigo, nome FROM tipoDocumento WHERE ativo = 1
                 </div>
                 <div class="form-buttons">
                     <button type="button" class="btn btn-secondary-error" onclick="fecharModal('newModal')">Cancelar</button>
-                    <button type="submit" class="btn btn-primary-success">Cadastrar Documento</button>
+                    <button type="submit" class="btn btn-green btn-lg">Cadastrar Documento</button>
                 </div>
             </form>
         </div>

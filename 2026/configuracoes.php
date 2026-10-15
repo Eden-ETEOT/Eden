@@ -182,7 +182,7 @@ $endereco = $cond
 
                         <div class="form-actions">
                             <button type="button" id="btnCancelar" class="btn btn-secondary-error" onclick="history.back()">Cancelar</button>
-                            <button type="submit" class="btn btn-primary-success">Salvar Alterações</button>
+                            <button type="submit" class="btn btn-green">Salvar Alterações</button>
                         </div>
                     </form>
                 </div>

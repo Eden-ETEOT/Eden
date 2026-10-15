@@ -9,7 +9,8 @@
    Base: .btn (tamanho m, 40px) · Tamanhos: .btn-sm 32px · .btn-lg 48px ·
          .btn-block 100% · .btn-icon (só ícone, sem padding lateral).
    Estilos: primary (preenchido) · secondary (outlined) · tertiary (fantasma).
-   Variantes: orange (primary = .btn-orange) · success · warning · error · info · black. */
+   Variantes: orange (primary = .btn-orange) · success · warning · error · info · black.
+   Exceção legada: .btn-green (verde-identidade para confirmar/salvar). */
 
 .btn {
     display: inline-flex;
@@ -61,6 +62,18 @@
 .btn-orange:active {
     background-color: var(--orange1-700);
     border-color: var(--orange1-700);
+}
+
+/* Exceção: verde-identidade para ações de confirmar/salvar (tom original). */
+.btn-green {
+    background-color: #31563e;
+    border-color: #31563e;
+    color: white;
+}
+
+.btn-green:hover {
+    background-color: #274731;
+    border-color: #274731;
 }
 
 /* ===== Primary: preenchido, texto branco, hover/active intensificam ===== */

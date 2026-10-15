@@ -221,7 +221,7 @@ try {
                     </div>
                     <div class="form-buttons">
                         <button type="button" class="btn btn-secondary-error" onclick="fdFecharModal('newApartmentModal')">Cancelar</button>
-                        <button type="submit" class="btn btn-primary-success">Registrar Apartamento</button>
+                        <button type="submit" class="btn btn-green btn-lg">Registrar Apartamento</button>
                     </div>
                 </form>
             </div>
@@ -243,7 +243,7 @@ try {
                     </div>
                     <div class="form-buttons block-buttons">
                         <button type="button" class="btn btn-secondary-error" onclick="fdFecharModal('newBlockModal')">Cancelar</button>
-                        <button type="submit" class="btn btn-primary-success">Adicionar Bloco</button>
+                        <button type="submit" class="btn btn-green btn-lg">Adicionar Bloco</button>
                     </div>
                 </form>
             </div>

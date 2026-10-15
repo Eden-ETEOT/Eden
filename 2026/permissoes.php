@@ -121,7 +121,7 @@ function iniciais($nome) {
                     <section class="card users-card">
                         <div class="section-header">
                             <h2>Funcionários do Sistema</h2>
-                            <button class="btn btn-primary-success" type="button" onclick="fdAbrirModal('employeeModal')">
+                            <button class="btn btn-green" type="button" onclick="fdAbrirModal('employeeModal')">
                                 <i data-lucide="plus"></i>
                                 Novo Funcionário
                             </button>
@@ -233,7 +233,7 @@ function iniciais($nome) {
                     </div>
                     <div class="form-buttons">
                         <button type="button" class="btn btn-secondary-error" onclick="fdFecharModal('employeeModal')">Cancelar</button>
-                        <button type="submit" class="btn btn-primary-success">Registrar Funcionário</button>
+                        <button type="submit" class="btn btn-green btn-lg">Registrar Funcionário</button>
                     </div>
                 </form>
             </div>
@@ -277,7 +277,7 @@ function iniciais($nome) {
                     </div>
                     <div class="form-buttons">
                         <button type="button" class="btn btn-secondary-error" onclick="fdFecharModal('editModal')">Cancelar</button>
-                        <button type="submit" class="btn btn-primary-success">Salvar Alterações</button>
+                        <button type="submit" class="btn btn-green btn-lg">Salvar Alterações</button>
                     </div>
                 </form>
             </div>

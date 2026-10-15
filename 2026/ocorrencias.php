@@ -369,10 +369,10 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </form>
                 <div class="update-title">Atualizar Status</div>
                 <div class="status-buttons" id="statusButtons">
-                    <button type="button" class="btn btn-secondary-success btn-sm" data-status="resolvida" onclick="alterarStatus(this)">Finalizado</button>
-                    <button type="button" class="btn btn-secondary-success btn-sm" data-status="andamento" onclick="alterarStatus(this)">Em andamento</button>
-                    <button type="button" class="btn btn-secondary-success btn-sm" data-status="analise" onclick="alterarStatus(this)">Em análise</button>
-                    <button type="button" class="btn btn-secondary-success btn-sm" data-status="cancelada" onclick="alterarStatus(this)">Cancelado</button>
+                    <button type="button" class="btn btn-secondary-black btn-sm" data-status="resolvida" onclick="alterarStatus(this)">Finalizado</button>
+                    <button type="button" class="btn btn-secondary-black btn-sm" data-status="andamento" onclick="alterarStatus(this)">Em andamento</button>
+                    <button type="button" class="btn btn-secondary-black btn-sm" data-status="analise" onclick="alterarStatus(this)">Em análise</button>
+                    <button type="button" class="btn btn-secondary-black btn-sm" data-status="cancelada" onclick="alterarStatus(this)">Cancelado</button>
                 </div>
                 <?php else: ?>
                 <div class="update-title">Ações indisponíveis</div>
@@ -510,7 +510,7 @@ $moradoresSel = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
             document.getElementById('cancelId').value = o.idChamados;
             document.querySelectorAll('#statusButtons button').forEach(b => {
-                b.className = 'btn btn-sm ' + (b.dataset.status === o.status ? 'btn-primary-success' : 'btn-secondary-success');
+                b.className = 'btn btn-sm ' + (b.dataset.status === o.status ? 'btn-primary-black' : 'btn-secondary-black');
             });
             abrirModal('viewModal');
         }

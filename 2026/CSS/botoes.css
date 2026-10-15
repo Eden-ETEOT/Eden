@@ -9,7 +9,7 @@
    Base: .btn (tamanho m, 40px) · Tamanhos: .btn-sm 32px · .btn-lg 48px ·
          .btn-block 100% · .btn-icon (só ícone, sem padding lateral).
    Estilos: primary (preenchido) · secondary (outlined) · tertiary (fantasma).
-   Variantes: orange (primary = .btn-orange) · success · warning · error · info. */
+   Variantes: orange (primary = .btn-orange) · success · warning · error · info · black. */
 
 .btn {
     display: inline-flex;
@@ -65,17 +65,17 @@
 
 /* ===== Primary: preenchido, texto branco, hover/active intensificam ===== */
 .btn-primary-success {
-    background-color: var(--sucess);
-    border-color: var(--sucess);
+    background-color: var(--green3-600);
+    border-color: var(--green3-600);
     color: white;
 }
 .btn-primary-success:hover {
-    background-color: var(--green3-600);
-    border-color: var(--green3-600);
-}
-.btn-primary-success:active {
     background-color: var(--green3-700);
     border-color: var(--green3-700);
+}
+.btn-primary-success:active {
+    background-color: var(--green3-800);
+    border-color: var(--green3-800);
 }
 
 .btn-primary-warning {
@@ -137,16 +137,16 @@
 
 .btn-secondary-success {
     background-color: transparent;
-    border-color: var(--sucess);
-    color: var(--sucess);
-}
-.btn-secondary-success:hover {
     border-color: var(--green3-600);
     color: var(--green3-600);
 }
-.btn-secondary-success:active {
+.btn-secondary-success:hover {
     border-color: var(--green3-700);
     color: var(--green3-700);
+}
+.btn-secondary-success:active {
+    border-color: var(--green3-800);
+    color: var(--green3-800);
 }
 
 .btn-secondary-warning {
@@ -207,13 +207,13 @@
 .btn-tertiary-success {
     background-color: transparent;
     border-color: transparent;
-    color: var(--sucess);
-}
-.btn-tertiary-success:hover {
     color: var(--green3-600);
 }
-.btn-tertiary-success:active {
+.btn-tertiary-success:hover {
     color: var(--green3-700);
+}
+.btn-tertiary-success:active {
+    color: var(--green3-800);
 }
 
 .btn-tertiary-warning {
@@ -250,6 +250,39 @@
 }
 .btn-tertiary-info:active {
     color: var(--blue-700);
+}
+
+/* ===== Preta: usa o preto do projeto; hover/active no preto absoluto ===== */
+.btn-primary-black {
+    background-color: var(--corNeutra2);
+    border-color: var(--corNeutra2);
+    color: white;
+}
+.btn-primary-black:hover,
+.btn-primary-black:active {
+    background-color: #000;
+    border-color: #000;
+}
+
+.btn-secondary-black {
+    background-color: transparent;
+    border-color: var(--corNeutra2);
+    color: var(--corNeutra2);
+}
+.btn-secondary-black:hover,
+.btn-secondary-black:active {
+    border-color: #000;
+    color: #000;
+}
+
+.btn-tertiary-black {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--corNeutra2);
+}
+.btn-tertiary-black:hover,
+.btn-tertiary-black:active {
+    color: #000;
 }
 
 /* Tamanhos: só a altura varia (padrão m = 40px). */

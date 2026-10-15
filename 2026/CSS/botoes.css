@@ -4,18 +4,24 @@
      <button class="btn btn-orange"><i data-lucide="plus"></i>Novo item</button>
      <a class="btn btn-green" href="./pagina.php">Salvar</a>
      <button class="btn btn-green-ghost btn-lg">Cancelar</button>
-   Variantes: .btn-orange (ação principal) · .btn-green (confirmar/registrar) ·
-              .btn-green-ghost (cancelar/voltar, estilo fantasma).
-   Tamanhos: padrão 42px · .btn-sm 34px · .btn-lg 48px · .btn-block 100%. */
+     <button class="btn btn-primary-success btn-sm">Confirmar</button>
+     <button class="btn btn-secondary-error">Excluir</button>
+     <button class="btn btn-tertiary-info btn-icon"><i data-lucide="info"></i></button>
+   Base: .btn (tamanho m, 40px) · Tamanhos: .btn-sm 32px · .btn-lg 48px ·
+         .btn-block 100% · .btn-icon (só ícone, sem padding lateral).
+   Estilos: primary (preenchido) · secondary (outlined) · tertiary (fantasma).
+   Variantes: orange · success · warning · error · info.
+   Legado preservado: .btn-orange (primary orange) · .btn-green (confirmar/registrar) ·
+         .btn-green-ghost (cancelar/voltar, estilo fantasma). */
 
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: var(--spacing200);
 
-    height: 42px;
-    padding: 0 18px;
+    height: var(--btn-height-m);
+    padding: 0 var(--btn-padding-x);
 
     border: 1px solid transparent;
     border-radius: 12px;
@@ -29,27 +35,38 @@
 
     cursor: pointer;
 
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .btn svg {
     width: 18px;
     height: 18px;
+    flex: none;
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--orange1-default);
+    outline-offset: 2px;
 }
 
 /* Laranja preenchido — ações de criação/atalho (ex.: Novo, Filtrar). */
 .btn-orange {
-    background-color: #ff8b00;
-    border-color: #ff8b00;
+    background-color: var(--orange1-default);
+    border-color: var(--orange1-default);
     color: white;
 }
 
 .btn-orange:hover {
-    background-color: #e67b00;
-    border-color: #e67b00;
+    background-color: var(--orange1-600);
+    border-color: var(--orange1-600);
 }
 
-/* Verde preenchido — confirmar/registrar/salvar. */
+.btn-orange:active {
+    background-color: var(--orange1-700);
+    border-color: var(--orange1-700);
+}
+
+/* Verde preenchido — confirmar/registrar/salvar (legado, identidade). */
 .btn-green {
     background-color: #31563e;
     border-color: #31563e;
@@ -61,7 +78,7 @@
     border-color: #274731;
 }
 
-/* Verde fantasma — cancelar/voltar. */
+/* Verde fantasma — cancelar/voltar (legado, identidade). */
 .btn-green-ghost {
     background-color: transparent;
     border-color: #52705d;
@@ -72,25 +89,256 @@
     background-color: #f4f7f5;
 }
 
-/* Tamanhos. */
+/* ===== Primary: preenchido, texto branco, hover/active intensificam ===== */
+.btn-primary-success {
+    background-color: var(--sucess);
+    border-color: var(--sucess);
+    color: white;
+}
+.btn-primary-success:hover {
+    background-color: var(--green3-600);
+    border-color: var(--green3-600);
+}
+.btn-primary-success:active {
+    background-color: var(--green3-700);
+    border-color: var(--green3-700);
+}
+
+.btn-primary-warning {
+    background-color: var(--warning);
+    border-color: var(--warning);
+    color: #333;
+}
+.btn-primary-warning:hover {
+    background-color: var(--yellow-600);
+    border-color: var(--yellow-600);
+}
+.btn-primary-warning:active {
+    background-color: var(--yellow-700);
+    border-color: var(--yellow-700);
+}
+
+.btn-primary-error {
+    background-color: var(--error);
+    border-color: var(--error);
+    color: white;
+}
+.btn-primary-error:hover {
+    background-color: var(--red-600);
+    border-color: var(--red-600);
+}
+.btn-primary-error:active {
+    background-color: var(--red-700);
+    border-color: var(--red-700);
+}
+
+.btn-primary-info {
+    background-color: var(--info);
+    border-color: var(--info);
+    color: white;
+}
+.btn-primary-info:hover {
+    background-color: var(--blue-600);
+    border-color: var(--blue-600);
+}
+.btn-primary-info:active {
+    background-color: var(--blue-700);
+    border-color: var(--blue-700);
+}
+
+/* ===== Secondary: outlined, fundo transparente ===== */
+.btn-secondary-orange {
+    background-color: transparent;
+    border-color: var(--orange1-default);
+    color: var(--orange1-default);
+}
+.btn-secondary-orange:hover {
+    border-color: var(--orange1-600);
+    color: var(--orange1-600);
+}
+.btn-secondary-orange:active {
+    border-color: var(--orange1-700);
+    color: var(--orange1-700);
+}
+
+.btn-secondary-success {
+    background-color: transparent;
+    border-color: var(--sucess);
+    color: var(--sucess);
+}
+.btn-secondary-success:hover {
+    border-color: var(--green3-600);
+    color: var(--green3-600);
+}
+.btn-secondary-success:active {
+    border-color: var(--green3-700);
+    color: var(--green3-700);
+}
+
+.btn-secondary-warning {
+    background-color: transparent;
+    border-color: var(--warning);
+    color: var(--warning);
+}
+.btn-secondary-warning:hover {
+    border-color: var(--yellow-600);
+    color: var(--yellow-600);
+}
+.btn-secondary-warning:active {
+    border-color: var(--yellow-700);
+    color: var(--yellow-700);
+}
+
+.btn-secondary-error {
+    background-color: transparent;
+    border-color: var(--error);
+    color: var(--error);
+}
+.btn-secondary-error:hover {
+    border-color: var(--red-600);
+    color: var(--red-600);
+}
+.btn-secondary-error:active {
+    border-color: var(--red-700);
+    color: var(--red-700);
+}
+
+.btn-secondary-info {
+    background-color: transparent;
+    border-color: var(--info);
+    color: var(--info);
+}
+.btn-secondary-info:hover {
+    border-color: var(--blue-600);
+    color: var(--blue-600);
+}
+.btn-secondary-info:active {
+    border-color: var(--blue-700);
+    color: var(--blue-700);
+}
+
+/* ===== Tertiary: fantasma, só texto ===== */
+.btn-tertiary-orange {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--orange1-default);
+}
+.btn-tertiary-orange:hover {
+    color: var(--orange1-600);
+}
+.btn-tertiary-orange:active {
+    color: var(--orange1-700);
+}
+
+.btn-tertiary-success {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--sucess);
+}
+.btn-tertiary-success:hover {
+    color: var(--green3-600);
+}
+.btn-tertiary-success:active {
+    color: var(--green3-700);
+}
+
+.btn-tertiary-warning {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--warning);
+}
+.btn-tertiary-warning:hover {
+    color: var(--yellow-600);
+}
+.btn-tertiary-warning:active {
+    color: var(--yellow-700);
+}
+
+.btn-tertiary-error {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--error);
+}
+.btn-tertiary-error:hover {
+    color: var(--red-600);
+}
+.btn-tertiary-error:active {
+    color: var(--red-700);
+}
+
+.btn-tertiary-info {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--info);
+}
+.btn-tertiary-info:hover {
+    color: var(--blue-600);
+}
+.btn-tertiary-info:active {
+    color: var(--blue-700);
+}
+
+/* Tamanhos: só a altura varia (padrão m = 40px). */
 .btn-sm {
-    height: 34px;
-    padding: 0 14px;
-    border-radius: 10px;
-    font-size: 13px;
+    height: var(--btn-height-sm);
 }
 
 .btn-lg {
-    height: 48px;
-    padding: 0 22px;
-    border-radius: 13px;
+    height: var(--btn-height-lg);
 }
 
 .btn-block {
     width: 100%;
 }
 
+/* Só ícone: quadrado na altura do tamanho, sem padding lateral. */
+.btn-icon {
+    padding: 0;
+    width: var(--btn-height-m);
+}
+.btn-sm.btn-icon {
+    width: var(--btn-height-sm);
+}
+.btn-lg.btn-icon {
+    width: var(--btn-height-lg);
+}
+
+/* Desabilitado: cinza, sem ação. <button disabled> já não dispara;
+   para links, use class="btn disabled" (pointer-events impede a ação). */
 .btn:disabled {
-    opacity: 0.55;
+    background-color: var(--gray300);
+    border-color: var(--gray300);
+    color: #fff;
+    opacity: 1;
+    box-shadow: none;
     cursor: not-allowed;
+}
+.btn[class*="btn-secondary-"]:disabled {
+    background-color: transparent;
+    border-color: var(--gray300);
+    color: var(--gray300);
+}
+.btn[class*="btn-tertiary-"]:disabled {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--gray300);
+}
+.btn.disabled {
+    background-color: var(--gray300);
+    border-color: var(--gray300);
+    color: #fff;
+    opacity: 1;
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+.btn[class*="btn-secondary-"].disabled {
+    background-color: transparent;
+    border-color: var(--gray300);
+    color: var(--gray300);
+}
+.btn[class*="btn-tertiary-"].disabled {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--gray300);
 }

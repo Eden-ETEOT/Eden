@@ -252,7 +252,7 @@
     height: 48px;
     border: 0;
     border-radius: 12px;
-    background: #ff8b00;
+    background: var(--orange1-default);
     color: white;
     font-size: 15px;
     font-weight: 700;
@@ -265,7 +265,11 @@
 }
 
 .pl-btn:hover {
-    background: #e67b00;
+    background: var(--orange1-600);
+}
+
+.pl-btn:active {
+    background: var(--orange1-700);
 }
 
 .pl-error {

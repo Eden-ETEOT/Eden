@@ -141,6 +141,12 @@
     --medium: 500;
     --semi-bold: 600;
     --bold: 700;
+
+    /* Botões (as cores reaproveitam a paleta e os atalhos semânticos acima) */
+    --btn-height-sm: 32px;
+    --btn-height-m: 40px;
+    --btn-height-lg: 48px;
+    --btn-padding-x: 32px;
 }
 
 .btn-primary-orange-small {

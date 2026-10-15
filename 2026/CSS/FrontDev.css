@@ -407,7 +407,7 @@
 
     background: transparent;
 
-    color: #d82f27;
+    color: var(--error);
 
     font-size: 13px;
 
@@ -2203,7 +2203,7 @@
 
     background: transparent;
 
-    color: #d82f27;
+    color: var(--error);
 
     font-size: 13px;
 

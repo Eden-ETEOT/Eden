@@ -45,14 +45,14 @@
     margin-top: 25px;
 }
 .fd-apartamentos .new-btn {
-    height: 42px;
+    height: var(--btn-height-m);
 
     padding: 0 18px;
 
     border: 0;
     border-radius: 13px;
 
-    background: #ff8b00;
+    background: var(--orange1-default);
     color: white;
 
     display: flex;
@@ -66,7 +66,10 @@
     cursor: pointer;
 }
 .fd-apartamentos .new-btn:hover {
-    background: #e67b00;
+    background: var(--orange1-600);
+}
+.fd-apartamentos .new-btn:active {
+    background: var(--orange1-700);
 }
 .fd-apartamentos .new-btn i {
     width: 25px;
@@ -208,11 +211,11 @@
     width: 18px;
 }
 .fd-apartamentos .page.active {
-    background: #ff8b00;
+    background: var(--orange1-default);
 
     color: white;
 
-    border-color: #ff8b00;
+    border-color: var(--orange1-default);
 
     font-weight: bold;
 }
@@ -308,7 +311,7 @@
     margin-top: 42px;
 }
 .fd-apartamentos .cancel-button, .fd-apartamentos .register-button {
-    height: 48px;
+    height: var(--btn-height-lg);
 
     border-radius: 13px;
 
@@ -968,7 +971,7 @@
     margin-top: 3px;
 }
 .fd-configuracoes .btn-cancel, .fd-configuracoes .btn-save {
-    height: 43px;
+    height: var(--btn-height-m);
 
     padding: 0 20px;
 
@@ -1094,7 +1097,7 @@
     font-weight: 600;
 }
 .fd-permissoes .new-user-button {
-    height: 40px;
+    height: var(--btn-height-m);
 
     border: 0;
     border-radius: 11px;
@@ -1198,8 +1201,8 @@
     background: #eef0f2;
 }
 .fd-permissoes .edit-button {
-    width: 32px;
-    height: 32px;
+    width: var(--btn-height-sm);
+    height: var(--btn-height-sm);
 
     border: 0;
 
@@ -1397,7 +1400,7 @@
     margin-top: 30px;
 }
 .fd-permissoes .cancel-button, .fd-permissoes .register-button {
-    height: 65px;
+    height: var(--btn-height-lg);
 
     border-radius: 13px;
 
@@ -1712,7 +1715,7 @@
 }
 .fd-suporte .send-button {
     min-width: 180px;
-    height: 44px;
+    height: var(--btn-height-m);
 
     border: 0;
     border-radius: 11px;
@@ -1824,7 +1827,7 @@
 }
 .fd-suporte .success-button {
     width: 160px;
-    height: 43px;
+    height: var(--btn-height-m);
 
     border: 0;
     border-radius: 10px;
@@ -1889,7 +1892,7 @@
     line-height: 1.55;
 }
 .fd-moradores .new-btn {
-    height: 42px;
+    height: var(--btn-height-m);
 
     padding: 0 18px;
 
@@ -1898,7 +1901,7 @@
     border: 0;
     border-radius: 13px;
 
-    background: #ff8b00;
+    background: var(--orange1-default);
     color: white;
 
     display: flex;
@@ -1912,7 +1915,10 @@
     cursor: pointer;
 }
 .fd-moradores .new-btn:hover {
-    background: #e67b00;
+    background: var(--orange1-600);
+}
+.fd-moradores .new-btn:active {
+    background: var(--orange1-700);
 }
 .fd-moradores .new-btn i {
     width: 25px;
@@ -2062,11 +2068,11 @@
     background: #f0f4f1;
 }
 .fd-moradores .page.active {
-    background: #ff8b00;
+    background: var(--orange1-default);
 
     color: white;
 
-    border-color: #ff8b00;
+    border-color: var(--orange1-default);
 
     font-weight: bold;
 }
@@ -2266,7 +2272,7 @@
     margin-top: 30px;
 }
 .fd-moradores .cancel-button, .fd-moradores .register-button {
-    height: 45px;
+    height: var(--btn-height-m);
 
     border-radius: 10px;
 
@@ -2513,14 +2519,14 @@
     font-size: 13px;
 }
 .fd-ocorrencias .new-occurrence-button {
-    height: 41px;
+    height: var(--btn-height-m);
 
     border: 0;
     border-radius: 11px;
 
     padding: 0 14px;
 
-    background: #ff8b00;
+    background: var(--orange1-default);
     color: white;
 
     display: flex;
@@ -2530,9 +2536,15 @@
     font-weight: 600;
     cursor: pointer;
 }
+.fd-ocorrencias .new-occurrence-button:hover {
+    background: var(--orange1-600);
+}
+.fd-ocorrencias .new-occurrence-button:active {
+    background: var(--orange1-700);
+}
 .fd-ocorrencias .intro .new-occurrence-button {
     min-width: 170px;
-    height: 48px;
+    height: var(--btn-height-lg);
     justify-content: center;
     border-radius: 10px;
     white-space: nowrap;
@@ -2581,9 +2593,9 @@
     font-size: 16px;
 }
 .fd-ocorrencias .pagination button.selected {
-    background: #ff8b00;
+    background: var(--orange1-default);
     color: white;
-    border-color: #ff8b00;
+    border-color: var(--orange1-default);
 }
 .fd-ocorrencias .modal-overlay {
     position: fixed;
@@ -2686,7 +2698,7 @@
     min-height: 43px;
 }
 .fd-ocorrencias .attach-button {
-    height: 37px;
+    height: var(--btn-height-m);
 
     border: 0;
     border-radius: 12px;
@@ -2714,7 +2726,7 @@
     margin-top: 32px;
 }
 .fd-ocorrencias .cancel-button, .fd-ocorrencias .register-button {
-    height: 48px;
+    height: var(--btn-height-lg);
 
     border-radius: 13px;
 
@@ -2887,7 +2899,7 @@
     border: 0;
     background: transparent;
 
-    color: #dc342b;
+    color: var(--error);
 
     font-size: 12px;
 
@@ -2968,7 +2980,7 @@
     line-height: 1.55;
 }
 .fd-documentacao .new-document-button {
-    height: 42px;
+    height: var(--btn-height-m);
 
     margin-top: 25px;
 
@@ -2977,7 +2989,7 @@
     border: 0;
     border-radius: 13px;
 
-    background: #ff8b00;
+    background: var(--orange1-default);
     color: white;
 
     display: flex;
@@ -2988,6 +3000,12 @@
     font-weight: bold;
 
     cursor: pointer;
+}
+.fd-documentacao .new-document-button:hover {
+    background: var(--orange1-600);
+}
+.fd-documentacao .new-document-button:active {
+    background: var(--orange1-700);
 }
 .fd-documentacao .new-document-button svg {
     width: 25px;
@@ -3114,10 +3132,10 @@
     font-size: 16px;
 }
 .fd-documentacao .pagination button.selected {
-    background: #ff8b00;
+    background: var(--orange1-default);
     color: white;
 
-    border-color: #ff8b00;
+    border-color: var(--orange1-default);
 }
 .fd-documentacao .modal-overlay {
     position: fixed;
@@ -3320,7 +3338,7 @@
     margin-top: 31px;
 }
 .fd-documentacao .cancel-button, .fd-documentacao .register-button {
-    height: 48px;
+    height: var(--btn-height-lg);
 
     border-radius: 13px;
 
@@ -3408,7 +3426,7 @@
 .fd-moradores .pagination button.active,
 .fd-ocorrencias .pagination button.active,
 .fd-documentacao .pagination button.active {
-    background: #ff8b00;
+    background: var(--orange1-default);
     color: #fff;
-    border-color: #ff8b00;
+    border-color: var(--orange1-default);
 }

@@ -726,7 +726,7 @@ body {
     font-weight: var(--medium);
     padding: 8px var(--spacing400);
     border: none;
-    border-radius: var(--spacing200);
+    border-radius: var(--btn-radius);
     cursor: pointer;
     transition: background-color 0.2s ease;
 }

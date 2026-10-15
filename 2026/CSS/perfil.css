@@ -310,7 +310,7 @@
     background: #dcebd4;
     color: #2c4a34;
     border: 0;
-    border-radius: 9px;
+    border-radius: var(--btn-radius);
     padding: 9px 16px;
     font-size: 13px;
     font-weight: 600;

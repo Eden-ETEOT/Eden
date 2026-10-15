@@ -22,7 +22,7 @@
     padding: 0 var(--btn-padding-x);
 
     border: 1px solid transparent;
-    border-radius: 12px;
+    border-radius: var(--btn-radius);
 
     font-family: 'Inter', sans-serif;
     font-size: 14px;

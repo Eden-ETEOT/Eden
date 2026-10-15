@@ -196,7 +196,7 @@ button {
   background: var(--orange1-default);
   color: var(--corNeutra1);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--btn-radius);
   padding: 0 var(--btn-padding-x);
   font-size: 1rem;
   font-family: var(--fonteTextos);

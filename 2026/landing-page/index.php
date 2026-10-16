@@ -15,17 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute(['e' => $email]);
             $leadOrigem = 'newsletter';
             $leadMsg = 'Inscrição confirmada! Obrigado por assinar.';
-        } elseif ($acao === 'contato') {
-            $nome = trim($_POST['nome'] ?? '');
-            $email = trim($_POST['email'] ?? '');
-            $mensagem = trim($_POST['mensagem'] ?? '');
-            if ($nome === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || $mensagem === '') {
-                throw new Exception('Preencha nome, e-mail válido e mensagem.');
-            }
-            $stmt = $conexao->prepare("INSERT INTO leads (nome, email, mensagem, origem) VALUES (:n, :e, :m, 'contato')");
-            $stmt->execute(['n' => $nome, 'e' => $email, 'm' => $mensagem]);
-            $leadOrigem = 'contato';
-            $leadMsg = 'Mensagem enviada! Retornaremos em breve.';
         }
     } catch (PDOException $e) {
         $leadOrigem = $acao;
@@ -68,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="#planos">Planos</a>
                 <a href="#diferenciais">Serviços</a>
                 <a href="#faq">Suporte</a>
-                <a href="#contato">Contato</a>
             </nav>
 
             <a href="../auth/login.php"><button class="botao-primario">Entrar</button></a>
@@ -154,8 +142,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <p>
                         Registre ocorrências com tipo, descrição, local e imagens, evitando perda de informação.
                     </p>
-                    <button class="botao-primario btn-sobre" data-detalhe="det-rec-1"> Saiba mais</button>
-                    <div class="detalhe-recurso" id="det-rec-1"><p>Tipo, descrição, local, fotos e histórico em cada ocorrência. Nada se perde em grupos de WhatsApp.</p><a href="../cadastro/comum/escolher-tipo.php" class="link-detalhe">Começar agora →</a></div>
+                    <button class="botao-primario btn-sobre" data-detalhe="det-rec-1" aria-expanded="false"> Saiba mais</button>
+                    <div class="detalhe-recurso" id="det-rec-1"><div class="detalhe-inner"><p>Tipo, descrição, local, fotos e histórico em cada ocorrência. Nada se perde em grupos de WhatsApp.</p><a href="../cadastro/comum/escolher-tipo.php" class="link-detalhe">Começar agora →</a></div></div>
                 </div>
 
                 <div class="cartao-recurso">
@@ -164,8 +152,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <p>
                         Monitore o status e o histórico das ocorrências para identificar recorrências.
                     </p>
-                    <button class="botao-primario btn-sobre" data-detalhe="det-rec-2"> Saiba mais</button>
-                    <div class="detalhe-recurso" id="det-rec-2"><p>Linha do tempo completa por unidade e categoria, com filtros por status e período para identificar recorrências.</p><a href="../cadastro/comum/escolher-tipo.php" class="link-detalhe">Começar agora →</a></div>
+                    <button class="botao-primario btn-sobre" data-detalhe="det-rec-2" aria-expanded="false"> Saiba mais</button>
+                    <div class="detalhe-recurso" id="det-rec-2"><div class="detalhe-inner"><p>Linha do tempo completa por unidade e categoria, com filtros por status e período para identificar recorrências.</p><a href="../cadastro/comum/escolher-tipo.php" class="link-detalhe">Começar agora →</a></div></div>
                 </div>
 
                 <div class="cartao-recurso">
@@ -174,8 +162,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <p>
                         Converse diretamente dentro de cada chamado, sem depender de e-mails ou aplicativos externos.
                     </p>
-                    <button class="botao-primario btn-sobre" data-detalhe="det-rec-3"> Saiba mais</button>
-                    <div class="detalhe-recurso" id="det-rec-3"><p>Morador e administração conversam no contexto de cada chamado, com tudo registrado e acessível.</p><a href="../cadastro/comum/escolher-tipo.php" class="link-detalhe">Começar agora →</a></div>
+                    <button class="botao-primario btn-sobre" data-detalhe="det-rec-3" aria-expanded="false"> Saiba mais</button>
+                    <div class="detalhe-recurso" id="det-rec-3"><div class="detalhe-inner"><p>Morador e administração conversam no contexto de cada chamado, com tudo registrado e acessível.</p><a href="../cadastro/comum/escolher-tipo.php" class="link-detalhe">Começar agora →</a></div></div>
                 </div>
 
             </div>
@@ -222,34 +210,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
 
         <!-- Fim seção estatísticas -->
-
-        <!-- Início seção depoimentos -->
-
-        <!-- TROCAR: depoimentos ilustrativos abaixo. Substituir por depoimentos reais antes da banca. -->
-        <section class="secao-depoimentos" id="depoimentos">
-            <div class="cabecalho-recursos">
-                <h1 class="titulo-recursos">Quem usa, recomenda</h1>
-                <br>
-                <p class="desc-recursos">Síndicos e moradores que transformaram a gestão com o Éden
-                </p>
-            </div>
-            <div class="grade-depoimentos">
-                <div class="cartao-depoimento">
-                    <p class="texto-depoimento">“Saímos dos grupos de WhatsApp para um controle de verdade. Hoje sei exatamente o que está aberto e o que já foi resolvido.”</p>
-                    <div class="autor-depoimento"><strong>Marcos T.</strong><span>Síndico · Residencial Jardim das Flores</span></div>
-                </div>
-                <div class="cartao-depoimento">
-                    <p class="texto-depoimento">“Registro a ocorrência com foto em menos de um minuto e acompanho tudo pelo celular. Muito mais transparente.”</p>
-                    <div class="autor-depoimento"><strong>Juliana R.</strong><span>Moradora · Condomínio Solaris</span></div>
-                </div>
-                <div class="cartao-depoimento">
-                    <p class="texto-depoimento">“Os relatórios mensais mudaram nossas assembleias. Prestação de contas com dados, sem discussão.”</p>
-                    <div class="autor-depoimento"><strong>Paulo H.</strong><span>Síndico · Edifício Aurora</span></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Fim seção depoimentos -->
 
         <!-- Início seção planos -->
 
@@ -509,30 +469,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Fim seção faq -->
 
-        <!-- Início seção contato -->
-
-        <section class="secao-contato" id="contato">
-            <div class="cabecalho-recursos">
-                <h1 class="titulo-recursos">Fale com a gente</h1>
-                <br>
-                <p class="desc-recursos">Dúvidas sobre planos ou uma demonstração? Deixe sua mensagem.
-                </p>
-            </div>
-            <form method="post" class="form-contato">
-                <input type="hidden" name="acao" value="contato">
-                <div class="linha-contato">
-                    <input type="text" name="nome" placeholder="Seu nome" required>
-                    <input type="email" name="email" placeholder="Seu e-mail" required>
-                </div>
-                <textarea name="mensagem" placeholder="Como podemos ajudar?" required></textarea>
-                <?php if ($leadOrigem === 'contato' && $leadMsg): ?><p class="lead-msg"><?= htmlspecialchars($leadMsg) ?></p><?php endif; ?>
-                <?php if ($leadOrigem === 'contato' && $leadErro): ?><p class="lead-erro"><?= htmlspecialchars($leadErro) ?></p><?php endif; ?>
-                <button class="botao-primario" type="submit">Enviar mensagem</button>
-            </form>
-        </section>
-
-        <!-- Fim seção contato -->
-
 
     </main>
 
@@ -574,7 +510,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <li><a href="#sobre">Sobre nós</a></li>
                         <li><a href="#diferenciais">Funcionalidades</a></li>
                         <li><a href="#planos">Planos</a></li>
-                        <li><a href="#contato">Contato</a></li>
+                        <li><a href="#newsletter">Contato</a></li>
                     </ul>
                 </div>
 

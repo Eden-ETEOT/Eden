@@ -303,7 +303,9 @@ body {
     padding: 30px;
     text-align: left;
     transition: transform 0.3s;
-    height: 350px;
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
 }
 
 .cartao-recurso h3{
@@ -617,18 +619,7 @@ body {
     color:var(--branco)
 }
 
-/* ===== Conversão (newsletter, contato, depoimentos, detalhes) ===== */
-.secao-depoimentos { padding: 70px 20px; text-align: center; }
-.grade-depoimentos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; max-width: 1024px; margin: 30px auto 0; }
-.cartao-depoimento { background: #fff; border: 1px solid var(--cinza-claro); border-radius: 14px; padding: 26px 22px; text-align: left; }
-.texto-depoimento { font-size: 15px; color: var(--preto); margin-bottom: 16px; }
-.autor-depoimento strong { display: block; color: var(--verde-primario); }
-.autor-depoimento span { font-size: 13px; color: var(--cinza); }
-.secao-contato { padding: 70px 20px; max-width: 720px; margin: 0 auto; text-align: center; }
-.form-contato { display: flex; flex-direction: column; gap: 14px; margin-top: 26px; }
-.linha-contato { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.form-contato input, .form-contato textarea { border: 1px solid var(--cinza-claro); border-radius: 10px; padding: 13px 15px; font-size: 15px; font-family: inherit; }
-.form-contato textarea { min-height: 120px; resize: vertical; }
+/* ===== Conversão (newsletter, detalhes) ===== */
 .secao-newsletter { background: var(--verde-primario); padding: 54px 20px; }
 .conteudo-newsletter { max-width: 1024px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; color: #fff; }
 .conteudo-newsletter h2 { font-size: 24px; margin-bottom: 6px; }
@@ -638,8 +629,9 @@ body {
 .lead-msg { color: #2e9e5b; font-weight: 600; margin-top: 10px; }
 .lead-erro { color: #b72c24; font-weight: 600; margin-top: 10px; }
 .secao-newsletter .lead-msg { color: #9fe0b4; }
-.detalhe-recurso { display: none; margin-top: 12px; font-size: 14px; }
-.detalhe-recurso.aberto { display: block; }
+.detalhe-recurso { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s ease; font-size: 14px; order: 2; }
+.detalhe-recurso.aberto { grid-template-rows: 1fr; margin-top: 12px; }
+.detalhe-inner { overflow: hidden; min-height: 0; }
 .detalhe-recurso p { margin-bottom: 10px; }
+.cartao-recurso .botao-primario.btn-sobre { order: 3; margin-top: 14px; }
 .link-detalhe { color: var(--laranja-primario); font-weight: 700; text-decoration: none; }
-@media (max-width: 640px) { .linha-contato { grid-template-columns: 1fr; } }

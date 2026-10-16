@@ -1,0 +1,9 @@
+2026/uploads/*
+!2026/uploads/.gitkeep
+# /input: inbox bruto é LOCAL-ONLY (pode conter senhas e chats privados) — nunca vai ao GitHub
+input/inbox.md
+input/*.local.md
+# higiene: dumps e backups locais nunca commitados
+*.bak
+*.sql.bak
+/tmp_eden_*.sql

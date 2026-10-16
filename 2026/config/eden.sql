@@ -656,3 +656,14 @@ JOIN (
 ) vinculo ON vinculo.Morador_idMorador = c.morador_idMorador
 SET c.Condominio_idCondominio = vinculo.Condominio_idCondominio
 WHERE c.Condominio_idCondominio IS NULL;
+
+-- ==============================================================
+-- PLANOS CANONICOS LANDING (41/42/43 IDs fixos, feat-landing-conversao-2 T1)
+-- Espelha 2026/planos/index.php $canonicos. IDs explicitos p/ ?plano=X (T2).
+-- Somente INSERT/UPDATE com ativo=1; nunca DELETE.
+-- ==============================================================
+INSERT INTO plano (idPlano, nome, descricao, valor, maxApartamentos, funcionalidades, ativo) VALUES
+(41, 'Básico', 'Ideal para pequenos condomínios', 167.00, 30, 'Registro de ocorrências, Acompanhamento de status, Histórico dos últimos 3 meses, 1 administrador / síndico', 1),
+(42, 'Profissional', 'Perfeito para condomínios em crescimento', 267.00, 100, 'Upload de imagem, Chat por ocorrência, Relatórios semanais, 3 administradores, Notificações em tempo real', 1),
+(43, 'Empresarial', 'Para administradoras e grandes condomínios', 367.00, 0, 'Todos os recursos do Profissional, Funcionários e administradores ilimitados, Dashboard analítico de ocorrências, Exportação de relatórios em PDF', 1)
+ON DUPLICATE KEY UPDATE nome=VALUES(nome), descricao=VALUES(descricao), valor=VALUES(valor), maxApartamentos=VALUES(maxApartamentos), funcionalidades=VALUES(funcionalidades), ativo=1;

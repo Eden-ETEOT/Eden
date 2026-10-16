@@ -633,5 +633,5 @@ body {
 .detalhe-recurso.aberto { grid-template-rows: 1fr; margin-top: 12px; }
 .detalhe-inner { overflow: hidden; min-height: 0; }
 .detalhe-recurso p { margin-bottom: 10px; }
-.cartao-recurso .botao-primario.btn-sobre { order: 3; margin-top: 14px; align-self: center; }
+.cartao-recurso .botao-primario.btn-sobre { order: 3; margin: 14px auto 0; margin-right: auto; margin-left: auto; align-self: center; }
 .link-detalhe { color: var(--laranja-primario); font-weight: 700; text-decoration: none; }
